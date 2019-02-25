@@ -1,0 +1,90 @@
+\documentclass[a4paper, twoside, listof=totoc, toc=sectionentrywithdots]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[svgnames]{xcolor}
+
+\usepackage[colorlinks]{hyperref}
+\usepackage{url}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{footnote}
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
+\usepackage{csquotes}
+\usepackage[backend=biber, dateabbrev=true, citestyle=authoryear, bibstyle=authoryear, useprefix=true, language=english]{biblatex}
+\bibliography{Bibliography/BibETF}
+\nocite{*}
+
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+\subject{Final thesis for the completion of the Master of Science in Finance (\textsc{MScF})}
+\titlehead{Faculty of Business and Economics -- HEC Lausanne\\University of Lausanne}
+\title{Exchange-traded funds expansion and their unintended effects over underlying stocks: analyzing volatility, liquidity, informational efficiency {\small [temporary title]}}
+\subtitle{Thesis proposal\footnote{This document is a summary of my current ideas and proposition for my Master's thesis following the structure and advice available at \url{https://www.ldeo.columbia.edu/~martins/sen_res/how_to_thesis_proposal.html} [accessed \today]. While the source is meant for another scientific field of study, I have slightly adapted and hope to match the expectation of a ``battle plan'' at an early stage, before any actual data treatment being completed.}}
+\date{\today}
+\author{Grégoire Pichard}
+\publishers{{\small Intended supervisor}\\Prof. Artem Neklyudov, PhD}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Introduction}
+If the rise of passive investing in the stock market and more generally in indexes over various asset classes is one of the broad avenues of today's financial markets, exchange-traded funds (ETFs) are the most common vehicles taking this avenues. Beyond a mediocre pun is a statement of an order of magnitude hard to even conceive : the assets under management of various ETFs, which are not exclusively passive but mostly, are worth around USD 3.5 trillion ($3.5 * 10^{12}$), of which more than 70\% are invested in US assets. From a niche market that was created around the early 1990s, ETFs seem to have experienced exponential growth fueled by the very no-load, low fees structure they offer to investors made brutally aware of the less than transparent and little robust performance offered by mutual funds and hedge funds managers. Yet this phenomenon would essentially be interesting if one wanted to study their impact over corporate governance, if the goal were only, for investors, to trade less frequently, invest more cheaply and harness a risk premium as close as possible as the market itself (traditional beta) or deviate a little (only) to track an alternative risk premium, often dubbed \textit{smart beta}.
+
+The consequences of that trend over three decades, and significantly since the 2008 financial crisis, are very complex, since ETFs allow opportunities for some market players that to which they were perhaps not intended at first. Since ETFs can be traded continuously during the day, and even shares created or redeemed by so-called Authorized Participants, they are useful tools for high-frequency traders for example. But if there is a for of transmission belt between ETFs and the underlying securities, researchers are increasingly aware of a new volatility component and some correlation (uncertain regarding its sign) across securities commonly held by many ETFs. In a provocative way, do you, as an investor, really feel better by investing a seemingly diversified product if most the securities in your portfolio covary a lot more ? The process yielding that unintended effect is a recent field of study and various hypotheses compete.
+\section{Essential literature}
+The main paper inspiring my paper is \cite{Ben-David2018}: my research question can be mostly found in this paper whose final version has been published in the December 2018 issue of the \textit{Journal of Finance}. They designate  \cite{Evans2017}, apparently not yet published, is also very instructive, in analyzing very thoroughly one transmission mechanism increasing risk commonality of market makers (but not underlying stocks): uncovered short-selling and subsequent failure-to-deliver. It is no coincidence that both papers share a common coauthor, Rabih Moussawi from Wharton Research Data Services (WRDS) at the homonym business school.\cite{Chinco2016}, which is a working paper with very clear expression, investigates the rebalancing cascades that happen at least once a quarter in the ETF world and their effect on distant securities. The consequence of rebalancing cascades amounts to random demand ``noise'', which is a direct citation of two classics about efficiency, namely the noisy rational-expectations equilibrium by \cite{Grossman1980} and the insider-trading by \cite{Kyle1985}. 
+
+Although it is not overly relevant to reaching normative conclusions, as whether ETFs and their liquidity and volatility impacts are good or bad overall, \cite{Evans2017} mainly focuses on the role of arbitrageurs; the fact they are allowed to fail to deliver the ETF shares that they sold short a few days earlier is a buffer for demand shocks. Whereas one generally tries to explain why ETFs increase volatilty and may amplify (size of shocks) and spread (scope) liquidity issues, \cite{Evans2017} takes a contrarian position\footnote{\dots about contrarian market makers that are just expecting the next short term reversal of demand to trade less !} and show that the APs' privilege to delay or even cancel delivery actually reduces volatility on underlying equities. Actually, both arguments can live together since we are not analyzing the same market configurations : \cite{Evans2017} is about bullish situations, excess buying demand, whereas \cite{Ben-David2018} compares the volatility of equities before and after they are included in a widely-tracked index (Russell 3000). From a regulatory perspective, over the short term (thus excluding bubbles, which are not likely due to ETFs alone, if at all), the propagation from ETFs to stocks is crucial when many investors are selling simulataneously. Although it is little more than my own feeling (and a few comments of financial TV channels\dots), it seems more worrying if ETFs amplify and spread crashes around. Already a few of these cases have happened over the last ten years.
+\section{Thesis statement}
+Obtaining similar results as \cite{Ben-David2018} over a international equity ETFs would allow to strengthen their conclusions. Their proposed future research paragraph is about the clientele effect being induced by the ETF arbitrage mechanism. That seems to be another research direction, in which we would analyze how different investor categories would select (and would be selected by) stocks according to their turnover. Otherwise, I am not sure to understand their statement; perhaps it is a warning not to confuse correlation and direct causation :
+\begin{quotation}
+  Whether this modification in client base [i.e. higher turnover investors in stocks with increased ETF ownership] is the result of ETF arbitrage remains to be established.
+\end{quotation}
+The particular experimental scheme of ``index-switching'' from the (relatively small-cap) Russell 2000 to the (relatively large cap) Russell 1000 is not unique and it has become a noisier instrument, as they disclose that fact, since 2006 and a methodological change. Searching for a similar scheme abroad means finding a situation where a stock can randomly (according to its price at an arbitrarily determined date) switching from the top of small-caps group (where it has a large weight and is therefore much traded by arbitrageurs) to the bottom of a large-caps group (where its weight is rather negligible and arbitrageurs indeed neglect that stock). It is clear that arbitrageurs in \cite{Ben-David2018} are ``high-frequency traders and hedge funds'':
+\blockquote[\cite{Ben-David2018}, p.9]{These investors do not need to engage in primary market trades. Instead, they can turn to the secondary market, where they can buy the inexpensive asset and short sell the more expensive one between the ETF and the basket of underlying securities. Then they hold the positions until price converge, at which point they close the positions and realize a profit- Of course, the uncertainty involved in these profits does not qualify these trades as an arbitrage in a strict sense.}
+
+Indeed if the authors mean the APs too, do they imply that they are actually allowed to neglect the little weights in the index in their trades with the ETF sponsor ? It depends on pre-established rules between APs and ETF sponsors. If the goal is to minimize the tracking error relative to the reference index, the ETF sponsor should logically demand that APs submits complete baskets of shares matching the index weighting until the last stock, say the 1000th stock from Russell 1000. Then the AP (creation case) or the sponsor (redemption case) will also be forced to trade that little stock. Thus the advertised situation of neglected little stocks that suddenly get extensively traded by the ``chance'' of index-switching would be put into question. On the other side, the arbitrageurs from \cite{Ben-David2018} could are traders that stay outside the creation/redemption scheme; in that case, they are ``simply'' trying to profit from the tracking error on two different markets and could as well neglect the smallest weights in the index. It remains for investigation, more than statistical research, whether such an arbitrage has an economic relevance, i.e. is profitable after transaction costs. After reading what is indeed an investigation, Michael Lewis' 2014 \textit{Flash boys}, where he documents transactions back and forth well under the millisecond (thus making TAQ data from NYSE almost blind), I could imagine the opportunity existing actually, with superior technology, priviledged access to dark pools and a fair amount of cheating\footnote{I unfortunately do not see another word for the exposed practice of front-running and more influential investors, managers and regulators have felt the same.}. Beyond the passion for this writer's best-sellers, my argument is that there is a reality-check to do in order to ensure that \cite{Ben-David2018}'s scenario is realistic.
+
+Finding similar evidence on another market would be a external validity check; for instance, the Swiss stock exchange (SIX) displays the blue-chip SMI index of the 20 largest market capitalization stocks and the SMI MID which includes the 30 next companies, thus allowing for a similar experiment. It remains to prove whether the Swiss stock market has a relevant ETF activity. At least two sponsors, iShares (BlackRock) and UBS each manage ETFs for both SMI and SMI MID. Likewise, it can be reasonably expected at least on larger marketplaces in developed markets to exhibit the same tiered market indices and a liquid ETF market tracking those indices, which would allow to run the same quasi-experiment as in \cite{Ben-David2018}. At this stage of my research, I am not yet able to provide more insight about that topic.
+
+Since it has been shown that ETFs are favoured by investors who trade relatively frequently, we can concentrate on the impact of index integration and ETF ownership on the stocks' volatility and on liquidity. Several competing hypotheses are analyzed : on one hand, the liquidity-trading hypothesis assumes that ETF demand causes shocks on the price of stocks that revert in the medium term. On the other hand, the price-discovery hypothesis tells a different story: since some ETFs are more liquid than some of the underlying stocks, they could adjust more quickly to fundamental shocks and information about stocks is then infered from ETF prices. \cite{Ben-David2018} claim to have found a new risk premium for ETF ownership amounting to about 50 bps per month; the consistency of this new alpha\footnote{\dots using the terminology in the article. But if it can be systematically sought, is it not rather an alternative beta ?} could be further investigated across markets too.
+
+\section{Data}
+The amount and the structure of data to access remotely makes it likely that it will be necessary to write scripts that, for each date of interest, will scan through each ETF from the Thomson data set, access the fund capitalization and weights, in order to get the ownership of each stock by documented ETFs. This a worryingly complex task. First of all, I have to achieve computing the stock ownership for one ETF, then extend the code to iterate over ETFs, store the data efficiently, and then combine by gathering indentical stock IDs (e.g. CUSIP, ISIN, etc.) across thousands of ETFs. It starts with iterating queries over ETFs and ends up gathering data points across time and underlying companies.
+
+With the help from Süleyman Ceran, the expert in databases, I have been able to setup a permanent remote connection with some CEDIF (the data center from the faculty) credentials. I am currently getting familiar with the Thomson Reuters Eikon API for Python (officially supported, still in beta version) and with the data science, visualization and  econometrics libraries \textsf{Numpy}, \textsf{Pandas} and \textsf{Matplotlib} of the Python~3 programming language.  
+
+\section{Work plan}
+This is in my opinion an ideal schedule while I try to set realistic time frames: \autoref{Tab:Schedule}
+\begin{center}
+  \begin{table}
+    \caption{Schedule v0}
+    \label{Tab:Schedule}
+  \begin{tabular}{p{0.33\textwidth}p{0.67\textwidth}}
+    \toprule
+    Date & Task to achieve\\
+    \midrule
+    (Before) February 22, 2019 & Sending requested parts to Professor: introduction, problem statement, methodology \& data, and the majority of the review of literature\\
+    March 5, 2019 & Code for remote data access on Thomson Reuters Eikon and CRSP (to my current knowledge) ready and working.\\
+    March 30, 2019 & Discussion of results submitted in a raw form, aimed at either validating the approach and extending results or understanding mistakes and amend\\
+    April 30, 2019 & Submission of a draft paper with final structure to the supervisor.\\
+    \dots & Corrections according to requests from the supervisor; hopefully extensive research will not be necessary (already completed at an earlier stage)\\
+    May 17, 2019 & Submission of the final version of thesis paper\\
+    Before May 31, 2019\footnote{This is a wish; the actuel slot will be decided by the supervisor and the expert.} & Presentation in front of thesis committee\\
+    \bottomrule
+    \end{tabular}
+  \end{table}
+\end{center}
+I will comply with any regular update requirement decided by the advisor; in case I become convinced that I will not be able to meet a coming deadline, I will contact Prof. Neklyudov and disclose what prevents me from reaching the next step in time. It is guaranteed that I don't have any priority higher than this current task so any delay will only be caused -- outside exceptional events impossible to forecast -- by difficulty doing my task. As this memorandum is not marketing material and because I am committed to transparency\footnote{I have already had this issue in the past, during the MScF.}, I acknowledge that I may need concrete assistance from the Professor or from another qualified person designated by him in order to be able to complete my thesis. Such a likely necessity is handling large amounts of data and reshaping them to another panel dataset.
+\clearpage
+\printbibliography
+\end{document}

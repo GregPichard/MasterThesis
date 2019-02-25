@@ -1,0 +1,12 @@
+import numpy as np
+import pandas as pd
+import eikon
+
+
+
+ETF_db = pd.read_excel("ReportEikon_ETF_20180224.xlsx", header = 0)
+print(ETF_db.head())
+print(ETF_db[['Lipper RIC']].nunique()) #All different
+print(ETF_db[['Lipper RIC']].dropna().nunique())
+
+eikon.set_app_key('638fa3bbb90349d5a97dc60c1c0cc4b0b5646846')

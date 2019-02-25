@@ -1,0 +1,36 @@
+\documentclass[a4paper, twoside, 10pt]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[svgnames]{xcolor}
+
+\usepackage[colorlinks]{hyperref}
+\usepackage{url}
+\usepackage{amsmath, amssymb}
+
+\usepackage[backend=biber, dateabbrev=true, citestyle=authoryear, bibstyle=authoryear, useprefix=true, language=english]{biblatex}
+\bibliography{Bibliography/BibETF}
+\nocite{*}
+
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+\subject{Final thesis for the completion of the Master of Science in Finance (\textsc{MScF})\\Faculty of Business and Economics -- HEC Lausanne\\University of Lausanne}
+\title{Exchange-traded funds expansion and their unintended effects over underlying stocks {\small [temporary title]}}
+\date{\today}
+\author{Grégoire Pichard}
+
+\begin{document}
+\maketitle
+\input{JackBogle.tex}
+\input{KnowledgeSummary.tex}
+\clearpage
+\printbibliography
+\end{document}
