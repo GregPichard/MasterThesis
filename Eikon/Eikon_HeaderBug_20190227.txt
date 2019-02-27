@@ -1,3 +1,4 @@
+# Attempt 1
 LP40056077
 Traceback (most recent call last):
   File "ETF_ID.py", line 15, in <module>
@@ -7,6 +8,10 @@ Traceback (most recent call last):
   File "/home/gpichard/anaconda3/lib/python3.7/site-packages/eikon/data_grid.py", line 218, in get_data_frame
     headers = [header['displayName'] for header in data_dict['headers'][0]]
 KeyError: 'headers'
+
+_______________
+
+# Attempt 2
 LP40056077
       Instrument                   ...                   Holdings Pct Of Shares Outstanding Held
 0     LP40056077                   ...                                                    0.0469
@@ -137,6 +142,11 @@ LP40056078
 982  LP40056078                   ...                                                    0.0002
 
 [983 rows x 4 columns]
+
+_____________
+
+# Attempt 3
+
 LP40056077
       Instrument                   ...                   Holdings Pct Of Shares Outstanding Held
 0     LP40056077                   ...                                                    0.0469
@@ -267,6 +277,10 @@ LP40056078
 982  LP40056078                   ...                                                    0.0002
 
 [983 rows x 4 columns]
+
+______________
+
+# Attempt 4
 Backend error. 400 Bad Request
 LP40056077
 Traceback (most recent call last):
