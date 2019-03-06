@@ -1,11 +1,13 @@
 import numpy as np
 import pandas as pd
+import datetime as dt
 import eikon
 import configparser as cp
 cfg = cp.ConfigParser()
 cfg.read('eikon.cfg')
 eikon.set_app_key(cfg['eikon']['app_id'])
 
+from itertools import compress
 from sqlalchemy import create_engine
 engine = create_engine('postgresql://postgres:postgres@localhost:5432/FundOwners_db')
 Stocks_db = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
@@ -16,10 +18,19 @@ ric_list = Stocks_db.RIC.tolist()
      #   Constituents = Constituents.loc[(Constituents['Holdings Pct Of Shares Outstanding Held'].notnull()) & (Constituents['Holdings Pct Of Shares Outstanding Held'] > 0) & (Constituents['Constituent RIC'] != '')]
         #print(Constituents)
       #  Constituents.to_csv("Ex1.csv", mode = 'a', header = False)
-dates_list = ['2015-12-31', '2014-12-31', '2013-12-31', '2012-12-31', '2011-12-31', '2010-12-31', '2009-12-31', '2008-12-31', '2007-12-31', '2006-12-31', '2005-12-31', '2004-12-31', '2003-12-31', '2002-12-31', '2001-12-31', '2000-12-31', '1999-12-31']
+mo = 12
+dd = 31
+years = range(2014, 1998, -1)
+ref_dates = list()
+dates_list = list()
+for y in years:
+    dates_list.append(str(y) + "-" + str(mo) + "-" + str(dd))
+    ref_dates.append(dt.datetime(y, mo, dd, 0, 0))
+
 def Get_Data(eikon_iter_ric_list, date):
     FundOwners, err = eikon.get_data(eikon_iter_ric_list, ['TR.FundInvestorType', 'TR.FundHoldingsDate', 'TR.FundPortfolioName', 'TR.FundClassID', 'TR.FundAdjShrsHeld'], {'SDate':date})
     return FundOwners
+
 def Loop_Stocks(ric_list, date):
     N_stocks = len(ric_list)
     print("Number of stocks : ", N_stocks)
@@ -35,23 +46,24 @@ def Loop_Stocks(ric_list, date):
         else:
             end_value = initial_value + width
         eikon_iter_ric_list = ','.join(ric_list[initial_value:end_value])
+        print(eikon_iter_ric_list)
         attempt_count = 0
         get_data_successful = True
         try:
-            FundOwners = Get_Data(eikon_iter_ric_list)
+            FundOwners = Get_Data(eikon_iter_ric_list, date)
         except:
             #attempt_count += 1
             #print("Additional attempt(s): ", attempt_count)
             #try :
-                #FundOwners = Get_Data(eikon_iter_ric_list)
+                #FundOwners = Get_Data(eikon_iter_ric_list, date)
             #except:
                 #attempt_count += 1
                 #print("Additional attempt(s): ", attempt_count)
                 #try:
-                    #FundOwners = Get_Data(eikon_iter_ric_list)
+                    #FundOwners = Get_Data(eikon_iter_ric_list, date)
                 #except:
                 # print("Could not succeed after ", attempt_count, " attempts. Init value: ", initial_value, ". Width . ", width)
-            width //= 2
+            width //= 4
             get_data_successful = False
         if get_data_successful:
             FundOwners = FundOwners.loc[FundOwners['Lipper Primary Fund Class ID'].notnull() & (FundOwners['Fund Shares Held (Adjusted)'] > 0)]
@@ -65,7 +77,16 @@ def Loop_Stocks(ric_list, date):
 
     return 0
 
-for date in dates_list:
+for i, date in enumerate(dates_list):
     print("Processing date : ", date)
-    Loop_Stocks(ric_list, date)
+    print(ref_dates[i])
+    stocks_kept = [None for x in range(len(ric_list))]
+    for j in range(0, len(ric_list)):
+        if isinstance(Stocks_db.Date_Became_Public[j], dt.datetime):
+            stocks_kept[j] = Stocks_db.Date_Became_Public[j] < ref_dates[i]
+        else:
+            stocks_kept[j] = True
+    #print(list(compress(ric_list, stocks_kept)))
+    print(date)
+    Loop_Stocks(list(compress(ric_list,stocks_kept)), date)
     print("Processed date : ", date)
