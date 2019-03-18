@@ -10,7 +10,8 @@ appended_data = list()
 for y in years:
     print("Processing year ", y)
     dates_list.append(str(y) + "-" + str(mo) + "-" + str(dd))
-    filenames_list.append("FundOwners_" + dates_list[-1] + "_db.csv")
+    # filenames_list.append("FundOwners_" + dates_list[-1] + "_db.csv") # On the VM
+    filenames_list.append("../../../../../../switchdrive/ETF/FundOwners_" + dates_list[-1] + "_db.csv") # Greg's local path
     data = pd.read_csv(filenames_list[-1], header = None)
     data.info()
     data.head()
