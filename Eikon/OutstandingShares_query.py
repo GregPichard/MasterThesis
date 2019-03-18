@@ -8,6 +8,7 @@ Created on Mon Mar 18 19:16:43 2019
 if __name__ == "__main__":
     import pandas as pd
     import numpy as np
+    import datetime as dt
     import eikon
     import configparser as cp
     cfg = cp.ConfigParser()
@@ -47,7 +48,7 @@ def Loop_Stocks(ric_list, date):
         except:
             width //= 4
 
-def main:
+def main():
     StocksRICs = np.load("FundOwners_ETFHeld_RIC_list.npz")
     StocksRICs = list(StocksRICs['RIC'])
     
