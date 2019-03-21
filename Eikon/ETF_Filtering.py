@@ -42,4 +42,3 @@ ETF_agg_db = pd.melt(StocksPanel_db.reset_index(), id_vars = ['Year'], var_name 
 
 StocksETF_Holdings_Panel_db = StocksPanel_db/StocksMarketCapPanel_db
 StocksETF_Holdings_Long_db = pd.melt(StocksETF_Holdings_Panel_db.reset_index(), id_vars = ['Year'], var_name = 'RIC', value_name = 'ETFHoldings')
-
