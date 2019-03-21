@@ -38,9 +38,10 @@ def Loop_Stocks(ric_list, date):
         try:
             #FundOwners = p.apply_async(Get_Data, args = (eikon_iter_ric_list, date))
             FundOwners = Get_Data(eikon_iter_ric_list, date)
-            print(FundOwners)
+            #print(FundOwners)
             FundOwners = FundOwners.loc[FundOwners['Lipper Primary Fund Class ID'].notnull() & (FundOwners['Fund Shares Held (Adjusted)'] > 0)]
-            FundOwners.to_csv("D:/ETF_GP/FundOwners_"+date+"_db.csv", mode = 'a', header = False)
+            #print(FundOwners)
+            FundOwners.to_csv("Monthly/FundOwners_"+date+"_db.csv", mode = 'a', header = False)
             #FundOwners.to_hdf("FundOwners_"+date+"_db.hdf", key = 'owners_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
@@ -69,16 +70,16 @@ def main():
     #print(ric_list)
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
-    years = range(1999, 2019, 1)
+    years = range(2012, 2019, 1)
     ref_dates = list()
     dates_list = list()
     for y in years:
         for m, month in enumerate(mo):
-            dates_list.append(str(y) + "-" + str(month) + "-" + str(dd[m]))
+            dates_list.append(str(y) + "-" + str(month).zfill(2) + "-" + str(dd[m]))
             ref_dates.append(dt.datetime(y, month, dd[m], 0, 0))
     for i, date in enumerate(dates_list):
         #p = multiprocessing.Pool(processes = multiprocessing.cpu_count()) # - 1 if more than one CPU
-        print("Number of CPU cores used : ", multiprocessing.cpu_count()) # - 1
+        #print("Number of CPU cores used : ", multiprocessing.cpu_count()) # - 1
         print("Processing date : ", date)
         print(ref_dates[i])
         stocks_kept = [None for x in range(len(ric_list))]
