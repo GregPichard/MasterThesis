@@ -23,7 +23,7 @@ def Loop_Stocks(ric_list, date):
     N_stocks = len(ric_list)
     print("Number of stocks : ", N_stocks)
     initial_value = 0
-    ideal_width = 100
+    ideal_width = 50
     width = ideal_width
     while initial_value < N_stocks:
         if width == 0:
@@ -70,7 +70,7 @@ def main():
     #print(ric_list)
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
-    years = range(2012, 2019, 1)
+    years = range(1999, 2019, 1)
     ref_dates = list()
     dates_list = list()
     for y in years:
