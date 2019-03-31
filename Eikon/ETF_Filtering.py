@@ -34,7 +34,7 @@ OutliersMarketCapPanel_db.to_csv("OutliersMarketCapPanel.csv", header = True)
 
 StocksMarketCapPanel_db = pd.pivot_table(Stocks_MarketCap_db, values = 'NbSharesOutstanding', index = 'Year', columns = 'RIC', fill_value = 0)
 
-# Issue : there are 7 seven companies which never report the number of shares outstanding over the whole period : 
+# Issue : there are 7 (seven) companies which never report the number of shares outstanding over the whole period : 
 NonreportingStocks_MarketCap_list = list(set(Stocks_MarketCap_db.RIC.unique()).difference(set(StocksMarketCapPanel_db.columns)))
 # Dropping non-reporting companies from the ETF holdings panel
 StocksPanel_db = StocksPanel_db.drop(columns = NonreportingStocks_MarketCap_list)
