@@ -23,7 +23,7 @@ def Loop_Stocks(ric_list, date):
     N_stocks = len(ric_list)
     print("Number of stocks : ", N_stocks)
     initial_value = 0
-    ideal_width = 1000
+    ideal_width = 2000
     width = ideal_width
     while initial_value < N_stocks:
         if width == 0:
@@ -34,7 +34,7 @@ def Loop_Stocks(ric_list, date):
         else:
             end_value = initial_value + width
         eikon_iter_ric_list = ','.join(ric_list[initial_value:end_value])
-        print(eikon_iter_ric_list)
+        #print(eikon_iter_ric_list)
         try:
             #FundOwners = p.apply_async(Get_Data, args = (eikon_iter_ric_list, date))
             OutShares = Get_Data(eikon_iter_ric_list, date)
