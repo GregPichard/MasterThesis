@@ -40,7 +40,7 @@ ETF_ID_db.info()
 #StocksFunds_opt_db.to_hdf('Monthly/FundOwners_Monthly_Full_db_comp.h5', 'StocksFunds_Monthly_db', format='table', data_columns = True, complib = 'zlib', complevel = 6)
 
 # Read fund holdings of US stocks (monthly appended data) - HDF5
-print("Extraction of raw ETF holdings in progess. Please wait...")
+print("Extraction of raw ETF holdings in progress. Please wait...")
 StocksETF_db = pd.concat([x.query('Fund_RIC in ' + str(list(ETF_ID_db.Lipper_RIC))) for x in pd.read_csv('Monthly/FundOwners_Monthly_Full_db.csv', chunksize = 10e4)], ignore_index = True)
 print("Extracted raw ETF holdings")
 StocksETF_db.info()
@@ -98,30 +98,49 @@ Duplicates_db.head(100)
 for i, x in enumerate(Duplicates_db.index):
     StocksETF_db.Month.at[x] = Duplicates_db.Month.at[x]
     StocksETF_db.Year.at[x] = Duplicates_db.Year.at[x]
-StocksETF_db['YearMonth'] = list(zip(StocksETF_db.Year, StocksETF_db.Month))
+StocksETF_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(StocksETF_db['Year'], StocksETF_db['Month'])]
 StocksPanel_db = pd.pivot_table(StocksETF_db, values = 'AdjNbSharesHeld', index = 'YearMonth', columns = 'RIC', aggfunc = np.sum, fill_value = 0)
 
 ## Warning : from here on, script "OutstandingShares_query.py" is expected to have been run
 Stocks_MarketCap_db = pd.read_csv("Monthly/BasicOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
+AdditionalStocks_MarketCap_db = pd.read_csv("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
+Stocks_MarketCap_db = pd.concat([Stocks_MarketCap_db, AdditionalStocks_MarketCap_db])
 Stocks_MarketCap_db = Stocks_MarketCap_db.rename(index = str, columns = {1:"RIC", 2:"Date", 3:"NbSharesOutstanding"})
-Stocks_MarketCap_db['Year'] =pd.DatetimeIndex(Stocks_MarketCap_db['Date']).year
-Stocks_MarketCap_db['Month'] =pd.DatetimeIndex(Stocks_MarketCap_db['Date']).month
-Stocks_MarketCap_db['YearMonth'] = list(zip(Stocks_MarketCap_db.Year, Stocks_MarketCap_db.Month))
-Stocks_MarketCap_db = Stocks_MarketCap_db.dropna()
+Stocks_MarketCap_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(np.int64(pd.DatetimeIndex(Stocks_MarketCap_db['Date']).year), np.int64(pd.DatetimeIndex(Stocks_MarketCap_db['Date']).month))]
+#Stocks_MarketCap_db = Stocks_MarketCap_db.dropna()
 
-# Issue : with the variable 'TR.SharesOutstanding'. some securities have shares outstanding data before 1999. Here is their subsample.
-Outliers_MarketCap_db = Stocks_MarketCap_db[Stocks_MarketCap_db.RIC.isin(list(Stocks_MarketCap_db.loc[Stocks_MarketCap_db.Year < 1999, 'RIC'].unique()))]
-OutliersMarketCapPanel_db = pd.pivot_table(Outliers_MarketCap_db, values = 'NbSharesOutstanding', index = 'Year', columns = 'RIC', fill_value = None)
-OutliersMarketCapPanel_db.to_csv("Monthly/OutliersMarketCapPanel_Monthly.csv", header = True)
+## Monthly frequency : those share do not appear because another variable, 'TR.BasicShrsOutAvg' is used
+## Issue : with the variable 'TR.SharesOutstanding'. some securities have shares outstanding data before 1999. Here is their subsample.
+#Outliers_MarketCap_db = Stocks_MarketCap_db[Stocks_MarketCap_db.RIC.isin(list(Stocks_MarketCap_db.loc[Stocks_MarketCap_db.Year < 1999, 'RIC'].unique()))]
+#OutliersMarketCapPanel_db = pd.pivot_table(Outliers_MarketCap_db, values = 'NbSharesOutstanding', index = 'Year', columns = 'RIC', fill_value = None)
+#OutliersMarketCapPanel_db.to_csv("Monthly/OutliersMarketCapPanel_Monthly.csv", header = True)
 
 StocksMarketCapPanel_db = pd.pivot_table(Stocks_MarketCap_db, values = 'NbSharesOutstanding', index = 'YearMonth', columns = 'RIC', fill_value = 0)
 
-# Issue : there are 7 (seven) (?) companies which never report the number of shares outstanding over the whole period : 
+## Monthly frequency : this issue affects 8 companies. Comment the line with Stocks_MarketCap_db.dropna() to have them appear
+## Issue : there are 7 (seven) (?) companies which never report the number of shares outstanding over the whole period : 
 NonreportingStocks_MarketCap_list = list(set(Stocks_MarketCap_db.RIC.unique()).difference(set(StocksMarketCapPanel_db.columns)))
-# Dropping non-reporting companies from the ETF holdings panel
+## Dropping non-reporting companies from the ETF holdings panel
 StocksPanel_db = StocksPanel_db.drop(columns = NonreportingStocks_MarketCap_list)
-ETF_agg_db = pd.melt(StocksPanel_db.reset_index(), id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'TotalAdjNbSharesHeld')
+# Year 1999 is incomplete in the shares quantities held by ETF (StocksETF_db) : January and August totally missing. Thus dropping from January until September (kept).
+StocksPanel_db = StocksPanel_db[StocksPanel_db.index >= '1999-09']
+StocksMarketCapPanel_db = StocksMarketCapPanel_db[StocksMarketCapPanel_db.index >= '1999-09']
+#Extracting the time index to be used in two dataframes
+YearMonth_final = list(StocksPanel_db.index)
+
 
 StocksETF_Holdings_Panel_db = StocksPanel_db/StocksMarketCapPanel_db
-StocksETF_Holdings_Long_db = pd.melt(StocksETF_Holdings_Panel_db.reset_index(), id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'ETFHoldings')
+StocksETF_Holdings_Panel_db.columns = StocksETF_Holdings_Panel_db.columns.add_categories('YearMonth')
+StocksETF_Holdings_Panel_db['YearMonth'] = YearMonth_final
+StocksETF_Holdings_Long_db = pd.melt(StocksETF_Holdings_Panel_db, id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'ETFHoldings')
+StocksETF_Holdings_Long_db.set_index(['YearMonth', 'RIC'], drop = True, inplace=True)
 
+StocksPanel_db = StocksPanel_db.reset_index(drop=True)
+StocksPanel_db.columns = StocksPanel_db.columns.add_categories('YearMonth')
+StocksPanel_db['YearMonth'] = YearMonth_final
+ETF_agg_db = pd.melt(StocksPanel_db, id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'TotalAdjNbSharesHeld')
+ETF_agg_db.set_index(['YearMonth', 'RIC'], drop = True, inplace=True)
+
+StocksETF_Holdings_LongMerged_db = pd.concat([ETF_agg_db, StocksETF_Holdings_Long_db], axis = 1)
+# Writing DataFrame to file
+StocksETF_Holdings_LongMerged_db.to_csv('Monthly/ETF_Holdings_LongMerged_db.csv', index = True, header = True)
