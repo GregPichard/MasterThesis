@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-years = range(2018, 2019, 1)
+years = range(1999, 2019, 1)
 mo = range(1,13)
 dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
 dates_list = list()
@@ -11,7 +11,8 @@ for y in years:
     for m, month in enumerate(mo):
         print("Processing month/year " + str(month) + "/" + str(y))
         dates_list.append(str(y) + "-" + str(month).zfill(2) + "-" + str(dd[m]))
-        filenames_list.append("Monthly/FundOwners_" + dates_list[-1] + "_db.csv") # Greg's local path on debian2 machine
+        #filenames_list.append("Monthly/FundOwners_" + dates_list[-1] + "_db.csv") # Greg's local path on debian2 machine
+        filenames_list.append("D:/ETF_GP/Monthly/FundOwners_" + dates_list[-1] + "_db.csv") # Greg's local path on Süleyman's virtual machine
         data = pd.read_csv(filenames_list[-1], header = None)
         data.info()
         #data.head()
