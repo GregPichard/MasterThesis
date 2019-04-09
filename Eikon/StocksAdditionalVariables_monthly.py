@@ -21,7 +21,9 @@ Stocks_AdditionalVariables_db = pd.read_csv('Monthly/AdditionalVariables_Stocks_
 Stocks_AdditionalVariables_db.info()
 Stocks_AdditionalVariables_db.rename({1:'RIC', 2:'Date', 3:'CompanyMarketCap', 4:'Bid', 5:'Ask', 6:'Close', 7:'Volume', 8:'TotalReturn52Wk', 9:'PriceToBVPerShare', 10:'GrossProfit', 11:'TotalAssetsReported'}, axis = 'columns', inplace = True)
 Stocks_AdditionalVariables_db.Date = pd.to_datetime(Stocks_AdditionalVariables_db.Date, infer_datetime_format = True)
-
+Stocks_ControlVariables_db = Stocks_AdditionalVariables_db.filter(['Date', 'RIC', 'Close', 'CompanyMarketCap', 'PriceToBVPerShare']).dropna()
+Stocks_ControlVariables_db.set_index(['Date', 'RIC'], drop = True, inplace=True)
+Stocks_ControlVariables_db.to_csv('Monthly/StockControlVariables_monthly_db.csv', index = True, header = True)
 # Loading time series downloaded through script 'StocksPrice-volume_Series_monthly_query.py'
 Stocks_PriceVol_db = pd.read_csv('Monthly/StockPrice-volume_Series_monthly_db.csv', header = None, index_col = 0)
 Stocks_PriceVol_db.info()
