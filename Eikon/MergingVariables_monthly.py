@@ -76,4 +76,5 @@ GrossProfit_db = GrossProfit_db[~GrossProfit_db.index.duplicated(keep = 'last')]
 del ReturnCloseVolatility_MonthlyPanel, AmihudRatio_MonthlyPanel, RetPast12to1M_MonthlyPanel
 
 MonthlyVariables_db = pd.concat([ETF_Holdings_LongMerged_db,ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db, RetPast12to1M_db, GrossProfit_db, ControlVariables_db], axis = 1)
-#MonthlyVariables_db = pd.concat([ETF_Holdings_LongMerged_db,ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db.filter('PctBidAskSpread')], axis = 1)
+MonthlyVariables_db.replace([np.inf, -np.inf], np.nan, inplace = True)
+MonthlyVariables_db.to_csv('Monthly/MonthlyVariables_db.csv', index = True, header = True)
