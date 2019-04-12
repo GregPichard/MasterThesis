@@ -17,6 +17,7 @@ import numpy as np
 import datetime
 import multiprocessing
 
+### Shares held by ETFs
 # Read data extracted from ETFs' ID data set
 ETF_ID_db = pd.read_excel("ReportEikon_ETF_live&nonswap_20190303.xlsx", header = 0)
 ETF_ID_db.info()
@@ -60,6 +61,7 @@ StocksETF_db.shape
 StocksETF_db['Year'] = pd.DatetimeIndex(StocksETF_db.Date).year
 StocksETF_db['Month'] = pd.DatetimeIndex(StocksETF_db.Date).month
 
+# This section assimilates delayed values to current ones : e.g. the shares held by an ETF queried on 01-01-2000 are not available, thus the database only provides the holdings as of 31-12-1999.
 global Duplicates_db
 Duplicates_db = StocksETF_db[StocksETF_db.duplicated(keep = False)]
 Duplicates_db.info()
@@ -86,7 +88,7 @@ def IncrementDate(i):
                     Duplicates_db.Year.iat[i] = Duplicates_db.Year.iat[i - 1] + (Duplicates_db.Month.iat[i - 1]) // 12
 def IncrementDate_Loop():
     for i,x in enumerate(Duplicates_db.index):
-        print(i, x)
+#        print(i, x)
         IncrementDate(i)
 IncrementDate_Loop()
 #p = multiprocessing.Process(target = IncrementDate_Loop)
@@ -94,13 +96,14 @@ IncrementDate_Loop()
 #p.close()
 Duplicates_db.head(100)
 
-# Correcting values in the initial StocksETF_db
+# Correcting values in the initial StocksETF_db : replacing delayed dates with queried dates
 for i, x in enumerate(Duplicates_db.index):
     StocksETF_db.Month.at[x] = Duplicates_db.Month.at[x]
     StocksETF_db.Year.at[x] = Duplicates_db.Year.at[x]
 StocksETF_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(StocksETF_db['Year'], StocksETF_db['Month'])]
 StocksPanel_db = pd.pivot_table(StocksETF_db, values = 'AdjNbSharesHeld', index = 'YearMonth', columns = 'RIC', aggfunc = np.sum, fill_value = 0)
 
+### Total shares outstanding
 ## Warning : from here on, script "OutstandingShares_query.py" is expected to have been run
 Stocks_MarketCap_db = pd.read_csv("Monthly/BasicOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
 AdditionalStocks_MarketCap_db = pd.read_csv("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
@@ -109,7 +112,7 @@ Stocks_MarketCap_db = Stocks_MarketCap_db.rename(index = str, columns = {1:"RIC"
 Stocks_MarketCap_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(np.int64(pd.DatetimeIndex(Stocks_MarketCap_db['Date']).year), np.int64(pd.DatetimeIndex(Stocks_MarketCap_db['Date']).month))]
 #Stocks_MarketCap_db = Stocks_MarketCap_db.dropna()
 
-## Monthly frequency : those share do not appear because another variable, 'TR.BasicShrsOutAvg' is used
+## Monthly frequency : those stocks do not appear because another variable, 'TR.BasicShrsOutAvg' is used. See script 'OutstandingShares_Monthly_query.py'
 ## Issue : with the variable 'TR.SharesOutstanding'. some securities have shares outstanding data before 1999. Here is their subsample.
 #Outliers_MarketCap_db = Stocks_MarketCap_db[Stocks_MarketCap_db.RIC.isin(list(Stocks_MarketCap_db.loc[Stocks_MarketCap_db.Year < 1999, 'RIC'].unique()))]
 #OutliersMarketCapPanel_db = pd.pivot_table(Outliers_MarketCap_db, values = 'NbSharesOutstanding', index = 'Year', columns = 'RIC', fill_value = None)

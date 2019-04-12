@@ -27,8 +27,11 @@ del col
 MonthlyVariables_db.reset_index(inplace = True)
 MonthlyVariables_db.set_index(['RIC','YearMonth'], inplace = True)
 MonthlyAvailable_db = MonthlyVariables_db.dropna()
-#mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + ETFHoldings + np.log(CompanyMarketCap.shift(1)) + 1/Close.shift(1) + AmihudRatio.shift(1) + PctBidAskSpread.shift(1) + (1/PriceToBVPerShare).shift(1) + RetPast12to1M + GrossProfitability.shift(1) + EntityEffects + TimeEffects', MonthlyAvailable_db)
-mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + ETFHoldings + np.log(CompanyMarketCap) + 1/Close + AmihudRatio + PctBidAskSpread + (1/PriceToBVPerShare) + RetPast12to1M + GrossProfitability + EntityEffects + TimeEffects', MonthlyAvailable_db)
+# Transformations and lags needed for regressions
+MonthlyAvailable_db = MonthlyAvailable_db.assign(InvClose = pd.Series(1/MonthlyAvailable_db['Close']))
+MonthlyAvailable_db = MonthlyAvailable_db.assign(BookToMarketRatio = pd.Series(1/MonthlyAvailable_db['PriceToBVPerShare']))
+# Shift variables in time : independent variables and volatility lags
+mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + ETFHoldings + np.log(CompanyMarketCap) +  InvClose + AmihudRatio + PctBidAskSpread + BookToMarketRatio + RetPast12to1M +  GrossProfitability +  EntityEffects + TimeEffects', MonthlyAvailable_db)
 
 print(mod1_All_Volatility.fit())
 
