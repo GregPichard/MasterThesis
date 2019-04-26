@@ -20,6 +20,8 @@ if __name__ == "__main__":
     cfg.read('eikon.cfg')
     eikon.set_app_key(cfg['eikon']['app_id'])
 
+    from itertools import compress
+    import multiprocessing
 
 def Concat_Stocks(path):
     region_files_list = os.listdir(path)
@@ -106,6 +108,6 @@ def main():
         print("Processed date : ", date)
         #p.close()
         #p.join()
+
 if __name__ == "__main__":
     main()
-

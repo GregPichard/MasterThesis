@@ -12,9 +12,9 @@ if __name__ == "__main__":
     import datetime as dt
     import eikon
     import configparser as cp
-#    cfg = cp.ConfigParser()
-#    cfg.read('eikon.cfg')
-#    eikon.set_app_key(cfg['eikon']['app_id'])
+    cfg = cp.ConfigParser()
+    cfg.read('eikon.cfg')
+    eikon.set_app_key(cfg['eikon']['app_id'])
     from IntlStockFundOwnership_monthly import Concat_Stocks
 
     
@@ -55,10 +55,7 @@ def Loop_Stocks(ric_list):
 def main():
     StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
-    print(StocksRICs)
-#    StocksRICs = np.load("Monthly/Additional41_RIC_list.npz")
-#    StocksRICs = list(StocksRICs['arr_0'])
  
-    #Loop_Stocks(StocksRICs)
+    Loop_Stocks(StocksRICs)
 if __name__ == "__main__":
     main()

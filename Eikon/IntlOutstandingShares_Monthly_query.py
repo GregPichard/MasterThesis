@@ -52,8 +52,6 @@ def Loop_Stocks(ric_list, date):
 def main():
     StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
-    #StocksRICs = np.load("Monthly/Additional41_RIC_list.npz")
-    #StocksRICs = list(StocksRICs['arr_0'])
     
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
