@@ -1,7 +1,8 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Mon Mar 18 19:16:43 2019
-Adapted from OutstandingShares_Monthly_query.py
+Adapted from StocksVWAP_Series_daily_query.py
 @author: Grégoire
 """
 
@@ -14,6 +15,7 @@ if __name__ == "__main__":
     cfg = cp.ConfigParser()
     cfg.read('eikon.cfg')
     eikon.set_app_key(cfg['eikon']['app_id'])
+    from IntlStockFundOwnership_monthly import Concat_Stocks
     
 def Get_Data(iter_ric_list):
     TS, err = eikon.get_data(iter_ric_list, ['TR.TSVWAP.calcdate', 'TR.TSVWAP'], {'SDate':'1999-08-02', 'EDate':'2018-12-31', 'Frq':'D'})
@@ -38,7 +40,7 @@ def Loop_Stocks(ric_list):
         try:
             TS = Get_Data(iter_ric_list)
             #print(TS)
-            TS.to_csv("Daily/StockVWAP_Series_daily_db.csv", mode = 'a', header = False)
+            TS.to_csv("Daily/IntlStockVWAP_Series_daily_db.csv", mode = 'a', header = False)
             #TS.to_csv("Daily/CopyStockVWAP_Series_daily_db.csv", mode = 'a', header = False)
 
             #TS.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
@@ -50,9 +52,8 @@ def Loop_Stocks(ric_list):
             width //= 2
 
 def main():
-    StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
+    StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
- 
     Loop_Stocks(StocksRICs)
 
 if __name__ == "__main__":

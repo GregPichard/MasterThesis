@@ -14,16 +14,17 @@ if __name__ == "__main__":
     cfg = cp.ConfigParser()
     cfg.read('eikon.cfg')
     eikon.set_app_key(cfg['eikon']['app_id'])
+    from IntlStockFundOwnership_monthly import Concat_Stocks
     
 def Get_Data(eikon_iter_ric_list, date):
-    OutShares, err = eikon.get_data(eikon_iter_ric_list, ['TR.CLOSEPRICE.calcdate', 'TR.CompanyMarketCap', 'TR.BIDPRICE', 'TR.ASKPRICE', 'TR.CLOSEPRICE', 'TR.Volume', 'TR.TotalReturn52Wk', 'TR.PriceToBVPerShare', 'TR.GrossProfit', 'TR.TotalAssetsReported'], {'SDate':date})
+    OutShares, err = eikon.get_data(eikon_iter_ric_list, ['TR.BasicShrsOutAvg.calcdate', 'TR.BasicShrsOutAvg'], {'SDate':date})
     return OutShares
 
 def Loop_Stocks(ric_list, date):
     N_stocks = len(ric_list)
     print("Number of stocks : ", N_stocks)
     initial_value = 0
-    ideal_width = 250
+    ideal_width = 2000
     width = ideal_width
     while initial_value < N_stocks:
         if width == 0:
@@ -39,8 +40,8 @@ def Loop_Stocks(ric_list, date):
             #FundOwners = p.apply_async(Get_Data, args = (eikon_iter_ric_list, date))
             OutShares = Get_Data(eikon_iter_ric_list, date)
             #print(OutShares)
-            OutShares.to_csv("Monthly/AdditionalVariables_Stocks_Monthly_db.csv", mode = 'a', header = False)
-            #OutShares.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
+            OutShares.to_csv("Monthly/IntlOutstandingShares_Stocks_Monthly_db.csv", mode = 'a', header = False)
+#            OutShares.to_hdf("Monthly/IntlOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
             initial_value += width
@@ -49,8 +50,10 @@ def Loop_Stocks(ric_list, date):
             width //= 4
 
 def main():
-    StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
+    StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
+    #StocksRICs = np.load("Monthly/Additional41_RIC_list.npz")
+    #StocksRICs = list(StocksRICs['arr_0'])
     
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
@@ -61,12 +64,11 @@ def main():
         for m, month in enumerate(mo):
             dates_list.append(str(y) + "-" + str(month).zfill(2) + "-" + str(dd[m]))
             ref_dates.append(dt.datetime(y, month, dd[m], 0, 0))
-    for i, date in enumerate(dates_list[8:]):
+    for i, date in enumerate(dates_list):
         print("Processing date : ", date)
-        print(ref_dates[8 + i])
+        print(ref_dates[i])
         Loop_Stocks(StocksRICs, date)
         print("Processed date : ", date)
 
-
-if __name__ == "__main__":   
+if __name__ == "__main__":
     main()

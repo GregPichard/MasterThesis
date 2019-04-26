@@ -50,12 +50,10 @@ def Loop_Stocks(ric_list):
             width //= 2
 
 def main():
-    StocksRICs = np.load("FundOwners_ETFHeld_RIC_list.npz") # Original query for the whole list of stocks
-    StocksRICs = list(StocksRICs['RIC']) 
-#    StocksRICs = np.load("Monthly/Additional41_RIC_list.npz")
-#    StocksRICs = list(StocksRICs['arr_0'])
+    StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
+    StocksRICs = StocksRICs.RIC.tolist()
  
     Loop_Stocks(StocksRICs)
 
- 
-main()
+if __name__ == "__main__": 
+    main()

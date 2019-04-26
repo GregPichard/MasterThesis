@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Mar 18 19:16:43 2019
-Adapted from OutstandingShares_Monthly_query.py
+Adapted from AdditionalStockVariables_monthly_query.py
 @author: Grégoire
 """
 
@@ -14,6 +14,7 @@ if __name__ == "__main__":
     cfg = cp.ConfigParser()
     cfg.read('eikon.cfg')
     eikon.set_app_key(cfg['eikon']['app_id'])
+    from IntlStockFundOwnership_monthly import Concat_Stocks
     
 def Get_Data(eikon_iter_ric_list, date):
     OutShares, err = eikon.get_data(eikon_iter_ric_list, ['TR.CLOSEPRICE.calcdate', 'TR.CompanyMarketCap', 'TR.BIDPRICE', 'TR.ASKPRICE', 'TR.CLOSEPRICE', 'TR.Volume', 'TR.TotalReturn52Wk', 'TR.PriceToBVPerShare', 'TR.GrossProfit', 'TR.TotalAssetsReported'], {'SDate':date})
@@ -39,7 +40,7 @@ def Loop_Stocks(ric_list, date):
             #FundOwners = p.apply_async(Get_Data, args = (eikon_iter_ric_list, date))
             OutShares = Get_Data(eikon_iter_ric_list, date)
             #print(OutShares)
-            OutShares.to_csv("Monthly/AdditionalVariables_Stocks_Monthly_db.csv", mode = 'a', header = False)
+            OutShares.to_csv("Monthly/AdditionalVariables_IntlStocks_Monthly_db.csv", mode = 'a', header = False)
             #OutShares.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
@@ -49,7 +50,7 @@ def Loop_Stocks(ric_list, date):
             width //= 4
 
 def main():
-    StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
+    StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
     
     mo = range(1, 13)
@@ -67,6 +68,5 @@ def main():
         Loop_Stocks(StocksRICs, date)
         print("Processed date : ", date)
 
-
-if __name__ == "__main__":   
+if __name__ == "__main__":
     main()

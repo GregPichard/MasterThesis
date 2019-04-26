@@ -49,10 +49,8 @@ def Loop_Stocks(ric_list, date):
             width //= 4
 
 def main():
-    #StocksRICs = np.load("FundOwners_ETFHeld_RIC_list.npz") # Original query for the whole list of stocks
-    #StocksRICs = list(StocksRICs['RIC']) 
-    StocksRICs = np.load("Monthly/Additional41_RIC_list.npz")
-    StocksRICs = list(StocksRICs['arr_0'])
+    StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
+    StocksRICs = StocksRICs.RIC.tolist()
     
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
@@ -70,5 +68,5 @@ def main():
         print("Processed date : ", date)
 
 
-    
-main()
+if __name__ == "__main__":    
+    main()
