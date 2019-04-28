@@ -43,7 +43,7 @@ def Loop_Stocks(ric_list):
         try:
             TS = Get_Data(iter_ric_list)
             #print(TS)
-            TS.to_csv("Daily/IntlStockPrice-volume_Series_daily_db.csv", mode = 'a', header = False)
+            TS.to_csv("D:/ETF_GP/Daily/IntlStockPrice-volume_Series_daily_db.csv", mode = 'a', header = False)
             #TS.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
@@ -55,7 +55,7 @@ def Loop_Stocks(ric_list):
 def main():
     StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
- 
-    Loop_Stocks(StocksRICs)
+    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Daily/IntlStockPrice-volume_Series_daily_db.csv', header = None, usecols = [2], squeeze= True).unique())))
+    Loop_Stocks(RemainingRICs)
 if __name__ == "__main__":
     main()
