@@ -62,9 +62,9 @@ def main():
         for m, month in enumerate(mo):
             dates_list.append(str(y) + "-" + str(month).zfill(2) + "-" + str(dd[m]))
             ref_dates.append(dt.datetime(y, month, dd[m], 0, 0))
-    for i, date in enumerate(dates_list[8:]):
+    for i, date in enumerate(dates_list[20:]):
         print("Processing date : ", date)
-        print(ref_dates[8 + i])
+        print(ref_dates[20 + i])
         Loop_Stocks(StocksRICs, date)
         print("Processed date : ", date)
 
