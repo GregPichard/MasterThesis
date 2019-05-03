@@ -33,4 +33,4 @@ appended_data = appended_data.drop(0, axis = 1)
 appended_data.info()
 appended_data.columns = ['RIC', 'Owner_type', 'Date', 'Fund_name', 'Fund_RIC', 'AdjNbSharesHeld']
 print(appended_data.head())
-appended_data.to_csv("Monthly/IntlFundOwners_Monthly_Full_db.csv", header=False, index = False, mode = 'a')
+appended_data.to_csv("Monthly/IntlFundOwners_Monthly_Full_db.csv", header=True, index = False, mode = 'a')
