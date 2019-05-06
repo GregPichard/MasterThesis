@@ -1,4 +1,22 @@
 \section{Methodology}
+\subsection{ETF ownership}
+Based on raw monthly fund-stocks number of shares held, the set of funds belonging to the ETF category and the overall number of shares outstanding of the given stock, the percentage of shares outstanding held is determined :
+\begin{equation}
+  Pct\_ETF\_Ownership_{i, t} = \frac{\sum_{f = 1}^{N_{f}} \#\_AdjShares\_Held_{f, i, t}\cdot B_{f}}{\#\_Shares\_Out_{i, t}}
+\end{equation}
+$\forall i = 1:N_{i}$ (stocks), $t = 1:T$ (periods)
+with $B_{f} = 1$ if fund $f$ is an ETF, $0$ else.
+\subsection{Control variables}
+\subsubsection{\cite{Amihud2002} illiquidity ratio}
+\subsubsection{Bid-ask spread}
+\subsubsection{Stock size}
+\subsubsection{Fama-French factors}
+\subsubsection{Gross profitability}
+According to \cite{Novy-Marx2013}, gross profitability, i.e.
+\begin{equation}
+  \frac{Revenues_{i, t} - COGS_{i, t}\footnote{Cost of goods sold}}{Total\_Assets_{i, t}}
+\end{equation}
+has a has a prediction power equal in magnitude and complementary to the book-to-market ratio over the cross-section of expected returns. \cite{Novy-Marx2013} has deemed this factor the \emph{other side of value} because it does not subsume it while it is linked to it. Both factors can be exploited The value factor measures the market price of a company's assets and finances the purchase of inexpensive assets through the sale of expensive ones while the profitability ratio measures how productive assets within the firm are and finances the purchase of productive ones through the sale of unproductive (or at least, less productive) ones.
 \subsection{Impact of ETF ownership on stocks' volatility}
 
 \subsubsection{Risk of endogeneity bias : the need for an instrument}
