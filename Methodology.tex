@@ -1,5 +1,33 @@
 \section{Methodology}
-\subsection{ETF ownership}
+\subsection{Independent variables}
+\subsubsection{Volatility}
+In order to keep the amount of data treated at a tractacble level\footnote{A quick enquiry returns that the datasets overall more than 20 Gigabytes large, with monthly fund ownership files, segregated into US and international subsamples, being the largest arrays.} and due to data availability limits, stock volatility is measured over a calendar month (end-to-end, adjusted for the number of trading days) as the standard deviation of simple returns using daily close series.
+
+\begin{equation}
+  Vol_{i, t} = \sqrt{\frac{1}{N\_d_{i, t} - 1} \sum_{d = 1}^{N\_d_{i, t}} (r_{i, d} - \bar{r}_{i, t})^2}
+  \end{equation}
+
+Computing and analyzing intraday volatility is a different avenue for research, shown in \cite{Ben-David2018} : they use the US Trade and Quote (TAQ) database and compute intraday volatility over second-by-second returns, which which is used in a panel OLS regression with the following regressors : the absolute mispricing as a proxy for arbitrage actitity, ETF ownership and the same controls included in their monthly database
+\subsubsection{Liquidity : \cite{Amihud2002} ratio}
+Liquidity has to be implied from various proxy variables. The illiquidity ratio introduced in \cite{Amihud2002} is one of them and it has been used in literature both as a variable of interest in itself (e.g. \cite{Israeli2017}) and as a control for the volatility impact of ETF ownership \parencite{Ben-David2018}.
+
+\begin{equation}
+  \begin{split}
+    Illiq_{i, t} & = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \frac{\mid r_{i, d} \mid}{Volume\_D_{i, d}}\\
+    &  = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \frac{\mid r_{i, d} \mid}{Volume_{i, d} \cdot VWAP_{i, d}}
+    \end{split}
+\end{equation}
+
+  The first line is \cite{Amihud2002}'s original definition, whereas the second shows how the daily dollar volume is computed, since it is not an available data in the source database : it is the product between the volume expressed in terms of stock shares traded and the volume-weighted adjusted price, or $VWAP$.
+  
+The method followed in liquidity regressions comes from \cite{Israeli2017}, which document both liquidity and information-related effects due to ETF ownership : correlation between, on one side, higher ETF ownership  and, on the other side :
+\begin{description}
+\item[lower liquidity] : higher bid-ask spread and higher price impact of trades
+\item[lower price efficiency] : higher stock returns synchronicity, lower future earnings response and, in the long run, lower analyst coverage.
+\end{description}
+
+The liquidity regressions will be explained in greater detail in the appropriate subsection (\autoref{subsec:Method:Liquidity}, p.\pageref{subsec:Method:Liquidity}).
+\subsection{Regressor of interest : ETF ownership}
 Based on raw monthly fund-stocks number of shares held, the set of funds belonging to the ETF category and the overall number of shares outstanding of the given stock, the percentage of shares outstanding held is determined :
 \begin{equation}
   Pct\_ETF\_Ownership_{i, t} = \frac{\sum_{f = 1}^{N_{f}} \#\_AdjShares\_Held_{f, i, t}\cdot B_{f}}{\#\_Shares\_Out_{i, t}}
@@ -7,19 +35,18 @@ Based on raw monthly fund-stocks number of shares held, the set of funds belongi
 $\forall i = 1:N_{i}$ (stocks), $t = 1:T$ (periods)
 with $B_{f} = 1$ if fund $f$ is an ETF, $0$ else.
 \subsection{Control variables}
-\subsubsection{\cite{Amihud2002} illiquidity ratio}
 \subsubsection{Bid-ask spread}
 \subsubsection{Stock size}
 \subsubsection{Fama-French factors}
 \subsubsection{Gross profitability}
 According to \cite{Novy-Marx2013}, gross profitability, i.e.
 \begin{equation}
-  \frac{Revenues_{i, t} - COGS_{i, t}\footnote{Cost of goods sold}}{Total\_Assets_{i, t}}
-\end{equation}
+  Gross\_Profitability_{i, t} = \frac{Revenues_{i, t} - COGS_{i, t}\footnotemark}{Total\_Assets_{i, t}}
+\end{equation}\footnotetext{Cost of goods sold}
 has a has a prediction power equal in magnitude and complementary to the book-to-market ratio over the cross-section of expected returns. \cite{Novy-Marx2013} has deemed this factor the \emph{other side of value} because it does not subsume it while it is linked to it. Both factors can be exploited The value factor measures the market price of a company's assets and finances the purchase of inexpensive assets through the sale of expensive ones while the profitability ratio measures how productive assets within the firm are and finances the purchase of productive ones through the sale of unproductive (or at least, less productive) ones.
 \subsection{Impact of ETF ownership on stocks' volatility}
 
 \subsubsection{Risk of endogeneity bias : the need for an instrument}
 \subsection{Impact of ETF ownership on market and stock liquidity}
-
+\label{subsec:Method:Liquidity}
 \subsection{Concerns about informational efficiency}
