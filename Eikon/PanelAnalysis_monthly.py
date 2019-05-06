@@ -52,8 +52,8 @@ MonthlyAvailable_db = MonthlyAvailable_db.dropna()
 MonthlyAvailable_db.info()
 
 mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag  + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag  +  EntityEffects + TimeEffects', MonthlyAvailable_db)
-#
 print(mod1_All_Volatility.fit(cov_type = "kernel"))
+
 mod1_All_Volatility_withLags = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag +  GrossProfitability_1lag +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag', MonthlyAvailable_db)
 print(mod1_All_Volatility_withLags.fit(cov_type = "kernel"))
 MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.csv', header = True, index = True)

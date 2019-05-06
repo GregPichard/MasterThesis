@@ -1,13 +1,13 @@
 \section{Methodology}
 \subsection{Independent variables}
 \subsubsection{Volatility}
-In order to keep the amount of data treated at a tractacble level\footnote{A quick enquiry returns that the datasets overall more than 20 Gigabytes large, with monthly fund ownership files, segregated into US and international subsamples, being the largest arrays.} and due to data availability limits, stock volatility is measured over a calendar month (end-to-end, adjusted for the number of trading days) as the standard deviation of simple returns using daily close series.
+In order to keep the amount of data treated at a tractable level\footnote{A quick enquiry returns that the datasets overall more than 20 Gigabytes large, with monthly fund ownership files, segregated into US and international subsamples, being the largest arrays.} and due to data availability limits, stock volatility is measured over a calendar month (end-to-end, adjusted for the number of trading days) as the standard deviation of simple returns using daily close series.
 
 \begin{equation}
   Vol_{i, t} = \sqrt{\frac{1}{N\_d_{i, t} - 1} \sum_{d = 1}^{N\_d_{i, t}} (r_{i, d} - \bar{r}_{i, t})^2}
   \end{equation}
 
-Computing and analyzing intraday volatility is a different avenue for research, shown in \cite{Ben-David2018} : they use the US Trade and Quote (TAQ) database and compute intraday volatility over second-by-second returns, which which is used in a panel OLS regression with the following regressors : the absolute mispricing as a proxy for arbitrage actitity, ETF ownership and the same controls included in their monthly database
+Computing and analyzing intraday volatility is a different avenue for research, shown in \cite{Ben-David2018} : they use the US Trade and Quote (TAQ) database and compute intraday volatility over second-by-second returns, which which is used in a panel OLS regression with the following regressors : the absolute mispricing as a proxy for arbitrage activity, ETF ownership and the same controls included in their monthly database and in this paper (cf. \autoref{subsec:Method:Volatility}, p.\pageref{subsec:Method:Volatility}).
 \subsubsection{Liquidity : \cite{Amihud2002} ratio}
 Liquidity has to be implied from various proxy variables. The illiquidity ratio introduced in \cite{Amihud2002} is one of them and it has been used in literature both as a variable of interest in itself (e.g. \cite{Israeli2017}) and as a control for the volatility impact of ETF ownership \parencite{Ben-David2018}.
 
@@ -18,7 +18,7 @@ Liquidity has to be implied from various proxy variables. The illiquidity ratio 
     \end{split}
 \end{equation}
 
-  The first line is \cite{Amihud2002}'s original definition, whereas the second shows how the daily dollar volume is computed, since it is not an available data in the source database : it is the product between the volume expressed in terms of stock shares traded and the volume-weighted adjusted price, or $VWAP$.
+  The first line is \cite{Amihud2002}'s original definition, whereas the second shows that the daily dollar volume, $Volume\_D$, is computed as the product between the volume expressed in terms of stock shares traded, $Volume$, and the volume-weighted adjusted price, or $VWAP$, since it is not an available data in the source database.
   
 The method followed in liquidity regressions comes from \cite{Israeli2017}, which document both liquidity and information-related effects due to ETF ownership : correlation between, on one side, higher ETF ownership  and, on the other side :
 \begin{description}
@@ -36,6 +36,11 @@ $\forall i = 1:N_{i}$ (stocks), $t = 1:T$ (periods)
 with $B_{f} = 1$ if fund $f$ is an ETF, $0$ else.
 \subsection{Control variables}
 \subsubsection{Bid-ask spread}
+The most straightforward way to compute the difference between the bid price -- the highest price at which buyers on the market are agreeing to pay for the security on the spot market -- and the ask price -- the lowest price sellers agree to receive for their shares -- is to compute the difference between the variables \texttt{TR.AskPrice} and \texttt{TR.BidPrice} at day close . Whenever both values returned by the data provider are not null, the absolute (difference) measure can be computed and in cross-sectional regressions, the relative measure is used as a liquidity control :
+\begin{equation}
+  Pct\_BidAskSpread_{i, t} = \frac{Ask_{i, t} - Bid_{i, t}}{\frac{Ask_{i, t} + Bid_{i, t}}{2}}
+\end{equation}
+
 \subsubsection{Stock size}
 \subsubsection{Fama-French factors}
 \subsubsection{Gross profitability}
@@ -45,7 +50,7 @@ According to \cite{Novy-Marx2013}, gross profitability, i.e.
 \end{equation}\footnotetext{Cost of goods sold}
 has a has a prediction power equal in magnitude and complementary to the book-to-market ratio over the cross-section of expected returns. \cite{Novy-Marx2013} has deemed this factor the \emph{other side of value} because it does not subsume it while it is linked to it. Both factors can be exploited The value factor measures the market price of a company's assets and finances the purchase of inexpensive assets through the sale of expensive ones while the profitability ratio measures how productive assets within the firm are and finances the purchase of productive ones through the sale of unproductive (or at least, less productive) ones.
 \subsection{Impact of ETF ownership on stocks' volatility}
-
+\label{subsec:Method:Volatility}
 \subsubsection{Risk of endogeneity bias : the need for an instrument}
 \subsection{Impact of ETF ownership on market and stock liquidity}
 \label{subsec:Method:Liquidity}
