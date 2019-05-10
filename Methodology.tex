@@ -41,14 +41,41 @@ The most straightforward way to compute the difference between the bid price -- 
   Pct\_BidAskSpread_{i, t} = \frac{Ask_{i, t} - Bid_{i, t}}{\frac{Ask_{i, t} + Bid_{i, t}}{2}}
 \end{equation}
 
-\subsubsection{Stock size}
+The relative bid-ask spread accounts for the cost of trading, which is itself assumed to correlate positively with the illiquidity, i.e. the weak number of agents willing to trade on a market. The market makers require a higher price, the bid-ask spread, in order to compensate for the risk of note being able to net out their position in an asset rapidly. Thus, a higher bid-ask spread constitutes a limit to arbitrage across markets or assets.
+
+Another explanation has been studied : according to the \cite{Glosten1985} market-microstructure model, the bid-ask spread reveals the presence of informed traders and it can even exist in a competitive market without trading costs. If there are both informed and uninformed (so-called \emph{noise}) traders and and market makers (such as the operators acting as middlemen on the NYSE) cannot tell whether a submitted order in which they are the counterparty comes from either group of traders, they (market makers) will infer determine their bid and ask prices based on the conditional expectation about the asset value based on the direction (buy or sell) of the order they are facing. In this model, the bid-ask spread accounts for the adverse selection, because transactions convey information, and creates a divergence between observed returns on securities and the returns that could be made by an uninformed trader -- a difference that becomes relatively smaller, the longer the investor holds its asset, the authors show. The bid-ask spread can therefore be included in cross-sectional regressions in order to account for the unequal liquidity provision as well as the unequal availability of information regarding firms.
 \subsubsection{Fama-French factors}
+In the original original paper about the cross-section of stock returns \parencite{Fama1992} as well as in their generalization to bond returns using a new methodology \parencite{Fama1993}, Fama and French introduce an empirically-founded, five-factor (counting the market return) extension to the Capital Asset Pricing Model. Three factors come from the equity universe : market return, size and value, while two factors are specific to bonds : a term (i.e. maturity) premium and a default risk premium. The methodology in the later paper provides a common framework for stocks and bonds and conclude that the explanatory power of the CAPM beta nearly disappears when the size and value factors are taken into account. They change the common, ``CAPM-based'' view by showing that, across sorted all portfolios, the residual sensitivity to the market return is the same and reflects a risk premium attached to any stock, compensating the investor for not investing in a bond instead. Here we will retain the three-factor model that is already powerful for explaining the differences of returns across stocks.
+\paragraph{Size}
+Small-capitalization firms have been shown to yield a higher return adjusted by their market exposure and this phenomenon justifies the existence of a risk premium 
+\paragraph{Book-to-Market ratio}
+\subsubsection{Momentum}
+Momentum is, chronologically, the fourth factor that has been found to explain the cross-section of expected returns, identified in \cite{Carhart1997}, a paper about persistence in mutual funds' risk-adjusted returns; this paper shows that the one-year momentum effect from \cite{Jegadeesh1993} makes the manager's skill or superior information irrelevant to explain the fund's performance, except for the worst-performing funds.
+
+A portfolio based on buying the (relative, say top quintile) winners and selling the losers based on their return over the previous month only \parencite{Novy-Marx2012}, is a definitely losing strategy. The negative coefficients are significant with very little doubt (t-statistics between $-10$ and $-20$. If momentum has been found in the equity world, essentially the same in equal-weighted as well as value-weighted portfolios, this positive correlation is strictly bound between the past twelve to two months before the start of the securities holding period.
+
+This concept of cross-sectional momentum corresponds to the traditional idea of momentum whereas \cite{Novy-Marx2012} finds that positive correlation is essentially coming from the first five months of the previous year, i.e. the return between $t-12$ and $t-7$ (included). The expected return and Sharpe ratio of several trading strategies tested exhibit figures twice larger for 12-to-7 winners-minus-losers (WML) portfolios compared with 6-to-2 WML portfolios. Describing a term structure of momentum put in evidence thanks to CRSP data spanning from 1926 to 2010 \cite{Novy-Marx2012} claims that
+\begin{quotation}
+Theoretically, the return predictability implied by the data, which looks \emph{more like an echo than momentum}\footnote{Emphasis added in the quote.}, poses a significant difficulty for stories that purport to explain momentum.
+\end{quotation}
+Results in \cite{Novy-Marx2012} indeed defeat possible and competing explanations of momentum cited in his review of literature. The aim in this section is to explain why the momentum effect has to be included as a control in regressions involving returns or the volatility of returns, rather than provide a theoretical rationale for doing so. In general, let us summarize as follows : models ``predicting short-term predictability'' (i.e., explaining momentum) are in either of two categories:
+\begin{description}
+\item[behavioral]  
+  \item[rational]
+\end{description}
+
+\begin{center}
+\textsc{Add the echo plots from figure 1 in \cite{Novy-Marx2012}}
+\end{center}
+
 \subsubsection{Gross profitability}
 According to \cite{Novy-Marx2013}, gross profitability, i.e.
 \begin{equation}
   Gross\_Profitability_{i, t} = \frac{Revenues_{i, t} - COGS_{i, t}\footnotemark}{Total\_Assets_{i, t}}
 \end{equation}\footnotetext{Cost of goods sold}
 has a has a prediction power equal in magnitude and complementary to the book-to-market ratio over the cross-section of expected returns. \cite{Novy-Marx2013} has deemed this factor the \emph{other side of value} because it does not subsume it while it is linked to it. Both factors can be exploited The value factor measures the market price of a company's assets and finances the purchase of inexpensive assets through the sale of expensive ones while the profitability ratio measures how productive assets within the firm are and finances the purchase of productive ones through the sale of unproductive (or at least, less productive) ones.
+
+The influence of profitability had already been studied before \cite{Novy-Marx2013} showed the existence of a predictive power over the cross-section of expected returns and thus the opportunity of a trading strategy : indeed \cite{Fama2006} treat the book-to-market, profitability and investment effects combined, although the authors remain agnostic on the mechanism, either rational or behavioral, underpinning their threefold statement. The statement originates from the dividend discount model.
 \subsection{Impact of ETF ownership on stocks' volatility}
 \label{subsec:Method:Volatility}
 \subsubsection{Risk of endogeneity bias : the need for an instrument}

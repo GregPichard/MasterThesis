@@ -50,11 +50,12 @@ Stocks_VolumePanel_db = Stocks_PriceVolPanel_db.xs('VOLUME', level=1)
 YearMonth_Close = list(Stocks_ClosePricePanel_db.index)
 Stocks_ClosePricePanel_db = Stocks_ClosePricePanel_db.reset_index(drop=True)
 Stocks_ClosePricePanel_db.columns = Stocks_ClosePricePanel_db.columns.add_categories('YearMonth')
-Stocks_ClosePricePanel_db['YearMonth'] = YearMonth_Close
+Stocks_ClosePricePanel_db = Stocks_ClosePricePanel_db.assign(YearMonth = YearMonth_Close)
 Stocks_ClosePrice_agg_db = pd.melt(Stocks_ClosePricePanel_db, id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'CLOSE')
 Stocks_ClosePrice_agg_db.set_index(['YearMonth', 'RIC'], drop = True, inplace=True)
 Stocks_ClosePrice_agg_db.to_csv('Monthly/Stocks_ClosePrice_LongMerged_db.csv', index = True, header = True)
-
+# Index set back on original db
+Stocks_ClosePricePanel_db.set_index(['YearMonth'], drop = True, inplace=True)
 
 YearMonth_Volume = list(Stocks_VolumePanel_db.index)
 Stocks_VolumePanel_db = Stocks_VolumePanel_db.reset_index(drop=True)
@@ -81,3 +82,7 @@ Stocks_GrossProfitPanel_db = Stocks_GrossProfit_db.reset_index(drop = False).piv
 # Previous 12 to 1 months' cumulative return (for momentum factor) - prices are already adjusted for corporate actions such as stock splits
 Stocks_RetPast12to1MonthsPanel_db = (Stocks_ClosePricePanel_db.shift(1) - Stocks_ClosePricePanel_db.shift(12))/Stocks_ClosePricePanel_db.shift(12)
 Stocks_RetPast12to1MonthsPanel_db.to_csv('Monthly/Stocks_RetPast12to1Months.csv', index = True, header = True)
+
+# Previous 12 to 7 months' cumulative return (for momentum factor) - prices are already adjusted for corporate actions such as stock splits
+Stocks_RetPast12to7MonthsPanel_db = (Stocks_ClosePricePanel_db.shift(7) - Stocks_ClosePricePanel_db.shift(12))/Stocks_ClosePricePanel_db.shift(7)
+Stocks_RetPast12to7MonthsPanel_db.to_csv('Monthly/Stocks_RetPast12to7Months.csv', index = True, header = True)

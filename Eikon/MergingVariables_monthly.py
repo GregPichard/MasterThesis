@@ -41,6 +41,14 @@ RetPast12to1M_MonthlyPanel.drop(np.arange(12), axis = 0, inplace = True)
 RetPast12to1M_MonthlyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
 RetPast12to1M_db = pd.melt(RetPast12to1M_MonthlyPanel, id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'RetPast12to1M')
 # Gross Profitability (Novy-Marx) (already long)
+
+# Past 12-to-7 months return (momentum) (panel form)
+RetPast12to7M_MonthlyPanel = pd.read_csv('Monthly/Stocks_RetPast12to7Months.csv', header = 0)
+RetPast12to7M_MonthlyPanel.drop(np.arange(12), axis = 0, inplace = True)
+RetPast12to7M_MonthlyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
+RetPast12to7M_db = pd.melt(RetPast12to7M_MonthlyPanel, id_vars = ['YearMonth'], var_name = 'RIC', value_name = 'RetPast12to7M')
+# Gross Profitability (Novy-Marx) (already long)
+
 GrossProfit_db = pd.read_csv('Monthly/Stocks_GrossProfit_db.csv', header = 0)
 GrossProfit_db.drop_duplicates(keep = 'last', inplace = True)
 for i, d in enumerate(pd.DatetimeIndex(GrossProfit_db.Date)):
@@ -65,6 +73,8 @@ for i, d in enumerate(pd.DatetimeIndex(ControlVariables_db.Date)):
 # The ETF Holdings already have the YearMonth variable
 ETF_Holdings_LongMerged_db.set_index(['YearMonth', 'RIC'], inplace = True)
 RetPast12to1M_db.set_index(['YearMonth', 'RIC'], inplace = True)
+RetPast12to7M_db.set_index(['YearMonth', 'RIC'], inplace = True)
+
 for df in list([GrossProfit_db, ControlVariables_db, ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db]):
     year = pd.DatetimeIndex(df.Date).year
     month = pd.DatetimeIndex(df.Date).month - (pd.DatetimeIndex(df.Date).day==1).astype('int64')
@@ -73,8 +83,8 @@ for df in list([GrossProfit_db, ControlVariables_db, ReturnCloseVolatility_db, A
 
 BidAsk_db = BidAsk_db[~BidAsk_db.index.duplicated(keep = 'last')]
 GrossProfit_db = GrossProfit_db[~GrossProfit_db.index.duplicated(keep = 'last')]
-del ReturnCloseVolatility_MonthlyPanel, AmihudRatio_MonthlyPanel, RetPast12to1M_MonthlyPanel
+del ReturnCloseVolatility_MonthlyPanel, AmihudRatio_MonthlyPanel, RetPast12to1M_MonthlyPanel, RetPast12to7M_MonthlyPanel
 
-MonthlyVariables_db = pd.concat([ETF_Holdings_LongMerged_db,ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db, RetPast12to1M_db, GrossProfit_db, ControlVariables_db], axis = 1)
+MonthlyVariables_db = pd.concat([ETF_Holdings_LongMerged_db,ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db, RetPast12to1M_db, RetPast12to7M_db, GrossProfit_db, ControlVariables_db], axis = 1)
 MonthlyVariables_db.replace([np.inf, -np.inf], np.nan, inplace = True)
 MonthlyVariables_db.to_csv('Monthly/MonthlyVariables_db.csv', index = True, header = True)
