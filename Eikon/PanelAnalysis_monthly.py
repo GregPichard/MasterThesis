@@ -54,13 +54,16 @@ MonthlyAvailable_db.info()
 mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag  + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag  +  EntityEffects + TimeEffects', MonthlyAvailable_db)
 print(mod1_All_Volatility.fit(cov_type = "kernel"))
 
-mod1_All_Volatility_withLags = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag +  GrossProfitability_1lag + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
+mod1_All_Volatility_withLags = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
 mod1_fit = mod1_All_Volatility_withLags.fit(cov_type = "kernel")
 print(mod1_fit)
 f = open('../Regression_Results/mod1_All_Volatility_withLags.tex', 'w')
 f.write(mod1_fit.summary.as_latex())
 f.close()
 
+mod1_All_Volatility_contemporaneousControls = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + PctSharesHeldETF* + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag +  GrossProfitability_1lag + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
+mod1_contemporaneousControls_fit = mod1_All_Volatility_contemporaneousControls.fit(cov_type = "kernel")
+print(mod1_contemporaneousControls_fit)
 ## Attempt to do a dynamic panel estimation through GMM. Needs further research.
 #mod1_GMM_All_Volatility_withlags = linearmodels.LinearFactorModelGMM()
 MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.csv', header = True, index = True)
@@ -70,11 +73,3 @@ MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.cs
 mod1_All_Volatility_noLag = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap) +  InvClose + AmihudRatio + PctBidAskSpread + BookToMarketRatio + RetPast12to1M +  GrossProfitability +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag', MonthlyAvailable_db)
 print(mod1_All_Volatility_noLag.fit(cov_type = "clustered"))
 
-#from statsmodels.datasets import grunfeld
-#data = grunfeld.load_pandas().data
-#data.firm = data.firm.astype('category')
-#data.year = pd.to_datetime(data.year)
-#data = data.set_index(['firm', 'year'])
-#print(data.head())
-#mod = linearmodels.PanelOLS.from_formula('invest ~ 0 + value + capital + EntityEffects', data = data)
-#print(mod.fit())

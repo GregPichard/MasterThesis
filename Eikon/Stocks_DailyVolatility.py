@@ -16,7 +16,7 @@ if os.getcwd() != dir_path:
 import pandas as pd
 import numpy as np
 import datetime
-print("Loading Price and volume data (large table > 2.2 GB)")
+print("Loading Price and volume data (large table > 2.4 GB)")
 Stocks_PriceVol_Daily_db = pd.read_csv('Daily/StockPrice-volume_Series_daily_db.csv', header = None, index_col = 0)
 Stocks_PriceVol_Daily_db.info()
 Stocks_PriceVol_Daily_db.rename({1:'Date', 2:'RIC', 3:'Variable', 4:'Value'}, axis = 'columns', inplace = True)
@@ -28,14 +28,17 @@ print("Generating Close Prices panel")
 Stocks_Close_Daily_db = Stocks_PriceVol_Daily_db.xs('CLOSE', level=2)
 Stocks_Close_DailyPanel_db = pd.pivot_table(Stocks_Close_Daily_db.reset_index(), values = 'Value', index = 'Date', columns = 'RIC', fill_value = 0)
 del Stocks_Close_Daily_db
-print("Generating Volume panel")
+print("Generating (daily) Volume panel")
 Stocks_Volume_Daily_db = Stocks_PriceVol_Daily_db.xs('VOLUME', level=2)
 del Stocks_PriceVol_Daily_db
 Stocks_Volume_DailyPanel_db = pd.pivot_table(Stocks_Volume_Daily_db.reset_index(), values = 'Value', index = 'Date', columns = 'RIC', fill_value = 0)
+# Aggregation at the monthly frequency
+Stocks_Volume_MonthlyPanel_db = Stocks_Volume_DailyPanel_db.resample('M', axis = 0).sum()
+Stocks_Volume_MonthlyPanel_db.to_csv('Monthly/Stocks_Volume_')
 del Stocks_Volume_Daily_db
 print("Generating Percentage daily return panel")
 Stocks_ReturnClose_DailyPanel = Stocks_Close_DailyPanel_db.pct_change().drop(pd.to_datetime('1999-08-02'), axis=0)
-print("Generating Montjly volatility panel")
+print("Generating Monthly volatility panel")
 Stocks_ReturnCloseVolatility_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).std()
 Stocks_ReturnCloseVolatility_MonthlyPanel.to_csv('Monthly/Stocks_DVolatility_MFreq_WidePanel.csv', index = True, header = True)
 # Loading the VWAP data set
