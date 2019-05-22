@@ -61,6 +61,7 @@ for i, d in enumerate(pd.DatetimeIndex(GrossProfit_db.Date)):
 # Close price (which inverse is used)
 # Price to BV per share ratio (which inverse is used)
 ControlVariables_db = pd.read_csv('Monthly/StockControlVariables_monthly_db.csv', header = 0)
+ControlVariables_db = ControlVariables_db.assign(CompanyMarketCap_millions = pd.Series(ControlVariables_db.CompanyMarketCap/10e6))
 ControlVariables_db.drop_duplicates(keep = 'last', inplace = True)
 for i, d in enumerate(pd.DatetimeIndex(ControlVariables_db.Date)):
     if d.day == 1:

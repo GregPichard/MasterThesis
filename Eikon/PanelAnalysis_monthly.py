@@ -6,7 +6,7 @@ Created on Wed Apr 10 09:19:05 2019
 @author: gpichard
 """
 
-import os
+import osSumStats
 file_path = os.path.realpath(__file__)
 dir_path = os.path.dirname(file_path)
 if os.getcwd() != dir_path:
@@ -14,6 +14,7 @@ if os.getcwd() != dir_path:
     os.chdir(dir_path)
 
 import pandas as pd
+pd.options.display.float_format = '{:.3f}'.format
 import numpy as np
 import datetime
 import multiprocessing
@@ -38,6 +39,27 @@ MonthlyAvailable_db.loc[MonthlyAvailable_db.Close < 1, 'Close'] = None
 # Transformations and lags needed for regressions
 MonthlyAvailable_db = MonthlyAvailable_db.assign(InvClose = pd.Series(1/MonthlyAvailable_db['Close']))
 MonthlyAvailable_db = MonthlyAvailable_db.assign(BookToMarketRatio = pd.Series(1/MonthlyAvailable_db['PriceToBVPerShare']))
+
+## Summary statistics
+KeptVariables_summary = list(['Volatility', 'PctSharesHeldETF', 'BookToMarketRatio', 'CompanyMarketCap_millions', 'InvClose', 'PctBidAskSpread', 'AmihudRatio', 'RetPast12to1M', 'RetPast12to7M', 'GrossProfitability'])
+KeptVariables_headers = list(['Volatility', 'ETF Ownership', 'Book-to-market', 'Market cap. ($ Mln.)', '1/Price', 'Rel. Bid-Ask spread', 'Amihud ratio', 'Past 12-to-1-month return', 'Past 12-to-7-month return', 'Gross profitability'])
+SumStats = MonthlyAvailable_db[KeptVariables_summary].dropna().describe().transpose()
+SumStats['count'] = SumStats['count'].astype(int)
+SumStats.to_latex('../SummaryStats/SummaryTable.tex', header = ['N (obs.)', 'Mean', 'St. dev.', 'Min.', '25%', 'Median', '75%', 'Max.'])
+#SumStats.to_latex()
+# Correlation matrix
+CorrMat = MonthlyAvailable_db[KeptVariables_summary].corr()
+mask = np.tril(np.ones_like(CorrMat, dtype=np.bool), k=0)
+CorrMat.where(mask, other = '', inplace = True)
+NumberedHeader = ["({})".format(x) for x in np.arange(1, len(KeptVariables_summary) + 1)]
+CorrMat.set_index([pd.Series(KeptVariables_headers), pd.Series(NumberedHeader)], inplace = True, drop = True)
+
+CorrMat.to_latex('../SummaryStats/CorrTable.tex', index_names = True, header = NumberedHeader[:(len(NumberedHeader))])
+
+
+
+
+## Dynamic panel
 # Shift variables in time : independent variables and volatility lags
 MonthlyAvailable_1lag_db = MonthlyAvailable_db.groupby(level = 0)[['CompanyMarketCap', 'InvClose', 'AmihudRatio', 'PctBidAskSpread', 'BookToMarketRatio', 'RetPast12to1M', 'RetPast12to7M','GrossProfitability', 'Volatility']].shift(1)
 MonthlyAvailable_1lag_db.columns = [s + "_1lag" for s in list(MonthlyAvailable_1lag_db.columns)]
@@ -50,6 +72,7 @@ MonthlyAvailable_4lag_db.name = MonthlyAvailable_4lag_db.name + "_4lag"
 MonthlyAvailable_db = pd.concat([MonthlyAvailable_db, MonthlyAvailable_1lag_db, MonthlyAvailable_2lag_db, MonthlyAvailable_3lag_db, MonthlyAvailable_4lag_db], axis = 1)
 #MonthlyAvailable_db = MonthlyAvailable_db.dropna()
 MonthlyAvailable_db.info()
+
 
 mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag  + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag  +  EntityEffects + TimeEffects', MonthlyAvailable_db)
 print(mod1_All_Volatility.fit(cov_type = "kernel"))
