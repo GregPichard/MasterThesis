@@ -4,7 +4,15 @@ This section aims first at providing an overview about the distribution of all v
   \begin{table}[htbp]
     \label{tab:SummaryTable}
     \caption{U.S. Sample (monthly) : Summary Statistics}
-    \input{SummaryStats/SummaryTable.tex}
-    \input{SummaryStats/CorrTable.tex}
+    \begin{subtable}[t]{\linewidth}
+      \label{subtab:SummaryTable:PanelA}
+      \caption{Summary statistics}
+      \input{SummaryStats/SummaryTable.tex}
+    \end{subtable}
+    \begin{subtable}[t]{\linewidth}
+      \label{subtab:SummaryTable:PanelB}
+      \caption{Pearson correlation coefficients}
+      \input{SummaryStats/CorrTable.tex}
+    \end{subtable}
 \end{table}
 \end{landscape}

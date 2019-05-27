@@ -6,7 +6,7 @@ Created on Wed Apr 10 09:19:05 2019
 @author: gpichard
 """
 
-import osSumStats
+import os
 file_path = os.path.realpath(__file__)
 dir_path = os.path.dirname(file_path)
 if os.getcwd() != dir_path:
