@@ -16,10 +16,9 @@ if os.getcwd() != dir_path:
 import pandas as pd
 import numpy as np
 import datetime
-import multiprocessing
 
 # Loading the dependent variable : Monthly-averaged daily returns volatility (panel form)
-ReturnCloseVolatility_MonthlyPanel = pd.read_csv('Monthly/Stocks_DVolatility_MFreq_WidePanel.csv', header = 0)
+ReturnCloseVolatility_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_DVolatility_MFreq_WidePanel.csv', header = 0)
 ReturnCloseVolatility_db = pd.melt(ReturnCloseVolatility_MonthlyPanel, id_vars = ['Date'], var_name = 'RIC', value_name = 'Volatility')
 # Loading the main independent variable : ETF ownership shares (already long)
 ETF_Holdings_LongMerged_db = pd.read_csv('Monthly/ETF_Holdings_LongMerged_db.csv', header=0)

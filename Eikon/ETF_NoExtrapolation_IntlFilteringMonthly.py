@@ -22,7 +22,7 @@ import multiprocessing
 ETF_ID_db = pd.read_excel("ReportEikon_ETF_live&nonswap_20190303.xlsx", header = 0)
 ETF_ID_db.info()
 
-# Read fund holdings of US stocks (monthly appended data) - HDF5
+# Read fund holdings of International stocks (monthly appended data) - CSV
 # Since file is large, it is read in successive chunks
 print("Extraction of raw ETF holdings in progress. Please wait...")
 StocksETF_db = pd.concat([x.query('Fund_RIC in ' + str(list(ETF_ID_db.Lipper_RIC))) for x in pd.read_csv('Monthly/IntlFundOwners_Monthly_Full_db.csv', chunksize = 10e4)], ignore_index = True)
@@ -58,11 +58,15 @@ StocksETF_Aggregate_db = StocksETF_db.reset_index().groupby(by= ['YearMonth', 'R
 ### Total shares outstanding
 ## Warning : from here on, script "OutstandingShares_query.py" is expected to have been run
 Stocks_SharesOutstanding_db = pd.read_csv("Monthly/IntlOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
+Stocks_SharesOutstanding_db.info()
+Stocks_SharesOutstanding_db.head(10)
+
 #AdditionalStocks_SharesOutstanding_db = pd.read_csv("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
 #Stocks_SharesOutstanding_db = pd.concat([Stocks_SharesOutstanding_db, AdditionalStocks_SharesOutstanding_db])
 Stocks_SharesOutstanding_db = Stocks_SharesOutstanding_db.rename(index = str, columns = {1:"RIC", 2:"Date", 3:"NbSharesOutstanding"})
 Stocks_SharesOutstanding_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(np.int64(pd.DatetimeIndex(Stocks_SharesOutstanding_db['Date']).year), np.int64(pd.DatetimeIndex(Stocks_SharesOutstanding_db['Date']).month))]
 Stocks_SharesOutstanding_db = Stocks_SharesOutstanding_db.dropna()
+Stocks_SharesOutstanding_db.drop_duplicates(inplace = True)
 Stocks_SharesOutstanding_db.set_index(['YearMonth', 'RIC'], inplace = True)
 
 # Panel form (not necessary for next operations)
