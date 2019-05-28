@@ -10,6 +10,7 @@ if __name__ == "__main__":
     import pandas as pd
     import numpy as np
     import datetime as dt
+    import time
     import eikon
     import configparser as cp
     cfg = cp.ConfigParser()
@@ -20,8 +21,9 @@ if __name__ == "__main__":
     
 def Get_Data(iter_ric_list):
     # The sample has to be cut into two bits : from August 1999 to late January 2007 and from February 2007 to end 2018.
-    #TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='1999-08-01', end_date='2007-01-31', interval='daily', normalize=True)
-    TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='2007-02-01', end_date='2018-12-31', interval='daily', normalize=True)
+    time.sleep(1)
+    TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='1999-08-01', end_date='2007-01-31', interval='daily', normalize=True)
+    #TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='2007-02-01', end_date='2018-12-31', interval='daily', normalize=True)
     return TS
 
 def Loop_Stocks(ric_list):
@@ -55,7 +57,14 @@ def Loop_Stocks(ric_list):
 def main():
     StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
-    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Daily/IntlStockPrice-volume_Series_daily_db.csv', header = None, usecols = [2], squeeze= True).unique())))
-    Loop_Stocks(RemainingRICs)
+#    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Daily/IntlStockPrice-volume_Series_daily_db.csv', header = None, usecols = [2], squeeze= True).unique())))
+    Already = pd.read_csv('D:/ETF_GP/Daily/IntlStockPrice-volume_Series_daily_db.csv', header = None, usecols = [1,2])
+    Already[1] = Already[1].astype('category')
+    Already[2] = Already[2].astype('category')
+    Already2007 = Already[Already[1] == '2007-01-31']
+    del Already
+    Already2007 = Already2007[2].unique()
+    Missing9907 = list(set(StocksRICs).difference(set(Already2007)))
+    Loop_Stocks(Missing9907)
 if __name__ == "__main__":
     main()

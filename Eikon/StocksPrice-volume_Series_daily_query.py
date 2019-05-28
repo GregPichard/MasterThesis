@@ -14,11 +14,12 @@ if __name__ == "__main__":
     cfg = cp.ConfigParser()
     cfg.read('eikon.cfg')
     eikon.set_app_key(cfg['eikon']['app_id'])
+    import time
     
 def Get_Data(iter_ric_list):
     # The sample has to be cut into two bits : from August 1999 to late January 2007 and from February 2007 to end 2018.
-    #TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='1999-08-01', end_date='2007-01-31', interval='daily', normalize=True)
-    TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='2007-02-01', end_date='2018-12-31', interval='daily', normalize=True)
+    TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='1999-08-01', end_date='2007-01-31', interval='daily', normalize=True)
+    #TS = eikon.get_timeseries(iter_ric_list, fields = ['TIMESTAMP','VOLUME', 'HIGH', 'LOW', 'OPEN', 'CLOSE'], start_date='2007-02-01', end_date='2018-12-31', interval='daily', normalize=True)
     return TS
 
 def Loop_Stocks(ric_list):
@@ -38,9 +39,10 @@ def Loop_Stocks(ric_list):
         iter_ric_list = ric_list[initial_value:end_value]
         #print(eikon_iter_ric_list)
         try:
+            time.sleep(2)
             TS = Get_Data(iter_ric_list)
             #print(TS)
-            TS.to_csv("Daily/StockPrice-volume_Series_daily_db.csv", mode = 'a', header = False)
+            TS.to_csv("D:/ETF_GP/Daily/StockPrice-volume_Series_daily_db.csv", mode = 'a', header = False)
             #TS.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
@@ -52,8 +54,14 @@ def Loop_Stocks(ric_list):
 def main():
     StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
     StocksRICs = StocksRICs.RIC.tolist()
- 
-    Loop_Stocks(StocksRICs)
+#    # Initial error of not including the RICs of companies that never held ETF. Here they are (early comparison just after noticing the mistake) :
+#    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Daily/StockPrice-volume_Series_daily_db.csv', header = None, usecols = [2], squeeze= True).unique())))
+#    # Manually processed the list to a CSV file :
+#    pd.Series(RemainingRICs).to_csv('RemainingRICs_StocksPrice-volume_Series.csv')
+    # Unfortunately, the script has to be run twice because of subperiods. Read the record of missing RICs :
+    RemainingRICs = list(pd.read_csv('RemainingRICs_StocksPrice-volume_Series.csv', header = None, usecols= [1], squeeze = True))
+    Loop_Stocks(RemainingRICs)
+#    Loop_Stocks(StocksRICs)
 
 if __name__ == "__main__": 
     main()

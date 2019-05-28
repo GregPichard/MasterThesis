@@ -51,7 +51,7 @@ if __name__ == "__main__":
 #            width //= 4
 
 def Get_Data(iter_ric_list):
-    OutShares, err = eikon.get_data(iter_ric_list, ['TR.BasicShrsOutAvg.calcdate', 'TR.BasicShrsOutAvg'], {'SDate':'1999-08-02', 'EDate':'2018-12-31', 'Frq':'D'})
+    OutShares, err = eikon.get_data(iter_ric_list, ['TR.BasicShrsOutAvg.calcdate', 'TR.BasicShrsOutAvg'], {'SDate':'1999-08-31', 'EDate':'2018-12-31', 'Frq':'M'})
     return OutShares
 
 def Loop_Stocks(ric_list):
@@ -83,7 +83,7 @@ def Loop_Stocks(ric_list):
 def main():
     StocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     StocksRICs = StocksRICs.RIC.tolist()
-    Loop_Stocks(ric_list)
+    Loop_Stocks(StocksRICs)
 #    mo = range(1, 13)
 #    dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
 #    years = range(1999, 2019, 1)

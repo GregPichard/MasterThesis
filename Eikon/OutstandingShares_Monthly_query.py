@@ -39,8 +39,8 @@ def Loop_Stocks(ric_list, date):
             #FundOwners = p.apply_async(Get_Data, args = (eikon_iter_ric_list, date))
             OutShares = Get_Data(eikon_iter_ric_list, date)
             #print(OutShares)
-            OutShares.to_csv("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.csv", mode = 'a', header = False)
-            OutShares.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
+            OutShares.to_csv("D:/ETF_GP/Monthly/BasicOutstandingShares_Stocks_Monthly_db.csv", mode = 'a', header = False)
+            #OutShares.to_hdf("D:/ETF_GP/Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
             initial_value += width
@@ -51,7 +51,11 @@ def Loop_Stocks(ric_list, date):
 def main():
     StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
     StocksRICs = StocksRICs.RIC.tolist()
-    
+    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Monthly/BasicOutstandingShares_Stocks_Monthly_db.csv', header = None, usecols = [1], squeeze= True).unique())))
+#    # Manually processed the list to a CSV file :
+#    pd.Series(RemainingRICs).to_csv('RemainingRICs_StocksPrice-volume_Series.csv')
+    # Unfortunately, the script has to be run twice because of subperiods. Read the record of missing RICs :
+    #RemainingRICs = list(pd.read_csv('D:/ETF_GP/', header = None, usecols= [1], squeeze = True))
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
     years = range(1999, 2019, 1)
@@ -64,7 +68,8 @@ def main():
     for i, date in enumerate(dates_list):
         print("Processing date : ", date)
         print(ref_dates[i])
-        Loop_Stocks(StocksRICs, date)
+        Loop_Stocks(RemainingRICs, date)
+#        Loop_Stocks(StocksRICs, date)
         print("Processed date : ", date)
 
 

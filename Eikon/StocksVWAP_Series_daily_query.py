@@ -23,7 +23,7 @@ def Loop_Stocks(ric_list):
     N_stocks = len(ric_list)
     print("Number of stocks : ", N_stocks)
     initial_value = 0
-    ideal_width = 100
+    ideal_width = 50
     width = ideal_width
     while initial_value < N_stocks:
         if width == 0:
@@ -38,7 +38,7 @@ def Loop_Stocks(ric_list):
         try:
             TS = Get_Data(iter_ric_list)
             #print(TS)
-            TS.to_csv("Daily/StockVWAP_Series_daily_db.csv", mode = 'a', header = False)
+            TS.to_csv("D:/ETF_GP/Daily/StockVWAP_Series_daily_db.csv", mode = 'a', header = False)
             #TS.to_csv("Daily/CopyStockVWAP_Series_daily_db.csv", mode = 'a', header = False)
 
             #TS.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
@@ -52,8 +52,14 @@ def Loop_Stocks(ric_list):
 def main():
     StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
     StocksRICs = StocksRICs.RIC.tolist()
- 
-    Loop_Stocks(StocksRICs)
+ #    # Initial error of not including the RICs of companies that never held ETF. Here they are (early comparison just after noticing the mistake) :
+    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Daily/StockVWAP_Series_daily_db.csv', header = None, usecols = [1], squeeze= True).unique())))
+#    # Manually processed the list to a CSV file :
+#    pd.Series(RemainingRICs).to_csv('RemainingRICs_StocksPrice-volume_Series.csv')
+    # Unfortunately, the script has to be run twice because of subperiods. Read the record of missing RICs :
+    #RemainingRICs = list(pd.read_csv('D:/ETF_GP/', header = None, usecols= [1], squeeze = True))
+    Loop_Stocks(RemainingRICs)
+#    Loop_Stocks(StocksRICs)
 
 if __name__ == "__main__":
     main()

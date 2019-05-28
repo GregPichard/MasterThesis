@@ -39,7 +39,7 @@ def Loop_Stocks(ric_list, date):
             #FundOwners = p.apply_async(Get_Data, args = (eikon_iter_ric_list, date))
             OutShares = Get_Data(eikon_iter_ric_list, date)
             #print(OutShares)
-            OutShares.to_csv("Monthly/AdditionalVariables_Stocks_Monthly_db.csv", mode = 'a', header = False)
+            OutShares.to_csv("D:/ETF_GP/Monthly/AdditionalVariables_Stocks_Monthly_db.csv", mode = 'a', header = False)
             #OutShares.to_hdf("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.hdf", key = 'out_shares', complevel = 6, complib = 'zlib')
             #FundOwners.to_sql('FundOwners_db', engine, if_exists = 'append', index = True, index_label = "Instrument")
             print("init", initial_value, "end", end_value, "-> OK !")
@@ -51,7 +51,7 @@ def Loop_Stocks(ric_list, date):
 def main():
     StocksRICs = pd.read_excel("ReportEikon_Stocks_US_static_20190304.xlsx", header = 0)
     StocksRICs = StocksRICs.RIC.tolist()
-    
+    RemainingRICs = list(set(StocksRICs).difference(set(pd.read_csv('D:/ETF_GP/Monthly/AdditionalVariables_Stocks_Monthly_db.csv', header = None, usecols = [1], squeeze= True).unique())))
     mo = range(1, 13)
     dd = list([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
     years = range(1999, 2019, 1)
@@ -64,7 +64,8 @@ def main():
     for i, date in enumerate(dates_list[8:]):
         print("Processing date : ", date)
         print(ref_dates[8 + i])
-        Loop_Stocks(StocksRICs, date)
+        Loop_Stocks(RemainingRICs, date)
+#        Loop_Stocks(StocksRICs, date)
         print("Processed date : ", date)
 
 

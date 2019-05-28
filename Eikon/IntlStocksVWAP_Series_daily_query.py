@@ -25,7 +25,7 @@ def Loop_Stocks(ric_list):
     N_stocks = len(ric_list)
     print("Number of stocks : ", N_stocks)
     initial_value = 0
-    ideal_width = 100
+    ideal_width = 25
     width = ideal_width
     while initial_value < N_stocks:
         if width == 0:
