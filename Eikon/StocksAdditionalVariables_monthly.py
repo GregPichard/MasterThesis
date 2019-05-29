@@ -31,6 +31,7 @@ Stocks_PriceVol_db.rename({1:'Date', 2:'RIC', 3:'Variable', 4:'Value'}, axis = '
 Stocks_PriceVol_db.Date = pd.to_datetime(Stocks_PriceVol_db.Date, infer_datetime_format = True)
 for col in list(Stocks_PriceVol_db[['RIC', 'Variable']].columns):
     Stocks_PriceVol_db[col] = Stocks_PriceVol_db[col].astype('category')
+del col
 Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
 Stocks_PriceVol_db['Month'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).month
 Stocks_PriceVol_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(Stocks_PriceVol_db['Year'], Stocks_PriceVol_db['Month'])]
@@ -41,8 +42,9 @@ Stocks_PriceVolPanel_db.shape
 # How to slice the panel :
 # All price series for stock with RIC 'A.N': Stocks_PriceVolPanel_db['A.N'].unstack()
 # All data across stocks for Year-Month end '2018-12' : Stocks_PriceVolPanel_db.xs('2018-12')
-# All Close price series : Stocks_PriceVolPanel_db.xs('CLOSE', level=1)
+# Close price series : 
 Stocks_ClosePricePanel_db = Stocks_PriceVolPanel_db.xs('CLOSE', level=1)
+# Volume series :
 Stocks_VolumePanel_db = Stocks_PriceVolPanel_db.xs('VOLUME', level=1)
 # The amount of non-null values (resp. 595120 and 59127) is higher than in the common ('Additional variables') query.
 
