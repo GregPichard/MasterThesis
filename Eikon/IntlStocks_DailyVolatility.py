@@ -57,7 +57,10 @@ del Stocks_Volume_MonthlyPanel_db
 
 # Back to Close price : returns and volatility
 print("Generating Percentage daily return panel")
-Stocks_ReturnClose_DailyPanel = Stocks_Close_DailyPanel_db.pct_change().drop(pd.to_datetime('1999-08-02'), axis=0)
+Stocks_ReturnClose_DailyPanel = Stocks_Close_DailyPanel_db.pct_change().drop(pd.to_datetime('1999-08-01'), axis=0)
+# There is an extremely large number of missing values, yielding infinite yield. Replace np.inf with np.nan before dropping all np.nan
+Stocks_ReturnClose_DailyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
+Stocks_ReturnClose_DailyPanel.dropna(how = 'all', inplace = True)
 print("Generating Monthly volatility panel")
 Stocks_ReturnCloseVolatility_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).std()
 Stocks_ReturnCloseVolatility_MonthlyPanel.to_csv('Monthly/IntlStocks_DVolatility_MFreq_WidePanel.csv', index = True, header = True)
@@ -85,9 +88,15 @@ Stocks_VWAP_DailyPanel_db = Stocks_VWAP_DailyPanel_db.filter(list(CommonDates), 
 Stocks_Volume_DailyPanel_db = Stocks_Volume_DailyPanel_db.filter(list(CommonDates), axis = 0)
 Stocks_ReturnClose_DailyPanel = Stocks_ReturnClose_DailyPanel.filter(list(CommonDates), axis = 0)
 
-
+# Sorting rows chronologically again
+Stocks_VWAP_DailyPanel_db.sort_index(inplace = True)
+Stocks_Volume_DailyPanel_db.sort_index(inplace = True)
+Stocks_ReturnClose_DailyPanel.sort_index(inplace = True)
 # Computing the Amihud illiquidity ratio over calendar months
 Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db)
+# There is an extremely large number of missing values, yielding infinite yield. Replace np.inf with np.nan before dropping all np.nan
+Stocks_AbsReturnOverVolume_DailyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
+Stocks_AbsReturnOverVolume_DailyPanel.dropna(how = 'all', inplace = True)
 Stocks_AmihudRatio_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()/Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
 Stocks_AmihudRatio_MonthlyPanel.to_csv('Monthly/IntlStocks_AmihudRatio_WidePanel.csv', index = True, header = True)
 #Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
