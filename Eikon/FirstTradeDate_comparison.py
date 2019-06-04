@@ -6,7 +6,10 @@ Comparing IPO dates and earliest values included in sample.
 Some securities miss part of their history in our sample - and they were live at that time. Striking example : AAPL.OQ !
 @author: gpichard
 """
-
+if __name__ == "__main__":
+    import pandas as pd
+    import numpy as np
+    
 # Loading price/volume series and extracting Close prices panel to find the earliest
 Stocks_PriceVol_Daily_db = pd.read_csv('Daily/StockPrice-volume_Series_daily_db.csv', header = None, index_col = 0)
 Stocks_PriceVol_Daily_db.info()
