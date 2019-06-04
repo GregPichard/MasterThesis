@@ -96,7 +96,7 @@ IncrementDate_Loop()
 #p.close()
 Duplicates_db.head(100)
 
-# Correcting values in the initial StocksETF_db : replacing delayed dates with queried dates
+# Correcting values in the initial StocksETF_db : replacing delayed dates with queried dates (i.e. "not the actual ones")
 for i, x in enumerate(Duplicates_db.index):
     StocksETF_db.Month.at[x] = Duplicates_db.Month.at[x]
     StocksETF_db.Year.at[x] = Duplicates_db.Year.at[x]

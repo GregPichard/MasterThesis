@@ -40,11 +40,16 @@ MonthlyAvailable_db.loc[MonthlyAvailable_db.Close < 1, 'Close'] = None
 MonthlyAvailable_db = MonthlyAvailable_db.assign(InvClose = pd.Series(1/MonthlyAvailable_db['Close']))
 MonthlyAvailable_db = MonthlyAvailable_db.assign(BookToMarketRatio = pd.Series(1/MonthlyAvailable_db['PriceToBVPerShare']))
 
+# Replace infinite values with NaN in order to drop them afterwards
+MonthlyAvailable_db.replace([np.inf, -np.inf], np.nan, inplace = True)
+
+
 ## Summary statistics
 KeptVariables_summary = list(['Volatility', 'PctSharesHeldETF', 'BookToMarketRatio', 'CompanyMarketCap_millions', 'InvClose', 'PctBidAskSpread', 'AmihudRatio', 'RetPast12to1M', 'RetPast12to7M', 'GrossProfitability'])
 KeptVariables_headers = list(['Volatility', 'ETF Ownership', 'Book-to-market', 'Market cap. ($ Mln.)', '1/Price', 'Rel. Bid-Ask spread', 'Amihud ratio', 'Past 12-to-1-month return', 'Past 12-to-7-month return', 'Gross profitability'])
 SumStats = MonthlyAvailable_db[KeptVariables_summary].dropna().describe().transpose()
 SumStats['count'] = SumStats['count'].astype(int)
+SumStats.set_index(pd.Series(KeptVariables_headers), drop = True, inplace = True)
 SumStats.to_latex('../SummaryStats/SummaryTable.tex', header = ['N (obs.)', 'Mean', 'St. dev.', 'Min.', '25%', 'Median', '75%', 'Max.'])
 #SumStats.to_latex()
 # Correlation matrix

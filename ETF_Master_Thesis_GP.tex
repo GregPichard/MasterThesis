@@ -1,4 +1,4 @@
-\documentclass[a4paper, twoside, 10pt]{scrartcl}
+\documentclass[a4paper, twoside, 10pt, titlepage, captions = tableheading]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -16,24 +16,32 @@
 \usepackage{url}
 \usepackage{amsmath, amssymb}
 \usepackage[super]{nth}
-\usepackage[backend=biber, dateabbrev=true, citestyle=authoryear, bibstyle=authoryear, useprefix=true, language=english]{biblatex}
+\usepackage[backend=biber, dateabbrev=true, citestyle=authoryear-icomp, bibstyle=authoryear-icomp, useprefix=true, language=english]{biblatex}
+\linespread{1.5}
 \bibliography{Bibliography/BibETF}
 \nocite{*}
-
 \providecommand{\keywords}[1]
 {
   \small	
   \textbf{\textit{Keywords---}} #1
 }
-\subject{Final thesis for the completion of the Master of Science in Finance (\textsc{MScF})\\Faculty of Business and Economics -- HEC Lausanne\\University of Lausanne}
-\title{Exchange-traded funds expansion and their unintended effects over underlying stocks {\small [temporary title]}}
+\subject{Final thesis for the completion of the Master of Science in Finance (\textsc{MScF})}
+\titlehead{\centering \large Faculty of Business and Economics -- HEC Lausanne\\University of Lausanne}
+\title{Exchange-traded funds' expansion and their unintended effects over underlying stocks}
+\subtitle{Volatility, liquidity and informational efficiency}
+\publishers{{\small Supervisor :\\}Prof. Artem Neklyudov}
 \date{\today}
 \author{Grégoire Pichard}
 
 \begin{document}
 \maketitle
+\renewcommand{\sectionautorefname}{Section}
 \tableofcontents
+\listoftables
+\listoffigures
+\clearpage
 \input{JackBogle.tex}
+\input{Motivation.tex}
 \input{KnowledgeSummary.tex}
 \input{Data.tex}
 \input{Methodology.tex}
