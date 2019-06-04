@@ -59,6 +59,7 @@ del Stocks_Volume_MonthlyPanel_db
 print("Generating Percentage daily return panel")
 Stocks_ReturnClose_DailyPanel = Stocks_Close_DailyPanel_db.pct_change().drop(pd.to_datetime('1999-08-01'), axis=0)
 # There is an extremely large number of missing values, yielding infinite yield. Replace np.inf with np.nan before dropping all np.nan
+# Replace infinite values with NaN in order to drop them afterwards
 Stocks_ReturnClose_DailyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
 Stocks_ReturnClose_DailyPanel.dropna(how = 'all', inplace = True)
 print("Generating Monthly volatility panel")

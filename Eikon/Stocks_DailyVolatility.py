@@ -34,11 +34,16 @@ del Stocks_PriceVol_Daily_db
 Stocks_Volume_DailyPanel_db = pd.pivot_table(Stocks_Volume_Daily_db.reset_index(), values = 'Value', index = 'Date', columns = 'RIC', fill_value = 0)
 # Aggregation at the monthly frequency
 Stocks_Volume_MonthlyPanel_db = Stocks_Volume_DailyPanel_db.resample('M', axis = 0).sum()
-Stocks_Volume_MonthlyPanel_db.to_csv('Monthly/Stocks_Volume_')
+Stocks_Volume_MonthlyPanel_db.to_csv('Monthly/Stocks_Volume_LongMerged_db.csv')
 del Stocks_Volume_Daily_db
 print("Generating Percentage daily return panel")
 Stocks_ReturnClose_DailyPanel = Stocks_Close_DailyPanel_db.pct_change().drop(pd.to_datetime('1999-08-02'), axis=0)
 print("Generating Monthly volatility panel")
+# There is an extremely large number of missing values, yielding infinite yield. Replace np.inf with np.nan before dropping all np.nan
+# Replace infinite values with NaN in order to drop them afterwards
+Stocks_ReturnClose_DailyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
+Stocks_ReturnClose_DailyPanel.dropna(how = 'all', inplace = True)
+
 Stocks_ReturnCloseVolatility_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).std()
 Stocks_ReturnCloseVolatility_MonthlyPanel.to_csv('Monthly/Stocks_DVolatility_MFreq_WidePanel.csv', index = True, header = True)
 # Loading the VWAP data set
