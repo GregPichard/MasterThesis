@@ -1,8 +1,11 @@
-{\linespread{1.0}
 \begin{table}[htbp]
 \centering
   \label{tab:ETFCharacteristics}
   \caption{Summary of the variables' coverage in the ETF Characteristics table}
+\begin{tabular}{ll}
+  Type: & <class 'pandas.core.frame.DataFrame'>\\
+  RangeIndex: & 3601 entries, 0 to 3600\\
+  \end{tabular}
   \begin{tabular}{lr}
     \toprule
     Data columns & (total 20 columns)\\
@@ -28,12 +31,8 @@
     Peer\_Index & 1369 non-null object\\
     \bottomrule
   \end{tabular}
-  {\itshape
-  \begin{tabular}{rr}
-  Type: & <class 'pandas.core.frame.DataFrame'>\\
-  RangeIndex: & 3601 entries, 0 to 3600\\
+  \begin{tabular}{ll}
   dtypes: & datetime64[ns](1), float64(3), int64(2), object(14)\\
   Memory usage: & 562.7+ KB
-  \end{tabular}}
+  \end{tabular}
 \end{table}
-}
