@@ -9,6 +9,7 @@ Some securities miss part of their history in our sample - and they were live at
 if __name__ == "__main__":
     import pandas as pd
     import numpy as np
+    import datetime as dt
     
 # Loading price/volume series and extracting Close prices panel to find the earliest
 Stocks_PriceVol_Daily_db = pd.read_csv('Daily/StockPrice-volume_Series_daily_db.csv', header = None, index_col = 0)
@@ -39,6 +40,7 @@ ListingDate[2] = pd.to_datetime(ListingDate[2], infer_datetime_format=True)
 # Comparison
 CompTable = pd.concat([ListingDate, EarliestDate], axis=1, verify_integrity=True)
 CompTable.rename({'Date':'Earliest'}, axis='columns', inplace = True)
+CompTable.rename({2:'Listing'}, axis='columns', inplace = True)
 CompTable.columns
 
 print('Matching : Introduction date and Earliest date identical in sample')
@@ -47,6 +49,27 @@ print('Surprising : Earliest date is before Introduction date')
 np.sum(CompTable.Earliest < CompTable.Listing)
 print('Searched for : Earliest date is after 1999-08-02, and after the Introduction date, hence there a part of the time series is missing')
 MissingHistory = CompTable[(CompTable.Earliest > CompTable.Listing) & (CompTable.Earliest > pd.to_datetime('1999-08-02'))]
-pd.Series.hist(MissingHistory['Earliest'],bins=20)
+pd.Series.hist(MissingHistory['Earliest'], bins=20)
 MissingHistory.to_csv('Issues/MissingDailyPriceVol_timetable.csv', header = True, index = True)
 ## There are indeed about 40 securities missing the first half of the sample, while they were already listed. Some incimplete have only are few days missing at the beginning.
+
+## Also important : the number of shares outstanding
+Stocks_OutShares_db = pd.read_csv("Monthly/BasicOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
+AdditionalStocks_OutShares_db = pd.read_csv("Monthly/AdditionalOutstandingShares_Stocks_Monthly_db.csv", header = None, index_col = 0)
+Stocks_OutShares_db = pd.concat([Stocks_OutShares_db, AdditionalStocks_OutShares_db])
+Stocks_OutShares_db = Stocks_OutShares_db.rename(index = str, columns = {1:"RIC", 2:"Date", 3:"NbSharesOutstanding"})
+Stocks_OutShares_db.Date = pd.to_datetime(Stocks_OutShares_db.Date, infer_datetime_format = True)
+
+EarliestOutDate = Stocks_OutShares_db.dropna().groupby(by = 'RIC')['Date'].min()
+CompTableOut = pd.concat([ListingDate, EarliestOutDate], axis=1, verify_integrity=True)
+CompTableOut.rename({'Date':'Earliest'}, axis='columns', inplace = True)
+CompTableOut.rename({2:'Listing'}, axis='columns', inplace = True)
+CompTableOut.columns
+
+print('Matching : Introduction date and Earliest date identical in sample')
+np.sum(CompTableOut.Earliest == CompTableOut.Listing)
+print('Surprising : Earliest date is before Introduction date')
+np.sum(CompTableOut.Earliest < CompTableOut.Listing)
+print('Searched for : Earliest date is after 1999-01-31, and after the Introduction date, hence there a part of the time series is missing')
+MissingHistoryOut = CompTableOut[(CompTableOut.Earliest > CompTableOut.Listing) & (CompTableOut.Earliest > pd.to_datetime('1999-01-31'))]
+pd.Series.hist(MissingHistoryOut['Earliest'], bins=20)
