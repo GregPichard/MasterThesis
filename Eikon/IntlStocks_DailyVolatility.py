@@ -98,8 +98,16 @@ Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stoc
 # There is an extremely large number of missing values, yielding infinite yield. Replace np.inf with np.nan before dropping all np.nan
 Stocks_AbsReturnOverVolume_DailyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
 Stocks_AbsReturnOverVolume_DailyPanel.dropna(how = 'all', inplace = True)
-Stocks_AmihudRatio_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()/Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+
+# For model 2 (liquidity), both the numerator and denominator will be needed
+Stocks_AmihudNumerator_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()
+Stocks_AmihudNumerator_MonthlyPanel.to_csv('Monthly/IntlStocks_AmihudNumerator_WidePanel.csv', index = True, header = True)
+Stocks_AmihudDenominator_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudDenominator_MonthlyPanel.to_csv('Monthly/IntlStocks_AmihudDenominator_WidePanel.csv', index = True, header = True)
+Stocks_AmihudRatio_MonthlyPanel = Stocks_AmihudNumerator_MonthlyPanel/Stocks_AmihudDenominator_MonthlyPanel
 Stocks_AmihudRatio_MonthlyPanel.to_csv('Monthly/IntlStocks_AmihudRatio_WidePanel.csv', index = True, header = True)
+
+
 #Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
 #Stocks_PriceVol_db['Month'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).month
 #Stocks_PriceVol_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(Stocks_PriceVol_db['Year'], Stocks_PriceVol_db['Month'])]
