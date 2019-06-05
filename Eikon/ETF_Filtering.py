@@ -30,7 +30,7 @@ Stocks_MarketCap_db = Stocks_MarketCap_db.dropna()
 # Issue : with the variable 'TR.SharesOutstanding'. some securities have shares outstanding data before 1999. Here is their subsample.
 Outliers_MarketCap_db = Stocks_MarketCap_db[Stocks_MarketCap_db.RIC.isin(list(Stocks_MarketCap_db.loc[Stocks_MarketCap_db.Year < 1999, 'RIC'].unique()))]
 OutliersMarketCapPanel_db = pd.pivot_table(Outliers_MarketCap_db, values = 'NbSharesOutstanding', index = 'Year', columns = 'RIC', fill_value = None)
-OutliersMarketCapPanel_db.to_csv("OutliersMarketCapPanel.csv", header = True)
+#OutliersMarketCapPanel_db.to_csv("OutliersMarketCapPanel.csv", header = True)
 
 StocksMarketCapPanel_db = pd.pivot_table(Stocks_MarketCap_db, values = 'NbSharesOutstanding', index = 'Year', columns = 'RIC', fill_value = 0)
 
