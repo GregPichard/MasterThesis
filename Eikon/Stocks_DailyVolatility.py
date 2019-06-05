@@ -16,7 +16,7 @@ if os.getcwd() != dir_path:
 import pandas as pd
 import numpy as np
 import datetime
-print("Loading Price and volume data (large table > 2.4 GB)")
+print("Loading Price and volume data (large table > 2.5 GB)")
 Stocks_PriceVol_Daily_db = pd.read_csv('Daily/StockPrice-volume_Series_daily_db.csv', header = None, index_col = 0)
 Stocks_PriceVol_Daily_db.info()
 Stocks_PriceVol_Daily_db.rename({1:'Date', 2:'RIC', 3:'Variable', 4:'Value'}, axis = 'columns', inplace = True)
@@ -61,12 +61,19 @@ Stocks_VWAP_DailyPanel_db = Stocks_VWAP_DailyPanel_db.filter(Stocks_Volume_Daily
 # Dropping the first row of Volume and VWAP series in order to divide by same-sized arrays
 Stocks_Volume_DailyPanel_db.drop(pd.to_datetime('1999-08-02'), axis=0, inplace=True)
 Stocks_VWAP_DailyPanel_db.drop(pd.to_datetime('1999-08-02'), axis=0, inplace=True)
+# Dropping one date (Christmas...) existing in returns, and whose values are worth nothing
+Stocks_ReturnClose_DailyPanel.drop(pd.to_datetime('2004-12-24'), axis=0, inplace=True)
 # Filtering out one stock from the return on Close price history in order to match with those in VWAP and Volume series (the company, BSB Bancorp Inc., has filed out from NASDAQ on 2019-04-01)
 Stocks_ReturnClose_DailyPanel = Stocks_ReturnClose_DailyPanel.filter(Stocks_Volume_DailyPanel_db.columns, axis = 1)
 
 # Computing the Amihud illiquidity ratio over calendar months
+# For model 2 (liquidity), both the numerator and denominator will be needed
 Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db)
-Stocks_AmihudRatio_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()/Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudNumerator_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()
+Stocks_AmihudNumerator_MonthlyPanel.to_csv('Monthly/Stocks_AmihudNumerator_WidePanel.csv', index = True, header = True)
+Stocks_AmihudDenominator_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudDenominator_MonthlyPanel.to_csv('Monthly/Stocks_AmihudDenominator_WidePanel.csv', index = True, header = True)
+Stocks_AmihudRatio_MonthlyPanel = Stocks_AmihudNumerator_MonthlyPanel/Stocks_AmihudDenominator_MonthlyPanel
 Stocks_AmihudRatio_MonthlyPanel.to_csv('Monthly/Stocks_AmihudRatio_WidePanel.csv', index = True, header = True)
 #Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
 #Stocks_PriceVol_db['Month'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).month
