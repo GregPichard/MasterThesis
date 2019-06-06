@@ -50,20 +50,20 @@ def Loop_Stocks(ric_list):
     return AssetCategory
 
 def Export_Summary(MergedRICs):
-    Summary = pd.crosstab(index=MergedRICs['Asset Category Description'].astype('category'), columns='count')
-    Summary.reset_index(drop = False, inplace = True)
-    Summary.sort_values(by = ['count', 'Asset Category Description'], ascending=[False, True], inplace= True)
-    del Summary.columns.name
-    Summary.set_index('Asset Category Description', drop = True, inplace = True)
-    Summary.rename({'count':'# of entities'}, axis = 1, inplace = True)
-    print(Summary)
-    Summary.to_latex('../SummaryStats/StocksAssetCategories.tex')
+    Summary = pd.crosstab(columns = MergedRICs['level_0'] , index= MergedRICs['Asset Category Description'], margins = True)
+    Summary_resorted = Summary.reset_index().iloc[1:(-1), :].sort_values(by = ['All', 'Asset Category Description'], ascending=[False, True], na_position='last').set_index('Asset Category Description')
+    Summary_resorted = pd.concat([Summary_resorted, Summary.loc[['', 'All']]])
+    Column_Titles = ['US', 'International', 'All']
+    Summary_resorted.reindex(columns = Column_Titles)
+    del Summary_resorted.columns.name
+    print(Summary_resorted)
+    Summary_resorted.to_latex('../SummaryStats/StocksAssetCategories.tex')
 
 def main():
     MergedRICs = pd.read_csv('MergedStocksLists.csv', header = 0, index_col = list([0, 1]))
     AssetCategory = Loop_Stocks(list(MergedRICs.RIC))
     print(AssetCategory)
-    MergedRICs = MergedRICs.merge(AssetCategory, how = 'left', left_on = 'RIC', right_on = 'Instrument')
+    MergedRICs = MergedRICs.reset_index(drop = False).merge(AssetCategory, how = 'left', left_on = 'RIC', right_on = 'Instrument')
     MergedRICs.to_csv('MergedStocksLists.csv', header = True, index = True)
     Export_Summary(MergedRICs)
 
