@@ -53,6 +53,7 @@ def main():
     USStocksRICs.drop(columns = 'Company_Name.1', inplace = True)
     IntlStocksRICs = Concat_Stocks('./NonUS_StocksLists/')
     MergedRICs = pd.concat([USStocksRICs, IntlStocksRICs], keys = ['US', 'International'])
+    MergedRICs.to_csv('MergedStocksLists.csv', header = True, index = True)
     Loop_Stocks(list(MergedRICs.RIC))
 
 
