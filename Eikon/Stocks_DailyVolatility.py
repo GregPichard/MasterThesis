@@ -67,13 +67,15 @@ Stocks_ReturnClose_DailyPanel.drop(pd.to_datetime('2004-12-24'), axis=0, inplace
 Stocks_ReturnClose_DailyPanel = Stocks_ReturnClose_DailyPanel.filter(Stocks_Volume_DailyPanel_db.columns, axis = 1)
 
 # Computing the Amihud illiquidity ratio over calendar months
-# For model 2 (liquidity), both the numerator and denominator will be needed
-Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db)
-Stocks_AmihudNumerator_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()
+# For model 2 (liquidity), both the numerator and denominator will be needed, following the indication in Israeli (2017)
+Stocks_AmihudNumerator_MonthlyPanel = abs(Stocks_ReturnClose_DailyPanel).resample('M', axis=0).mean()
 Stocks_AmihudNumerator_MonthlyPanel.to_csv('Monthly/Stocks_AmihudNumerator_WidePanel.csv', index = True, header = True)
-Stocks_AmihudDenominator_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudDenominator_MonthlyPanel = (Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db).resample('M', axis=0).mean()
 Stocks_AmihudDenominator_MonthlyPanel.to_csv('Monthly/Stocks_AmihudDenominator_WidePanel.csv', index = True, header = True)
-Stocks_AmihudRatio_MonthlyPanel = Stocks_AmihudNumerator_MonthlyPanel/Stocks_AmihudDenominator_MonthlyPanel
+# Original definition of the ILLIQ ratio in Amihud (2002)
+Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db)
+Stocks_AmihudRatio_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()/Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudRatio_MonthlyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
 Stocks_AmihudRatio_MonthlyPanel.to_csv('Monthly/Stocks_AmihudRatio_WidePanel.csv', index = True, header = True)
 #Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
 #Stocks_PriceVol_db['Month'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).month
