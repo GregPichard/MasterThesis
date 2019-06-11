@@ -98,6 +98,30 @@ del colInit, col, mean, std
 MonthlyAvailable_diff_db = MonthlyAvailable_db.groupby(level=0).diff()
 MonthlyAvailable_diff_db.to_csv('Monthly/MonthlyAvailable_diff.csv', header = True, index = True)
 
+## Loading quarterly variance ratios panel
+QuarterlyVarianceRatio_panel = pd.read_csv('Quarterly/Stocks_5to1dVarianceRatio.csv', header = 0, parse_dates = True)
+QuarterlyVarianceRatio_panel.Date = pd.to_datetime(QuarterlyVarianceRatio_panel.Date, infer_datetime_format = True)
+QuarterlyVarianceRatio_db = pd.melt(QuarterlyVarianceRatio_panel, id_vars = ['Date'], var_name = 'RIC', value_name = 'VR')
+QuarterlyVarianceRatio_db.set_index(['RIC','Date'], inplace = True)
+QuarterlyVarianceRatio_db = QuarterlyVarianceRatio_db.assign(absVR = abs(QuarterlyVarianceRatio_db.VR - 1))
+
+# Creating quarterly dataset with the monthly regressors, using end of quarter data or, if missing, the last available values
+level_values = MonthlyAvailable_db.index.get_level_values
+QuarterlyAvailable_db = MonthlyAvailable_db.groupby([level_values(0)]+[pd.Grouper(freq='Q', level = -1)]).last()
+# Lags have to be constructed again at the quarterly frequency (they are still monthly)
+QuarterlyAvailable_db.drop(columns=QuarterlyAvailable_db.filter(regex=("lag")).columns, inplace = True)
+
+QuarterlyAvailable_1lag_db = QuarterlyAvailable_db.groupby(level = 0)[['PctSharesHeldETF', 'CompanyMarketCap', 'InvClose', 'AmihudRatio', 'PctBidAskSpread', 'BookToMarketRatio', 'RetPast12to1M', 'RetPast12to7M','GrossProfitability', 'Volatility']].shift(1)
+QuarterlyAvailable_1lag_db.columns = [s + "_1lag" for s in list(QuarterlyAvailable_1lag_db.columns)]
+QuarterlyAvailable_2lag_db = QuarterlyAvailable_db.groupby(level = 0)['Volatility'].shift(2)
+QuarterlyAvailable_2lag_db.name = QuarterlyAvailable_2lag_db.name + "_2lag"
+QuarterlyAvailable_3lag_db = QuarterlyAvailable_db.groupby(level = 0)['Volatility'].shift(3)
+QuarterlyAvailable_3lag_db.name = QuarterlyAvailable_3lag_db.name + "_3lag"
+QuarterlyAvailable_4lag_db = QuarterlyAvailable_db.groupby(level = 0)['Volatility'].shift(4)
+QuarterlyAvailable_4lag_db.name = QuarterlyAvailable_4lag_db.name + "_4lag"
+QuarterlyAvailable_db = pd.concat([QuarterlyAvailable_db, QuarterlyVarianceRatio_db, QuarterlyAvailable_1lag_db, QuarterlyAvailable_2lag_db, QuarterlyAvailable_3lag_db, QuarterlyAvailable_4lag_db], axis = 1)
+
+
 # =============================================================================
 # ## Regression estimates
 # =============================================================================
@@ -129,7 +153,9 @@ mod1_All_Volatility_noLag = linearmodels.PanelOLS.from_formula('Volatility ~ 0 +
 print(mod1_All_Volatility_noLag.fit(cov_type = "clustered"))
 
 mod1_All_Volatility_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
-mod1_fit = mod1_All_Volatility_withLags_withFundcontrols.fit(cov_type = "kernel")
+mod1_fit = mod1_All_Volatility_withLags_withFundcontrols.fit(cov_type = "kernel")mod3_All_VR = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
+mod3_fit = mod3_All_VR.fit(cov_type = "kernel")
+print(mod3_fit)
 print(mod1_fit)
 
 
@@ -176,3 +202,18 @@ print(mod2_fit)
 # Only the other mutual fund holdings are included to control for institutional ownership, otherwise the matrix of regressors does not have full column rank. Other mutual funds are the most available values and economically the more sizeable of the three categories at hand.
 
 # Model 3 : Efficiency
+mod3_All_VR = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
+mod3_fit = mod3_All_VR.fit(cov_type = "kernel")
+print(mod3_fit)
+
+mod3_All_VR_withFundcontrols = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge', QuarterlyAvailable_db)
+mod3_fit = mod3_All_VR_withFundcontrols.fit(cov_type = "kernel")
+print(mod3_fit)
+
+mod3_All_absVR = linearmodels.PanelOLS.from_formula('absVR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
+mod3_fit = mod3_All_absVR.fit(cov_type = "kernel")
+print(mod3_fit)
+
+mod3_All_absVR_withFundcontrols = linearmodels.PanelOLS.from_formula('absVR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge', QuarterlyAvailable_db)
+mod3_fit = mod3_All_absVR_withFundcontrols.fit(cov_type = "kernel")
+print(mod3_fit)
