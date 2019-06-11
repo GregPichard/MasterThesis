@@ -80,3 +80,16 @@ Stocks_AmihudRatio_MonthlyPanel.to_csv('Monthly/Stocks_AmihudRatio_WidePanel.csv
 #Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
 #Stocks_PriceVol_db['Month'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).month
 #Stocks_PriceVol_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(Stocks_PriceVol_db['Year'], Stocks_PriceVol_db['Month'])]
+
+# Variance ratio: the variable in order to analyze mean reversion
+# Quarterly 1-day versus 5-day returns variance comparison
+Stocks_1dVariance = Stocks_ReturnClose_DailyPanel.resample('Q', axis=0).var()
+Stocks_5dReturns = Stocks_Close_DailyPanel_db.diff(periods = 5)/Stocks_Close_DailyPanel_db.shift(5)
+Stocks_5dReturns.dropna(how = 'all', inplace = True)
+Stocks_5dReturns.replace([np.inf, -np.inf], np.nan, inplace = True)
+# Non-overlapping 5-day periods : keeping the first (valid, i.e numeric, even 0 and -1) 5-day return value, at the weekly frequency. The label accounts for the 5-day period end date
+Stocks_5dReturns = Stocks_5dReturns.resample('W', axis = 0, convention='start', label = 'left').first()
+Stocks_5dVariance = Stocks_5dReturns.resample('Q', axis = 0).var()
+
+Stocks_5to1dVarianceRatio = Stocks_5dVariance/(5 * Stocks_1dVariance)
+Stocks_5to1dVarianceRatio.to_csv('Quarterly/Stocks_5to1dVarianceRatio.csv', header = True, index = True)
