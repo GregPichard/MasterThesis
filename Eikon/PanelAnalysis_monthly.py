@@ -153,9 +153,7 @@ mod1_All_Volatility_noLag = linearmodels.PanelOLS.from_formula('Volatility ~ 0 +
 print(mod1_All_Volatility_noLag.fit(cov_type = "clustered"))
 
 mod1_All_Volatility_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
-mod1_fit = mod1_All_Volatility_withLags_withFundcontrols.fit(cov_type = "kernel")mod3_All_VR = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
-mod3_fit = mod3_All_VR.fit(cov_type = "kernel")
-print(mod3_fit)
+mod1_fit = mod1_All_Volatility_withLags_withFundcontrols.fit(cov_type = "kernel")
 print(mod1_fit)
 
 
