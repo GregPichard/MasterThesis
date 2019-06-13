@@ -73,7 +73,7 @@ MonthlyAvailable_1lag_db.columns = [s + "_1lag" for s in list(MonthlyAvailable_1
 MonthlyAvailable_2lag_db = MonthlyAvailable_db.groupby(level = 0)['Volatility'].shift(2)
 MonthlyAvailable_2lag_db.name = MonthlyAvailable_2lag_db.name + "_2lag"
 MonthlyAvailable_3lag_db = MonthlyAvailable_db.groupby(level = 0)['Volatility'].shift(3)
-MonthlyAvailable_3lag_db.name = Monthlyhttps://www.rts.ch/info/culture/10499904-les-causes-et-les-effets-de-la-dependance-a-internet.htmlAvailable_3lag_db.name + "_3lag"
+MonthlyAvailable_3lag_db.name = MonthlyAvailable_3lag_db.name + "_3lag"
 MonthlyAvailable_4lag_db = MonthlyAvailable_db.groupby(level = 0)['Volatility'].shift(4)
 MonthlyAvailable_4lag_db.name = MonthlyAvailable_4lag_db.name + "_4lag"
 MonthlyAvailable_db = pd.concat([MonthlyAvailable_db, MonthlyAvailable_1lag_db, MonthlyAvailable_2lag_db, MonthlyAvailable_3lag_db, MonthlyAvailable_4lag_db], axis = 1)
@@ -90,9 +90,21 @@ for col in colInit:
     # replacing the top 0.01% of values with NaN
     MonthlyAvailable_std_db[col].loc[MonthlyAvailable_std_db[col] >= np.percentile(MonthlyAvailable_std_db[col].dropna(), 99.99)] = None
     MonthlyAvailable_std_db[col] = (MonthlyAvailable_std_db[col] - mean)/std
-    MonthlyAvailable_db[col + '_std'] = MonthlyAvailable_std_db[col]
 
 del colInit, col, mean, std
+
+# Assign the non-normalized controls
+MonthlyAvailable_std_db = MonthlyAvailable_std_db.assign(InvClose = MonthlyAvailable_db.InvClose, AmihudRatio = MonthlyAvailable_db.AmihudRatio, RetPast12to1M = MonthlyAvailable_db.RetPast12to1M, RetPast12to7M = MonthlyAvailable_db.RetPast12to7M, CompanyMarketCap = MonthlyAvailable_db.CompanyMarketCap, BookToMarketRatio = MonthlyAvailable_db.BookToMarketRatio, PctBidAskSpread = MonthlyAvailable_db.PctBidAskSpread, GrossProfitability = MonthlyAvailable_db.GrossProfitability)
+
+MonthlyAvailable_std_1lag_db = MonthlyAvailable_std_db.groupby(level = 0)[['PctSharesHeldETF', 'CompanyMarketCap', 'InvClose', 'AmihudRatio', 'PctBidAskSpread', 'BookToMarketRatio', 'RetPast12to1M', 'RetPast12to7M','GrossProfitability', 'Volatility']].shift(1)
+MonthlyAvailable_std_1lag_db.columns = [s + "_1lag" for s in list(MonthlyAvailable_std_1lag_db.columns)]
+MonthlyAvailable_std_2lag_db = MonthlyAvailable_std_db.groupby(level = 0)['Volatility'].shift(2)
+MonthlyAvailable_std_2lag_db.name = MonthlyAvailable_std_2lag_db.name + "_2lag"
+MonthlyAvailable_std_3lag_db = MonthlyAvailable_std_db.groupby(level = 0)['Volatility'].shift(3)
+MonthlyAvailable_std_3lag_db.name = MonthlyAvailable_std_3lag_db.name + "_3lag"
+MonthlyAvailable_std_4lag_db = MonthlyAvailable_std_db.groupby(level = 0)['Volatility'].shift(4)
+MonthlyAvailable_std_4lag_db.name = MonthlyAvailable_std_4lag_db.name + "_4lag"
+MonthlyAvailable_std_db = pd.concat([MonthlyAvailable_std_db, MonthlyAvailable_std_1lag_db, MonthlyAvailable_std_2lag_db, MonthlyAvailable_std_3lag_db, MonthlyAvailable_std_4lag_db], axis = 1)
 
 ## First differences
 MonthlyAvailable_diff_db = MonthlyAvailable_db.groupby(level=0).diff()
@@ -126,9 +138,13 @@ QuarterlyAvailable_db = pd.concat([QuarterlyAvailable_db, QuarterlyVarianceRatio
 # ## Regression estimates
 # =============================================================================
 # Model 1 : Volatility
-# Full US sample without a constant term, lagged controls
-mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag  + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag + EntityEffects + TimeEffects', MonthlyAvailable_db)
-print(mod1_All_Volatility.fit(cov_type = "kernel"))
+# Full US sample, lagged controls
+mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag  + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag + EntityEffects + TimeEffects', MonthlyAvailable_db)
+mod1_fit_All_Volatility = mod1_All_Volatility.fit(cov_type = "kernel")
+print(mod1_fit_All_Volatility)
+f = open('../Regression_Results/US/mod1_fit_All_Volatility.tex', 'w')
+f.write(mod1_fit_All_Volatility.summary.as_latex())
+f.close()
 
 # Full US sample with a constant term, lagged controls and 4 volatility lags
 mod1_All_Volatility_withLags = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
@@ -147,9 +163,9 @@ f.write(mod1_contemporaneousControls_fit.summary.as_latex())
 f.close()
 ## Attempt to do a dynamic panel estimation through GMM. Needs further research.
 #mod1_GMM_All_Volatility_withlags = linearmodels.LinearFactorModelGMM()
-MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.csv', header = True, index = True)
+MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatility_withLags.csv', header = True, index = True)
 # Summary statistics : there are a few extreme values that may bias the sample.
-MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.csv', header = True, index = True)
+MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatility_withLags.csv', header = True, index = True)
 
 # No constant term and controls are contemporaneous of the dependent
 mod1_All_Volatility_noLag = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap) +  InvClose + AmihudRatio + PctBidAskSpread + BookToMarketRatio + RetPast12to1M +  GrossProfitability +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag', MonthlyAvailable_db)
@@ -164,32 +180,36 @@ f.write(mod1_fit_All_Volatility_withLags_withFundcontrols.summary.as_latex())
 f.close()
 
 # Standardization could (and should?) be performed over the relevant sample of values only
-MonthlyAvailable_stdMod1_db = MonthlyAvailable_db[['Volatility', 'PctSharesHeldETF_std', 'CompanyMarketCap_1lag', 'InvClose_1lag', 'AmihudRatio_1lag', 'PctBidAskSpread_1lag', 'BookToMarketRatio_1lag', 'RetPast12to7M_1lag', 'GrossProfitability_1lag', 'PctSharesHeldOtherMutual_std', 'PctSharesHeldPension_std', 'PctSharesHeldHedge_std', 'Volatility_1lag', 'Volatility_2lag', 'Volatility_3lag', 'Volatility_4lag']].dropna()
-colInit = list(MonthlyAvailable_stdMod1_db.columns)
-for col in colInit:
-    mean = MonthlyAvailable_stdMod1_db[col].loc[MonthlyAvailable_stdMod1_db[col] < np.percentile(MonthlyAvailable_stdMod1_db[col].dropna(), 99.99)].mean()
-    std = MonthlyAvailable_stdMod1_db[col].loc[MonthlyAvailable_stdMod1_db[col].dropna() < np.percentile(MonthlyAvailable_stdMod1_db[col].dropna(), 99.99)].std()
-    # replacing the top 0.01% of values with NaN
-    MonthlyAvailable_stdMod1_db[col].loc[MonthlyAvailable_stdMod1_db[col] >= np.percentile(MonthlyAvailable_stdMod1_db[col].dropna(), 99.99)] = None
-    MonthlyAvailable_stdMod1_db[col] = (MonthlyAvailable_stdMod1_db[col] - mean)/std
 
-del colInit, col, mean, std
 
 # Estimation on standardized, winsorized variables
-mod1_All_Volatility_std_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF_std + CompanyMarketCap_1lag +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual_std + PctSharesHeldPension_std + PctSharesHeldHedge_std + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_stdMod1_db)
+mod1_All_Volatility_std_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_std_db)
 mod1_fit_All_Volatility_std_withLags_withFundcontrols = mod1_All_Volatility_std_withLags_withFundcontrols.fit(cov_type = "kernel")
 print(mod1_fit_All_Volatility_std_withLags_withFundcontrols)
 f = open('../Regression_Results/US/mod1_fit_All_Volatility_std_withLags_withFundcontrols.tex', 'w')
 f.write(mod1_fit_All_Volatility_std_withLags_withFundcontrols.summary.as_latex())
 f.close()
 
-# First differences, standardized ownership and volatility, no controls except other fund holdings and volatility lags
+# First differences, no controls except other fund holdings and volatility lags
 # The full regressors matrix is not full rank, thus we do not include all usual controls 
-mod1_All_diffVolatility_std_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility_std ~ 0 + PctSharesHeldETF_std + PctSharesHeldOtherMutual_std + PctSharesHeldPension_std + PctSharesHeldHedge_std + AmihudRatio_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + EntityEffects + TimeEffects + Volatility_1lag', MonthlyAvailable_diff_db)
-mod1_fit_All_diffVolatility_std_withLags_withFundcontrols = mod1_All_diffVolatility_std_withLags_withFundcontrols.fit(cov_type = "kernel")
-print(mod1_fit_All_diffVolatility_std_withLags_withFundcontrols)
+mod1_All_diffVolatility_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility_std ~ 0 + PctSharesHeldETF_std + PctSharesHeldOtherMutual_std + PctSharesHeldPension_std + PctSharesHeldHedge_std + AmihudRatio_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + EntityEffects + TimeEffects + Volatility_1lag', MonthlyAvailable_diff_db)
+mod1_fit_All_diffVolatility_withLags_withFundcontrols = mod1_All_diffVolatility_withLags_withFundcontrols.fit(cov_type = "kernel")
+print(mod1_fit_All_diffVolatility_withLags_withFundcontrols)
 f = open('../Regression_Results/US/mod1_fit_All_diffVolatility_std_withLags_withFundcontrols.tex', 'w')
-f.write(mod1_fit_All_diffVolatility_std_withLags_withFundcontrols.summary.as_latex())
+f.write(mod1_fit_All_diffVolatility_withLags_withFundcontrols.summary.as_latex())
+f.close()
+
+# Variation : there is a FirstDifferenceOLS function in the "linearmodels" package
+# Using the standardized variables
+mod1_All_FirstDiffOLS_withLags_withFundcontrols = linearmodels.FirstDifferenceOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF_std + CompanyMarketCap_1lag +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual_std + PctSharesHeldPension_std + PctSharesHeldHedge_std + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_stdMod1_db)
+mod1_fit_All_FirstDiffOLS_withLags_withFundcontrols = mod1_All_FirstDiffOLS_withLags_withFundcontrols.fit(cov_type = "kernel")
+print(mod1_fit_All_FirstDiffOLS_withLags_withFundcontrols)
+
+# Models comparison for the paper body
+mod1_comp = linearmodels.panel.compare({'Baseline':mod1_fit_All_Volatility, 'Contemporaneous': mod1_contemporaneousControls_fit, 'Inst. o\'ship controls':mod1_fit_All_Volatility_withLags_withFundcontrols , 'Standardized': mod1_fit_All_Volatility_std_withLags_withFundcontrols})
+print(mod1_comp)
+f = open('../Regression_Results/US/mod1_comp.tex', 'w')
+f.write(mod1_comp.summary.as_latex())
 f.close()
 
 # Model 2 : Liquidity
@@ -224,6 +244,12 @@ f.write(mod2_fit_All_Liquidity_Amihud_withFundcontrols.summary.as_latex())
 f.close()
 # Only the other mutual fund holdings are included to control for institutional ownership, otherwise the matrix of regressors does not have full column rank. Other mutual funds are the most available values and economically the more sizeable of the three categories at hand.
 
+# Models comparison for the paper body
+mod2_comp = linearmodels.panel.compare({'Bid-Ask':mod2_fit_All_Liquidity_BidAsk, 'Bid-Ask w/inst. o\'ship':mod2_fit_All_Liquidity_BidAsk_withFundcontrols, 'Amihud':mod2_fit_All_Liquidity_Amihud, 'Amihud w/inst. o\'ship':mod2_fit_All_Liquidity_Amihud_withFundcontrols})
+print(mod2_comp)
+f = open('../Regression_Results/US/mod2_comp.tex', 'w')
+f.write(mod2_comp.summary.as_latex())
+f.close()
 # Model 3 : Efficiency
 mod3_All_VR = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
 mod3_fit_All_VR = mod3_All_VR.fit(cov_type = "kernel")
@@ -253,6 +279,7 @@ f = open('../Regression_Results/US/mod3_fit_All_absVR_withFundcontrols.tex', 'w'
 f.write(mod3_fit_All_absVR_withFundcontrols.summary.as_latex())
 f.close()
 
+# Models comparison for the paper body
 mod3_comp = linearmodels.panel.compare({'VR':mod3_fit_All_VR, 'VR w/inst. o\'ship':mod3_fit_All_VR_withFundcontrols, 'Abs. VR':mod3_fit_All_absVR, 'Abs. VR w/inst. o\'ship':mod3_fit_All_absVR_withFundcontrols})
 print(mod3_comp)
 f = open('../Regression_Results/US/mod3_comp.tex', 'w')
