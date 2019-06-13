@@ -5,12 +5,46 @@ One of the many advantages provided through the statistical functions library, c
 \label{app:sec:DetailedResults:Volatility}
 This subsection constitutes additional material about variants of the model attempting to explain stocks volatility, summarized and discussed in \autoref{sec:Results:sub:Volatility} (p.\pageref{sec:Results:sub:Volatility}).
 \subsubsection{U.S. stocks sample}
+\begin{landscape}
+  {\linespread{1.0}
+    \begin{table}
+      \input{Regression_Results/US/mod1_All_Volatility_withLags.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod1_contemporaneousControls_fit.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod1_fit_All_Volatility_withLags_withFundcontrols.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod1_fit_All_Volatility_std_withLags_withFundcontrols.tex}
+    \end{table}
+    %\input{Regression_Results/US/mod1_fit_All_diffVolatility_std_withLags_withFundcontrols.tex}
+  }
+\end{landscape}
+
 \subsubsection{International sample}
 
 \subsection{ETF ownership and underlying stocks' liquidity}
 \label{app:sec:DetailedResults:Liquidity}
 This subsection constitutes additional material about variants of the models using several liquidity proxies as dependent variables, summarized and discussed in \autoref{sec:Results:sub:Liquidity} (p.\pageref{sec:Results:sub:Liquidity}).
 \subsubsection{U.S. stocks sample}
+\begin{landscape}
+  {\linespread{1.0}
+    \begin{table}
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_BidAsk.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_BidAsk_withFundcontrols.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_Amihud.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_Amihud_withFundcontrols.tex}
+    \end{table}
+  }
+\end{landscape}
 \subsubsection{International sample}
 
 
@@ -18,4 +52,22 @@ This subsection constitutes additional material about variants of the models usi
 \label{app:sec:DetailedResults:Efficiency}
 This subsection constitutes additional material about variants of the model studying two forms of variance ratios, summarized and discussed in \autoref{sec:Results:sub:Efficiency} (p.\pageref{sec:Results:sub:Efficiency}).
 \subsubsection{U.S. stocks sample}
+
+\begin{landscape}
+  {\linespread{1.0}
+    \begin{table}
+      \input{Regression_Results/US/mod3_fit_All_VR.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod3_fit_All_VR_withFundcontrols.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod3_fit_All_absVR.tex}
+    \end{table}
+    \begin{table}
+      \input{Regression_Results/US/mod3_fit_All_absVR_withFundcontrols.tex}
+    \end{table}
+  }
+\end{landscape}
+
 \subsubsection{International sample}

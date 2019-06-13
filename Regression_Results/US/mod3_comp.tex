@@ -1,0 +1,48 @@
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+                                           &  \textbf{Abs. VR}  & \textbf{Abs. VR w/inst. o'ship} &    \textbf{VR}     & \textbf{VR w/inst. o'ship}  \\
+\midrule
+\textbf{Dep. Variable}                     &       absVR        &              absVR              &         VR         &             VR              \\
+\textbf{Estimator}                         &      PanelOLS      &             PanelOLS            &      PanelOLS      &          PanelOLS           \\
+\textbf{No. Observations}                  &       126851       &              126847             &       126851       &           126847            \\
+\textbf{Cov. Est.}                         &   Driscoll-Kraay   &          Driscoll-Kraay         &   Driscoll-Kraay   &       Driscoll-Kraay        \\
+\textbf{R-squared}                         &       0.0079       &              0.0081             &       0.0040       &           0.0041            \\
+\textbf{R-Squared (Within)}                &       0.0106       &              0.0106             &       0.0040       &           0.0042            \\
+\textbf{R-Squared (Between)}               &       0.2814       &              0.2820             &       0.1376       &           0.1385            \\
+\textbf{R-Squared (Overall)}               &       0.0318       &              0.0320             &       0.0163       &           0.0165            \\
+\textbf{F-statistic}                       &       123.79       &              91.734             &       61.843       &           46.323            \\
+\textbf{P-value (F-stat)}                  &       0.0000       &              0.0000             &       0.0000       &           0.0000            \\
+\midrule
+\textbf{Intercept}                         &       0.8523       &              0.8532             &       0.8735       &           0.8579            \\
+\textbf{ }                                 &      (12.280)      &             (12.208)            &      (7.6512)      &          (7.4328)           \\
+\textbf{PctSharesHeldETF\_1lag}            &       0.0096       &              0.0218             &      -0.1205       &          -0.1005            \\
+\textbf{ }                                 &      (0.1484)      &             (0.3373)            &     (-1.4081)      &         (-1.1660)           \\
+\textbf{np.log(CompanyMarketCap\_1lag)}    &      -0.0248       &             -0.0248             &       0.0044       &           0.0052            \\
+\textbf{ }                                 &     (-7.5202)      &            (-7.4640)            &      (0.8038)      &          (0.9458)           \\
+\textbf{InvClose\_1lag}                    &       0.1276       &              0.1277             &      -0.2002       &          -0.1986            \\
+\textbf{ }                                 &      (5.5223)      &             (5.5778)            &     (-6.0619)      &         (-5.9225)           \\
+\textbf{AmihudRatio\_1lag}                 &       9.9267       &              9.9488             &      -15.135       &          -15.117            \\
+\textbf{ }                                 &      (3.1431)      &             (3.1455)            &     (-3.0288)      &         (-3.0279)           \\
+\textbf{PctBidAskSpread\_1lag}             &       0.9314       &              0.9286             &      -1.2190       &          -1.2179            \\
+\textbf{ }                                 &      (5.5878)      &             (5.6027)            &     (-3.5732)      &         (-3.5633)           \\
+\textbf{BookToMarketRatio\_1lag}           &     -3.498e-06     &            4.433e-05            &     -1.257e-05     &         6.777e-05           \\
+\textbf{ }                                 &     (-0.5195)      &             (3.9695)            &     (-1.4303)      &          (3.2826)           \\
+\textbf{RetPast12to7M\_1lag}               &       0.0003       &            -9.153e-05           &      -0.0006       &          -0.0013            \\
+\textbf{ }                                 &      (0.5981)      &            (-0.2511)            &     (-0.9013)      &         (-2.2311)           \\
+\textbf{GrossProfitability\_1lag}          &       0.0011       &              0.0012             &       0.0064       &           0.0062            \\
+\textbf{ }                                 &      (0.2252)      &             (0.2454)            &      (1.2767)      &          (1.2635)           \\
+\textbf{PctSharesHeldOtherMutual\_1lag}    &                    &             -0.0053             &                    &          -0.0086            \\
+\textbf{ }                                 &                    &            (-3.9260)            &                    &         (-3.6908)           \\
+\textbf{PctSharesHeldPension\_1lag}        &                    &              11.292             &                    &          -3.7029            \\
+\textbf{ }                                 &                    &             (4.1468)            &                    &         (-0.5362)           \\
+\textbf{PctSharesHeldHedge\_1lag}          &                    &             -0.1294             &                    &          -0.1145            \\
+\textbf{ }                                 &                    &            (-0.8927)            &                    &         (-0.6268)           \\
+\midrule
+\textbf{Effects}                           &       Entity       &              Entity             &       Entity       &           Entity            \\
+\bottomrule
+\end{tabular}
+%\caption{Model Comparison}
+\end{center}
+
+T-stats reported in parentheses

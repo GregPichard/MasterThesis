@@ -73,7 +73,7 @@ MonthlyAvailable_1lag_db.columns = [s + "_1lag" for s in list(MonthlyAvailable_1
 MonthlyAvailable_2lag_db = MonthlyAvailable_db.groupby(level = 0)['Volatility'].shift(2)
 MonthlyAvailable_2lag_db.name = MonthlyAvailable_2lag_db.name + "_2lag"
 MonthlyAvailable_3lag_db = MonthlyAvailable_db.groupby(level = 0)['Volatility'].shift(3)
-MonthlyAvailable_3lag_db.name = MonthlyAvailable_3lag_db.name + "_3lag"
+MonthlyAvailable_3lag_db.name = Monthlyhttps://www.rts.ch/info/culture/10499904-les-causes-et-les-effets-de-la-dependance-a-internet.htmlAvailable_3lag_db.name + "_3lag"
 MonthlyAvailable_4lag_db = MonthlyAvailable_db.groupby(level = 0)['Volatility'].shift(4)
 MonthlyAvailable_4lag_db.name = MonthlyAvailable_4lag_db.name + "_4lag"
 MonthlyAvailable_db = pd.concat([MonthlyAvailable_db, MonthlyAvailable_1lag_db, MonthlyAvailable_2lag_db, MonthlyAvailable_3lag_db, MonthlyAvailable_4lag_db], axis = 1)
@@ -96,7 +96,7 @@ del colInit, col, mean, std
 
 ## First differences
 MonthlyAvailable_diff_db = MonthlyAvailable_db.groupby(level=0).diff()
-MonthlyAvailable_diff_db.to_csv('Monthly/MonthlyAvailable_diff.csv', header = True, index = True)
+#MonthlyAvailable_diff_db.to_csv('Monthly/MonthlyAvailable_diff.csv', header = True, index = True)
 
 ## Loading quarterly variance ratios panel
 QuarterlyVarianceRatio_panel = pd.read_csv('Quarterly/Stocks_5to1dVarianceRatio.csv', header = 0, parse_dates = True)
@@ -111,7 +111,7 @@ QuarterlyAvailable_db = MonthlyAvailable_db.groupby([level_values(0)]+[pd.Groupe
 # Lags have to be constructed again at the quarterly frequency (they are still monthly)
 QuarterlyAvailable_db.drop(columns=QuarterlyAvailable_db.filter(regex=("lag")).columns, inplace = True)
 
-QuarterlyAvailable_1lag_db = QuarterlyAvailable_db.groupby(level = 0)[['PctSharesHeldETF', 'CompanyMarketCap', 'InvClose', 'AmihudRatio', 'PctBidAskSpread', 'BookToMarketRatio', 'RetPast12to1M', 'RetPast12to7M','GrossProfitability', 'Volatility']].shift(1)
+QuarterlyAvailable_1lag_db = QuarterlyAvailable_db.groupby(level = 0)[['PctSharesHeldETF', 'CompanyMarketCap', 'InvClose', 'AmihudRatio', 'PctBidAskSpread', 'BookToMarketRatio', 'RetPast12to1M', 'RetPast12to7M','GrossProfitability', 'Volatility', 'PctSharesHeldOtherMutual', 'PctSharesHeldPension', 'PctSharesHeldHedge']].shift(1)
 QuarterlyAvailable_1lag_db.columns = [s + "_1lag" for s in list(QuarterlyAvailable_1lag_db.columns)]
 QuarterlyAvailable_2lag_db = QuarterlyAvailable_db.groupby(level = 0)['Volatility'].shift(2)
 QuarterlyAvailable_2lag_db.name = QuarterlyAvailable_2lag_db.name + "_2lag"
@@ -126,7 +126,7 @@ QuarterlyAvailable_db = pd.concat([QuarterlyAvailable_db, QuarterlyVarianceRatio
 # ## Regression estimates
 # =============================================================================
 # Model 1 : Volatility
-# Full US sample with a constant term, lagged controls
+# Full US sample without a constant term, lagged controls
 mod1_All_Volatility = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag  + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag + EntityEffects + TimeEffects', MonthlyAvailable_db)
 print(mod1_All_Volatility.fit(cov_type = "kernel"))
 
@@ -134,7 +134,7 @@ print(mod1_All_Volatility.fit(cov_type = "kernel"))
 mod1_All_Volatility_withLags = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
 mod1_fit = mod1_All_Volatility_withLags.fit(cov_type = "kernel")
 print(mod1_fit)
-f = open('../Regression_Results/mod1_All_Volatility_withLags.tex', 'w')
+f = open('../Regression_Results/US/mod1_All_Volatility_withLags.tex', 'w')
 f.write(mod1_fit.summary.as_latex())
 f.close()
 
@@ -142,6 +142,9 @@ f.close()
 mod1_All_Volatility_contemporaneousControls = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + PctSharesHeldETF* + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to1M_1lag +  GrossProfitability_1lag + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
 mod1_contemporaneousControls_fit = mod1_All_Volatility_contemporaneousControls.fit(cov_type = "kernel")
 print(mod1_contemporaneousControls_fit)
+f = open('../Regression_Results/US/mod1_contemporaneousControls_fit.tex', 'w')
+f.write(mod1_contemporaneousControls_fit.summary.as_latex())
+f.close()
 ## Attempt to do a dynamic panel estimation through GMM. Needs further research.
 #mod1_GMM_All_Volatility_withlags = linearmodels.LinearFactorModelGMM()
 MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.csv', header = True, index = True)
@@ -152,10 +155,13 @@ MonthlyAvailable_db.describe().to_csv('../SummaryStats/All_Volatlity_withLags.cs
 mod1_All_Volatility_noLag = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF + np.log(CompanyMarketCap) +  InvClose + AmihudRatio + PctBidAskSpread + BookToMarketRatio + RetPast12to1M +  GrossProfitability +  EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag', MonthlyAvailable_db)
 print(mod1_All_Volatility_noLag.fit(cov_type = "clustered"))
 
-mod1_All_Volatility_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
-mod1_fit = mod1_All_Volatility_withLags_withFundcontrols.fit(cov_type = "kernel")
-print(mod1_fit)
 
+mod1_All_Volatility_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_db)
+mod1_fit_All_Volatility_withLags_withFundcontrols = mod1_All_Volatility_withLags_withFundcontrols.fit(cov_type = "kernel")
+print(mod1_fit_All_Volatility_withLags_withFundcontrols)
+f = open('../Regression_Results/US/mod1_fit_All_Volatility_withLags_withFundcontrols.tex', 'w')
+f.write(mod1_fit_All_Volatility_withLags_withFundcontrols.summary.as_latex())
+f.close()
 
 # Standardization could (and should?) be performed over the relevant sample of values only
 MonthlyAvailable_stdMod1_db = MonthlyAvailable_db[['Volatility', 'PctSharesHeldETF_std', 'CompanyMarketCap_1lag', 'InvClose_1lag', 'AmihudRatio_1lag', 'PctBidAskSpread_1lag', 'BookToMarketRatio_1lag', 'RetPast12to7M_1lag', 'GrossProfitability_1lag', 'PctSharesHeldOtherMutual_std', 'PctSharesHeldPension_std', 'PctSharesHeldHedge_std', 'Volatility_1lag', 'Volatility_2lag', 'Volatility_3lag', 'Volatility_4lag']].dropna()
@@ -171,47 +177,84 @@ del colInit, col, mean, std
 
 # Estimation on standardized, winsorized variables
 mod1_All_Volatility_std_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility ~ 0 + PctSharesHeldETF_std + CompanyMarketCap_1lag +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + PctSharesHeldOtherMutual_std + PctSharesHeldPension_std + PctSharesHeldHedge_std + EntityEffects + TimeEffects + Volatility_1lag + Volatility_2lag + Volatility_3lag + Volatility_4lag', MonthlyAvailable_stdMod1_db)
-mod1_fit = mod1_All_Volatility_std_withLags_withFundcontrols.fit(cov_type = "kernel")
-print(mod1_fit)
+mod1_fit_All_Volatility_std_withLags_withFundcontrols = mod1_All_Volatility_std_withLags_withFundcontrols.fit(cov_type = "kernel")
+print(mod1_fit_All_Volatility_std_withLags_withFundcontrols)
+f = open('../Regression_Results/US/mod1_fit_All_Volatility_std_withLags_withFundcontrols.tex', 'w')
+f.write(mod1_fit_All_Volatility_std_withLags_withFundcontrols.summary.as_latex())
+f.close()
 
 # First differences, standardized ownership and volatility, no controls except other fund holdings and volatility lags
 # The full regressors matrix is not full rank, thus we do not include all usual controls 
 mod1_All_diffVolatility_std_withLags_withFundcontrols = linearmodels.PanelOLS.from_formula('Volatility_std ~ 0 + PctSharesHeldETF_std + PctSharesHeldOtherMutual_std + PctSharesHeldPension_std + PctSharesHeldHedge_std + AmihudRatio_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag + EntityEffects + TimeEffects + Volatility_1lag', MonthlyAvailable_diff_db)
-mod1_fit = mod1_All_diffVolatility_std_withLags_withFundcontrols.fit(cov_type = "kernel")
-print(mod1_fit)
+mod1_fit_All_diffVolatility_std_withLags_withFundcontrols = mod1_All_diffVolatility_std_withLags_withFundcontrols.fit(cov_type = "kernel")
+print(mod1_fit_All_diffVolatility_std_withLags_withFundcontrols)
+f = open('../Regression_Results/US/mod1_fit_All_diffVolatility_std_withLags_withFundcontrols.tex', 'w')
+f.write(mod1_fit_All_diffVolatility_std_withLags_withFundcontrols.summary.as_latex())
+f.close()
 
 # Model 2 : Liquidity
 # Bid-ask spread on close prices (not equal to the High-Low spread metric from Israeli 2017) - static model
 mod2_All_Liquidity_BidAsk = linearmodels.PanelOLS.from_formula('PctBidAskSpread ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) + BookToMarketRatio_1lag + Volatility_1lag + EntityEffects + TimeEffects', MonthlyAvailable_db)
-mod2_fit = mod2_All_Liquidity_BidAsk.fit(cov_type = "kernel")
-print(mod2_fit)
+mod2_fit_All_Liquidity_BidAsk = mod2_All_Liquidity_BidAsk.fit(cov_type = "kernel")
+print(mod2_fit_All_Liquidity_BidAsk)
+f = open('../Regression_Results/US/mod2_fit_All_Liquidity_BidAsk.tex', 'w')
+f.write(mod2_fit_All_Liquidity_BidAsk.summary.as_latex())
+f.close()
 
 mod2_All_Liquidity_BidAsk_withFundcontrols = linearmodels.PanelOLS.from_formula('PctBidAskSpread ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) + BookToMarketRatio_1lag + Volatility_1lag + EntityEffects + TimeEffects + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge', MonthlyAvailable_db)
-mod2_fit = mod2_All_Liquidity_BidAsk_withFundcontrols.fit(cov_type = "kernel")
-print(mod2_fit)
+mod2_fit_All_Liquidity_BidAsk_withFundcontrols = mod2_All_Liquidity_BidAsk_withFundcontrols.fit(cov_type = "kernel")
+print(mod2_fit_All_Liquidity_BidAsk_withFundcontrols)
+f = open('../Regression_Results/US/mod2_fit_All_Liquidity_BidAsk_withFundcontrols.tex', 'w')
+f.write(mod2_fit_All_Liquidity_BidAsk_withFundcontrols.summary.as_latex())
+f.close()
+
 # Amihud ratio decomposition
 mod2_All_Liquidity_Amihud = linearmodels.PanelOLS.from_formula('AmihudNumerator ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) + BookToMarketRatio_1lag + AmihudDenominator + EntityEffects + TimeEffects', MonthlyAvailable_db)
-mod2_fit = mod2_All_Liquidity_Amihud.fit(cov_type = "kernel")
-print(mod2_fit)
+mod2_fit_All_Liquidity_Amihud = mod2_All_Liquidity_Amihud.fit(cov_type = "kernel")
+print(mod2_fit_All_Liquidity_Amihud)
+f = open('../Regression_Results/US/mod2_fit_All_Liquidity_Amihud.tex', 'w')
+f.write(mod2_fit_All_Liquidity_Amihud.summary.as_latex())
+f.close()
 
 mod2_All_Liquidity_Amihud_withFundcontrols = linearmodels.PanelOLS.from_formula('AmihudNumerator ~ 1 + PctSharesHeldETF + np.log(CompanyMarketCap_1lag) + BookToMarketRatio_1lag + AmihudDenominator + EntityEffects + TimeEffects + PctSharesHeldOtherMutual ', MonthlyAvailable_db)
-mod2_fit = mod2_All_Liquidity_Amihud_withFundcontrols.fit(cov_type = "kernel")
-print(mod2_fit)
+mod2_fit_All_Liquidity_Amihud_withFundcontrols = mod2_All_Liquidity_Amihud_withFundcontrols.fit(cov_type = "kernel")
+print(mod2_fit_All_Liquidity_Amihud_withFundcontrols)
+f = open('../Regression_Results/US/mod2_fit_All_Liquidity_Amihud_withFundcontrols.tex', 'w')
+f.write(mod2_fit_All_Liquidity_Amihud_withFundcontrols.summary.as_latex())
+f.close()
 # Only the other mutual fund holdings are included to control for institutional ownership, otherwise the matrix of regressors does not have full column rank. Other mutual funds are the most available values and economically the more sizeable of the three categories at hand.
 
 # Model 3 : Efficiency
 mod3_All_VR = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
-mod3_fit = mod3_All_VR.fit(cov_type = "kernel")
-print(mod3_fit)
+mod3_fit_All_VR = mod3_All_VR.fit(cov_type = "kernel")
+print(mod3_fit_All_VR)
+f = open('../Regression_Results/US/mod3_fit_All_VR.tex', 'w')
+f.write(mod3_fit_All_VR.summary.as_latex())
+f.close()
 
-mod3_All_VR_withFundcontrols = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge', QuarterlyAvailable_db)
-mod3_fit = mod3_All_VR_withFundcontrols.fit(cov_type = "kernel")
-print(mod3_fit)
+mod3_All_VR_withFundcontrols = linearmodels.PanelOLS.from_formula('VR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + PctSharesHeldOtherMutual_1lag + PctSharesHeldPension_1lag + PctSharesHeldHedge_1lag', QuarterlyAvailable_db)
+mod3_fit_All_VR_withFundcontrols = mod3_All_VR_withFundcontrols.fit(cov_type = "kernel")
+print(mod3_fit_All_VR_withFundcontrols)
+f = open('../Regression_Results/US/mod3_fit_All_VR_withFundcontrols.tex', 'w')
+f.write(mod3_fit_All_VR_withFundcontrols.summary.as_latex())
+f.close()
 
 mod3_All_absVR = linearmodels.PanelOLS.from_formula('absVR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects', QuarterlyAvailable_db)
-mod3_fit = mod3_All_absVR.fit(cov_type = "kernel")
-print(mod3_fit)
+mod3_fit_All_absVR = mod3_All_absVR.fit(cov_type = "kernel")
+print(mod3_fit_All_absVR)
+f = open('../Regression_Results/US/mod3_fit_All_absVR.tex', 'w')
+f.write(mod3_fit_All_absVR.summary.as_latex())
+f.close()
 
-mod3_All_absVR_withFundcontrols = linearmodels.PanelOLS.from_formula('absVR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + PctSharesHeldOtherMutual + PctSharesHeldPension + PctSharesHeldHedge', QuarterlyAvailable_db)
-mod3_fit = mod3_All_absVR_withFundcontrols.fit(cov_type = "kernel")
-print(mod3_fit)
+mod3_All_absVR_withFundcontrols = linearmodels.PanelOLS.from_formula('absVR ~ 1 + PctSharesHeldETF_1lag + np.log(CompanyMarketCap_1lag) +  InvClose_1lag + AmihudRatio_1lag + PctBidAskSpread_1lag + BookToMarketRatio_1lag + RetPast12to7M_1lag + GrossProfitability_1lag +  EntityEffects + TimeEffects + PctSharesHeldOtherMutual_1lag + PctSharesHeldPension_1lag + PctSharesHeldHedge_1lag', QuarterlyAvailable_db)
+mod3_fit_All_absVR_withFundcontrols = mod3_All_absVR_withFundcontrols.fit(cov_type = "kernel")
+print(mod3_fit_All_absVR_withFundcontrols)
+f = open('../Regression_Results/US/mod3_fit_All_absVR_withFundcontrols.tex', 'w')
+f.write(mod3_fit_All_absVR_withFundcontrols.summary.as_latex())
+f.close()
+
+mod3_comp = linearmodels.panel.compare({'VR':mod3_fit_All_VR, 'VR w/inst. o\'ship':mod3_fit_All_VR_withFundcontrols, 'Abs. VR':mod3_fit_All_absVR, 'Abs. VR w/inst. o\'ship':mod3_fit_All_absVR_withFundcontrols})
+print(mod3_comp)
+f = open('../Regression_Results/US/mod3_comp.tex', 'w')
+f.write(mod3_comp.summary.as_latex())
+f.close()
