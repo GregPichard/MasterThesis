@@ -72,7 +72,6 @@ Duplicates_db.info()
 Duplicates_db.index
 # Sorting holdings by company, then by date,then by number of shares held : duplicated value are grouped together
 Duplicates_db = Duplicates_db.sort_values(['RIC', 'Date', 'AdjNbSharesHeld'])
-Duplicates_db_backup = Duplicates_db
 
 # Another backup, necessary for the next "Shares outstanding" query
 np.savez_compressed("FundOwners_ETFHeld_RIC_list", RIC = StocksETF_db.RIC.unique())
@@ -86,15 +85,7 @@ def IncrementDate(i):
         # Second case : values and original dates match but not (next duplicates)
         #if np.sum(Duplicates_db.drop(['Year', 'Month'], axis = 1).loc[index_current] == Duplicates_db.drop(['Year', 'Month'], axis = 1).loc[index_prev]) == (Duplicates_db.shape[1] - 2):
             #Duplicates_db[index_current, 'Month'] = Duplicates_db.Month.loc[index_prev] % 12 + 1
-            #Duplicates_db[index_current, 'Year'] = Dupliimport pandas as pd
-import numpy as np
-import datetime
-import multiprocessing
-
-### Shares held by ETFs
-# Read data extracted from ETFs' ID data set
-ETF_ID_db = pd.read_excel("ReportEikon_ETF_live&nonswap_20190303.xlsx", header = 0)
-ETF_ID_db.info()cates_db.Year.loc[index_prev] + (Duplicates_db.Month.loc[index_prev]) // 12
+            #Duplicates_db[index_current, 'Year'] = Duplicates_db.Year.loc[index_prev] + (Duplicates_db.Month.loc[index_prev]) // 12
         if Duplicates_db.RIC.iat[i] == Duplicates_db.RIC.iat[i - 1]:
             if Duplicates_db.Fund_RIC.iat[i] == Duplicates_db.Fund_RIC.iat[i - 1]:
                 if Duplicates_db.AdjNbSharesHeld.iat[i] == Duplicates_db.AdjNbSharesHeld.iat[i - 1]:
@@ -181,7 +172,7 @@ StocksETF_Holdings_db.loc[StocksETF_Holdings_db.AdjNbSharesHeld.isna(), 'PctShar
 StocksETF_Holdings_db.to_csv('Monthly/ETF_Holdings_Extrapolation_LongMerged_db.csv', index = True, header = True)
 del StocksETF_Aggregate_db, StocksETF_db, StocksETF_Holdings_db
 ## Extension : Aggregating other categories of institutional ownership, taking duplicates into account
-del Duplicates_db, Duplicates_db_backup
+del Duplicates_db
 
 def FindDuplicates(db):
     Duplicates_db = db[db.duplicated(keep = False)]

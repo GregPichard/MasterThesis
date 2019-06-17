@@ -21,7 +21,7 @@ import datetime
 ReturnCloseVolatility_MonthlyPanel = pd.read_csv('Monthly/Stocks_DVolatility_MFreq_WidePanel.csv', header = 0)
 ReturnCloseVolatility_db = pd.melt(ReturnCloseVolatility_MonthlyPanel, id_vars = ['Date'], var_name = 'RIC', value_name = 'Volatility')
 # Loading the main independent variable : ETF ownership shares (already long)
-ETF_Holdings_LongMerged_db = pd.read_csv('Monthly/ETF_Holdings_LongMerged_db.csv', header = 0)
+ETF_Holdings_LongMerged_db = pd.read_csv('Monthly/ETF_Holdings_Extrapolation_LongMerged_db.csv', header = 0)
 # Loading all the remaining control variables
 # Non-ETF holdings
 NonETF_Holdings_LongMerged_db = pd.read_csv('Monthly/NonETF_HoldingsExtrapolation_LongMerged_db.csv', header = 0)

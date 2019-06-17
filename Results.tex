@@ -1,26 +1,35 @@
 \section{Panel regression results and discussion}
 \label{sec:Results}
-In this whole section, descriptive statistics and results will always be given in the same order : first the U.S. stocks' sample, which is a tentative replication of \textcite{Ben-David2018} and then the international (non-U.S.) stocks' sample, which is one of the newer contribution of this paper. The model specifications tested are the same across both samples, which makes qualitative comparisons between both distinct populations more intuitive. All regressions are performed using a heteroskedasticity and auto-correlation robust covariance estimator following the methodology introduced in \textcite{Driscoll1998} for panel and spatial regressions based on the widely-used HAC estimator from \textcite{Newey1987}. Through comparisons that are not displayed here, it has been steadily noticed that the \textcite{Newey1987} tends to yield more conservative estimates (thus lower t-stats in absolute value) than the heteroskedasticity-robust estimator with clustering both on entities (stocks) and time. Nevertheless, and that is why such comparisons are not disclosed, the degree of significance of coefficient estimates does not change the conclusions drawn from the three models tested.  The estimation methodology, whose implementation is automated through a statistical package, is explained in \autoref{app:sec:EconometricDefinitions} as well as several statistics displayed in the exhibits.
+In this whole section, descriptive statistics and results will always be given in the same order : first the U.S. stocks' sample, which is a tentative replication of \textcite{Ben-David2018} and then the international (non-U.S.) stocks' sample, which is one of the newer contribution of this paper. The model specifications tested are the same across both samples, which makes qualitative comparisons between both distinct populations more intuitive. All regressions are performed using a heteroskedasticity and auto-correlation robust covariance estimator following the methodology introduced in \textcite{Driscoll1998} for panel and spatial regressions based on the widely-used HAC covariance estimator from \textcite{Newey1987}. The mathematical detail of this covariance matrix can be found in \autoref{app:sec:EconometricDefinitions}, p.\pageref{app:sec:EconometricDefinitions}.
+
+Through comparisons that are not displayed here, it has been steadily noticed that the \textcite{Newey1987} tends to yield more conservative estimates (thus lower t-stats in absolute value) than the heteroskedasticity-robust estimator with clustering both on entities (stocks) and time. Nevertheless, and that is why such comparisons are not disclosed, the degree of significance of coefficient estimates does not change the conclusions drawn from the three models tested.  The estimation methodology, whose implementation is automated through a statistical package, is explained in \autoref{app:sec:EconometricDefinitions} as well as several statistics displayed in the exhibits.
 \subsection{Summary statistics}
 \input{SummaryStats/SummaryStats.tex}
 \subsection{ETF ownership and underlying stocks' volatility}
 \label{sec:Results:sub:Volatility}
+\subsubsection{U.S. sample}
+\autoref{tab:Volatility:US:Comp} contains four different model specifications for which the coefficient on ETF ownership is always significant at a 1\% error level. From the first model (column \textit{Baseline}), one can interpret it as follows, on average, a 10 percentage point increase in the ETF interest in a stock is correlated with a 2.6 percentage point increase in this stock's daily returns over the same month. This baseline specification only uses controls relative to size, value and momentum. The column titled \textit{Controls + Volatility lags} tests the robustness using additional liquidity (\textcite{Amihud2002} ratio and bid-ask spread) and profitability, as in \textcite{Ben-David2018} and addresses the issue of serial correlation in the monthly volatility of returns using four lags of the dependent, all of them being positive and strongly significant. Subsequently, the magnitude of ETF ownership effect drops, from about $0.30$ to $0.04$. The third specification goes further in addressing the possible omitted variable bias due to institutional ownership : in order to distinguish the suspected correlation between ETF and other institutional flows into securities, three different categories of fund ownership are found to have an impact on volatility. Nevertheless, the signs are hard to justify at this stage : mutual funds' impact seems very close to zero, while an obvious contradition\footnote{\dots despite checks performed on how the variables have been computed. We have to keep in mind the level of reporting for those categories may be far less precise than for mutual funds in the Thomson Reuters database, both in terms of representativeness and reporting frequency.} exists between seemingly stabilizing hedge funds andvolatility-impounding pension funds (!) Perhaps reassuringly, the effect of ETFs alone does not change substantially as a consequence, showing that the omitted variable bias did not matter; in other words, the relationship between ETFs' weight in the capital of company and its volatility is independent from other collective investment schemes. The standardization in the fourth and last column to the right means that each variable in the regression is centered, i.e. the sample mean is subtracted from the original variable, and divided by the sample standard deviation. The interpretation follows : a one standard deviation change in ETF ownership is related with a 0.58\% to 1.05\% (average : 0.81\%) of a standard deviation increase in the stock's volatility. In general, clear support can be found in favor of the liquidity trading hypothesis in the sample of stocks traded in the United States.
+
+%Although statistically different from no effect, this result has arguably little economic magnitude: almost no pairwise correlation between these two variables can be found in general. This sample contains an important proportion of small stocks: the average market capitalization is worth USD 717 million while the median is USD 107; one quarter of the sample is populated with observations below USD 30 million. 
+
 
 \begin{landscape}
   {\linespread{1.0}
     %\begin{table}[htbp]
-     % \input{./Regression_Results/US/mod1_comp.tex}
+    % \input{./Regression_Results/US/mod1_comp.tex}
     %\end{table}
     \input{./Regression_Results/US/mod1_comp_long.tex}
   }
 \end{landscape}
 
+\subsubsection{International sample}
 
-For the sake of completeness, more detail is reported in the appendix, \autoref{app:sec:DetailedResults:Volatility}, p.\pageref{app:sec:DetailedResults:Volatility},  about the panel estimation results testing the relationship between the share of ETF ownership in securities and the held securities' daily returns volatility. 
+For the sake of completeness, more detail is reported in the appendix, \autoref{app:sec:DetailedResults:Volatility}, p.\pageref{app:sec:DetailedResults:Volatility}, about the panel estimation results testing the relationship between the share of ETF ownership in securities and the held securities' daily returns volatility. 
 
 \subsection{ETF ownership and underlying stocks' liquidity}
 \label{sec:Results:sub:Liquidity}
-
+\subsubsection{U.S. sample}
+In \autoref{tab:Liquidity:US:Comp}, the analysis of ETF ownership on two liquidity proxies, the relative bid-ask spread and the \textcite{Amihud2002} ratio is displayed. For each dependent variable, two variants, respectively with and without institutional ownership controls, yield very mixed results regarding the negative influence of ETF ownership on liquidity : indeed, both the illiquidity ratio equations exhibit positive coefficients with very high t-statistics, and those effects do not originate from a possible correlation between various categories of funds (ETF, other mutual, hedge funds). These results lead us to think that the increased degree of ETF involvement in a company's equity on average causes transactions to become more costly and, importantly for other institutional investors, to impound larger absolute moves on prices. In the Amihud ratio numerator model (first and second columns), the coefficient on ETF ownership means that a one percentage point increase in this variable is associated with a 0.19 percentage point (or 19 basis points) increase in the daily average absolute return, its dollar volume of transactions and other specified controls being kept constant. Contrary to what \textcite{Israeli2017} exhibits regarding their bid-ask spread proxy, the coefficients on ETF ownership (as well as pension and hedge funds ownership) are not statistically significant from zero, and the negative one on other open-end mutual funds ownership implies a very weak sensitivity.
 
 \begin{landscape}
   {\linespread{1.0}
@@ -30,9 +39,14 @@ For the sake of completeness, more detail is reported in the appendix, \autoref{
   }
 \end{landscape}
 
-Even though no significant effect has been found so far in this subsection, more detail is reported in the appendix, \autoref{app:sec:DetailedResults:Liquidity}, p.\pageref{app:sec:DetailedResults:Liquidity},  about the panel estimation results testing the relationship between the share of ETF ownership in securities and the statistics linked with stock-level liquidity (bid-ask spread, \textcite{Amihud2002} ratio decomposition).
+\subsubsection{International sample}
+
+Even though no significant effect has been found so far in this subsection, more detail is reported in the appendix, \autoref{app:sec:DetailedResults:Liquidity}, p.\pageref{app:sec:DetailedResults:Liquidity},  about the panel estimation results testing the relationship between the share of ETF ownership in securities and the statistics linked with stock-level liquidity (bid-ask spread, \textcite{Amihud2002} ratio decomposition). 
+
 \subsection{ETF ownership and concerns about pricing efficiency}
 \label{sec:Results:sub:Efficiency}
+\subsubsection{U.S. sample}
+\autoref{tab:Efficiency:US:Comp} gathers panel OLS regressions at quarterly frequency for the U.S. stocks sample. The row of ETF ownership's coefficients (and associated t-stats below) attempting to explain either the variance ratio or the absolute deviation to 1 of the variance ratio is not statistically significant. This comes generally in contradiction with \textcite{Ben-David2018}'s findings and running the same (untabulated) analysis on subsamples sorted on market capitalization quartiles does not yield a different result. As for the estimation of ETF ownership and volatility, the estimation strategy in the original paper relies on an instrumental variable, a binary depending on the switch of the security from an index to another (the Russell 1000 and 2000 indices) in order to avoid endogeneity between volatility and ETF ownership. Unlike the aforementioned analysis, we cannot say in the light of results for the U.S. stocks sample that ownership through exchange-traded funds yields more mean reversion over non-overlapping 5-day windows. 
 
 \begin{landscape}
   {\linespread{1.0}
@@ -42,4 +56,7 @@ Even though no significant effect has been found so far in this subsection, more
   }
 \end{landscape}
 
+\subsubsection{International sample}
+
 Despite the, at best fragile, evidence exhibited in this subsection, more detail is reported in the appendix, \autoref{app:sec:DetailedResults:Efficiency}, p.\pageref{app:sec:DetailedResults:Efficiency}, about the panel estimation results testing the relationship between the share of ETF ownership in securities and the statistics of mean reversion.
+

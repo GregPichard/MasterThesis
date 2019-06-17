@@ -1,44 +1,45 @@
 \begin{center}
-  \caption{Exchange-Traded Funds' aggregate ownership share and underlying securities' liquidity}
-  \label{tab:Liquidity:Comp}
-\begin{tabular}{lcccc}
+  \caption{U.S. Sample : Exchange-Traded Funds' aggregate ownership share and underlying securities' liquidity}
+  \label{tab:Liquidity:US:Comp}
+  \begin{tabular}{lcccc}
 \toprule
                                            &   \textbf{Amihud}   & \textbf{Amihud w/inst. o'ship} &   \textbf{Bid-Ask}  & \textbf{Bid-Ask w/inst. o'ship}  \\
 \midrule
 \textbf{Dep. Variable}                     &   AmihudNumerator   &        AmihudNumerator         &   PctBidAskSpread   &         PctBidAskSpread          \\
 \textbf{Estimator}                         &       PanelOLS      &            PanelOLS            &       PanelOLS      &             PanelOLS             \\
-\textbf{No. Observations}                  &        436857       &             436852             &        335350       &              335346              \\
+\textbf{No. Observations}                  &        436359       &             436352             &        335170       &              335164              \\
 \textbf{Cov. Est.}                         &    Driscoll-Kraay   &         Driscoll-Kraay         &    Driscoll-Kraay   &          Driscoll-Kraay          \\
-\textbf{R-squared}                         &        0.0330       &             0.0330             &        0.0512       &              0.0512              \\
-\textbf{R-Squared (Within)}                &        0.0436       &             0.0436             &        0.0661       &              0.0663              \\
-\textbf{R-Squared (Between)}               &        0.1873       &             0.1873             &        0.5612       &              0.5618              \\
-\textbf{R-Squared (Overall)}               &        0.1276       &             0.1276             &        0.1882       &              0.1885              \\
-\textbf{F-statistic}                       &        3688.0       &             2950.4             &        4465.5       &              2555.6              \\
+\textbf{R-squared}                         &        0.0326       &             0.0326             &        0.0510       &              0.0510              \\
+\textbf{R-Squared (Within)}                &        0.0448       &             0.0448             &        0.0659       &              0.0660              \\
+\textbf{R-Squared (Between)}               &        0.1897       &             0.1898             &        0.5568       &              0.5572              \\
+\textbf{R-Squared (Overall)}               &        0.1291       &             0.1291             &        0.1879       &              0.1881              \\
+\textbf{F-statistic}                       &        3643.1       &             2914.2             &        4445.9       &              2543.2              \\
 \textbf{P-value (F-stat)}                  &        0.0000       &             0.0000             &        0.0000       &              0.0000              \\
 \midrule
-\textbf{Intercept}                         &        0.3438       &             0.3438             &        0.1054       &              0.1057              \\
-\textbf{ }                                 &       (30.192)      &            (30.164)            &       (15.787)      &             (15.743)             \\
-\textbf{PctSharesHeldETF}                  &        0.1870       &             0.1871             &        0.0061       &              0.0060              \\
-\textbf{ }                                 &       (7.7614)      &            (7.7638)            &       (0.7923)      &             (0.7832)             \\
+\textbf{Intercept}                         &        0.3424       &             0.3425             &        0.1055       &              0.1057              \\
+\textbf{ }                                 &       (30.114)      &            (30.084)            &       (15.863)      &             (15.819)             \\
+\textbf{PctSharesHeldETF\_1lag}            &        0.1809       &             0.1810             &        0.0074       &              0.0073              \\
+\textbf{ }                                 &       (7.5170)      &            (7.5198)            &       (0.8731)      &             (0.8642)             \\
 \textbf{np.log(CompanyMarketCap\_1lag)}    &       -0.0153       &            -0.0153             &       -0.0049       &             -0.0049              \\
-\textbf{ }                                 &      (-26.847)      &           (-26.822)            &      (-14.639)      &            (-14.596)             \\
-\textbf{BookToMarketRatio\_1lag}           &      2.894e-07      &           3.098e-07            &      -4.277e-08     &            -4.038e-08            \\
-\textbf{ }                                 &       (1.1320)      &            (1.1432)            &      (-0.9008)      &            (-0.8852)             \\
-\textbf{AmihudDenominator}                 &      1.321e-11      &            1.32e-11            &                     &                                  \\
-\textbf{ }                                 &       (4.1972)      &            (4.1968)            &                     &                                  \\
-\textbf{PctSharesHeldOtherMutual}          &                     &           -1.219e-05           &                     &            -2.114e-06            \\
-\textbf{ }                                 &                     &           (-5.6177)            &                     &            (-4.5245)             \\
-\textbf{Volatility\_1lag}                  &                     &                                &        0.0500       &              0.0499              \\
-\textbf{ }                                 &                     &                                &       (10.104)      &             (10.107)             \\
-\textbf{PctSharesHeldPension}              &                     &                                &                     &              0.3943              \\
-\textbf{ }                                 &                     &                                &                     &             (1.2835)             \\
-\textbf{PctSharesHeldHedge}                &                     &                                &                     &              0.0077              \\
-\textbf{ }                                 &                     &                                &                     &             (1.7387)             \\
+\textbf{ }                                 &      (-26.856)      &           (-26.830)            &      (-14.666)      &            (-14.622)             \\
+\textbf{BookToMarketRatio\_1lag}           &      2.812e-07      &           2.925e-07            &      -4.261e-08     &            -4.149e-08            \\
+\textbf{ }                                 &       (1.1005)      &            (1.1141)            &      (-0.9060)      &            (-0.8901)             \\
+\textbf{AmihudDenominator}                 &      1.335e-11      &           1.335e-11            &                     &                                  \\
+\textbf{ }                                 &       (4.3898)      &            (4.3890)            &                     &                                  \\
+\textbf{PctSharesHeldOtherMutual\_1lag}    &                     &           -1.157e-05           &                     &            -2.123e-06            \\
+\textbf{ }                                 &                     &           (-5.2639)            &                     &            (-6.0853)             \\
+\textbf{Volatility\_1lag}                  &                     &                                &        0.0498       &              0.0498              \\
+\textbf{ }                                 &                     &                                &       (10.156)      &             (10.161)             \\
+\textbf{PctSharesHeldPension\_1lag}        &                     &                                &                     &              0.2846              \\
+\textbf{ }                                 &                     &                                &                     &             (1.1997)             \\
+\textbf{PctSharesHeldHedge\_1lag}          &                     &                                &                     &              0.0053              \\
+\textbf{ }                                 &                     &                                &                     &             (1.1511)             \\
 \midrule
 \textbf{Effects}                           &        Entity       &             Entity             &        Entity       &              Entity              \\
 & Time & Time & Time & Time\\
 \bottomrule
 \end{tabular}
+%\caption{Model Comparison}
 \end{center}
 
 T-stats reported in parentheses
