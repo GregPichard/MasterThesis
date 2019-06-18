@@ -18,14 +18,29 @@ import numpy as np
 import datetime
 
 # Loading the dependent variable : Monthly-averaged daily returns volatility (panel form)
-ReturnCloseVolatility_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_DVolatility_MFreq_WidePanel.csv', header = 0)
+ReturnCloseVolatility_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_DVolatility_MFreq_WidePanel.csv', header = 0, skiprows = [0, 2])
+ReturnCloseVolatility_MonthlyPanel.rename(index = str, columns = {'RIC':'Date'}, inplace = True)
 ReturnCloseVolatility_db = pd.melt(ReturnCloseVolatility_MonthlyPanel, id_vars = ['Date'], var_name = 'RIC', value_name = 'Volatility')
 # Loading the main independent variable : ETF ownership shares (already long)
-ETF_Holdings_LongMerged_db = pd.read_csv('Monthly/IntlETF_Holdings_LongMerged_db.csv', header=0)
+ETF_Holdings_LongMerged_db = pd.read_csv('Monthly/IntlETF_Holdings_Extrapolation_LongMerged_db.csv', header=0)
 # Loading all the remaining control variables
+# Non-ETF holdings
+NonETF_Holdings_LongMerged_db = pd.read_csv('Monthly/IntlNonETF_HoldingsExtrapolation_LongMerged_db.csv', header = 0)
+
 # Amihud ratio (panel form)
-AmihudRatio_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_AmihudRatio_WidePanel.csv', header = 0)
+AmihudRatio_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_AmihudRatio_WidePanel.csv', header = 0, skiprows = [0, 2])
+AmihudRatio_MonthlyPanel.rename(index = str, columns = {'RIC':'Date'}, inplace = True)
 AmihudRatio_db = pd.melt(AmihudRatio_MonthlyPanel, id_vars = ['Date'], var_name = 'RIC', value_name = 'AmihudRatio')
+
+# Amihud ratio's numerator and denominator for the liquidity regression
+AmihudNumerator_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_AmihudNumerator_WidePanel.csv', header = 0, skiprows = [0, 2])
+AmihudNumerator_MonthlyPanel.rename(index = str, columns = {'RIC':'Date'}, inplace = True)
+AmihudNumerator_db = pd.melt(AmihudNumerator_MonthlyPanel, id_vars = ['Date'], var_name = 'RIC', value_name = 'AmihudNumerator')
+
+AmihudDenominator_MonthlyPanel = pd.read_csv('Monthly/IntlStocks_AmihudDenominator_WidePanel.csv', header = 0, skiprows = [0, 2])
+AmihudDenominator_MonthlyPanel.rename(index = str, columns = {'RIC':'Date'}, inplace = True)
+AmihudDenominator_db = pd.melt(AmihudDenominator_MonthlyPanel, id_vars = ['Date'], var_name = 'RIC', value_name = 'AmihudDenominator')
+
 # Pct Bid-Ask Spread (long)
 BidAsk_db = pd.read_csv('Monthly/IntlStocks_BidAskSpread_db.csv', header = 0)
 BidAsk_db.drop_duplicates(keep = 'last', inplace = True)
@@ -71,10 +86,12 @@ for i, d in enumerate(pd.DatetimeIndex(ControlVariables_db.Date)):
 # 2/2  : for long datasets, define the multiple index ['YearMonth', 'RIC']
 # The ETF Holdings already have the YearMonth variable
 ETF_Holdings_LongMerged_db.set_index(['YearMonth', 'RIC'], inplace = True)
+NonETF_Holdings_LongMerged_db.set_index(['YearMonth', 'RIC'], inplace = True)
+
 #RetPast12to1M_db.set_index(['YearMonth', 'RIC'], inplace = True) # Indexing is based on full date, hence one has to create the 'YearMonth' variable below
 #RetPast12to7M_db.set_index(['YearMonth', 'RIC'], inplace = True)
 
-for df in list([GrossProfit_db, ControlVariables_db, ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db, RetPast12to1M_db, RetPast12to7M_db]):
+for df in list([GrossProfit_db, ControlVariables_db, ReturnCloseVolatility_db, AmihudRatio_db, AmihudNumerator_db, AmihudDenominator_db, BidAsk_db, RetPast12to1M_db, RetPast12to7M_db]):
     year = pd.DatetimeIndex(df.Date).year
     month = pd.DatetimeIndex(df.Date).month - (pd.DatetimeIndex(df.Date).day==1).astype('int64')
     df['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(year, month)]
@@ -84,7 +101,7 @@ for df in list([GrossProfit_db, ControlVariables_db, ReturnCloseVolatility_db, A
 BidAsk_db = BidAsk_db[~BidAsk_db.index.duplicated(keep = 'last')]
 GrossProfit_db = GrossProfit_db[~GrossProfit_db.index.duplicated(keep = 'last')]
 del ReturnCloseVolatility_MonthlyPanel, AmihudRatio_MonthlyPanel, RetPast12to1M_MonthlyPanel, RetPast12to7M_MonthlyPanel
-TablesMergelist = list([ETF_Holdings_LongMerged_db,ReturnCloseVolatility_db, AmihudRatio_db, BidAsk_db, RetPast12to1M_db, RetPast12to7M_db, GrossProfit_db, ControlVariables_db])
+TablesMergelist = list([ETF_Holdings_LongMerged_db,NonETF_Holdings_LongMerged_db, ReturnCloseVolatility_db, AmihudRatio_db, AmihudNumerator_db, AmihudDenominator_db, BidAsk_db, RetPast12to1M_db, RetPast12to7M_db, GrossProfit_db, ControlVariables_db])
 # The "Date" column can be found in several tables that are going to get merged. They have to be deleted.
 for df in TablesMergelist:
     if 'Date' in df.columns:
