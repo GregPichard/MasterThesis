@@ -17,21 +17,25 @@
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{url}
-\usepackage{amsmath, amssymb}
+\usepackage{amsmath, amssymb, amsfonts}
 \usepackage[super]{nth}
 \usepackage{fancybox}
 \usepackage{lipsum}
 
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning}
 \tikzset{%
-  >={Latex[width=2mm, length=2mm]},
+  >={Latex[width=10mm, length=3mm]},
   base/.style = {rectangle, draw = black, text centered, font = \sffamily, minimum width = 1cm , minimum height = 3cm, text width = 2cm},
   ETF/.style = {base, fill = blue!80},
   AP/.style = {base, fill = blue!60},
   Investor/.style = {base, fill = red!60},
   Exchange/.style = {base, fill = lightgray},
-  arrow/.style = {->, shorten >=2pt}
+  arrow/.style = {->, shorten >=2pt, width=10mm}
 }
 
 
@@ -167,29 +171,34 @@
 
 \begin{frame}
   \frametitle{ETF pricing mechanism and trading}
-  \begin{tikzpicture}[->, >=stealth, auto, node distance=3cm, align = center]
+  \begin{tikzpicture}[->, >={Stealth[width=3mm, length=4mm]}, auto, node distance=3cm, align = center]
     \node[base, minimum height = 6cm, minimum width = 5.5cm, fill=red!20, draw=none] at (-8.5, 0) (SecMarket) {};
     \node[base, minimum height = 6cm, minimum width = 5.5cm, fill=blue!20, right of=SecMarket, draw = none] at ([xshift=3cm] SecMarket) (PriMarket) {};
     \node[below of=PriMarket, below = 3pt] (PriMarketLabel) {Primary Market};
     \node[below of=SecMarket, below = 3pt] (SecMarketLabel) {Secondary Market};
     \begin{scope}[transparency group]
-    \node at (-1,0) (ETF) [ETF] {ETF issuer/manager};
-    \node (AP) [AP, left of = ETF] {Authorized Participant};
-    \node (Exchange) [Exchange, left of = AP] {Stock exchange};
-    \node (Investor) [Investor, left of = Exchange] {Investor};
-    \draw[->] (Investor.north) to [out=30, in=150] node[above = 3pt, font=\footnotesize] {Cash/ETF shares} (Exchange.north);
-    \draw[->] (Exchange.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Underlying basket (creation)} (AP.north);
-    \draw[->] (AP.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Cash/underlying basket} (ETF.north);
-    \draw[->] (ETF.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares} (AP.south);
-   \draw[->] (AP.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares (creation)} (Exchange.south);
+      \node at (-1,0) (ETF) [ETF] {ETF issuer/manager};
+      \node (AP) [AP, left of = ETF] {Authorized Participant};
+      \node (Exchange) [Exchange, left of = AP] {Stock exchange};
+      \node (Investor) [Investor, left of = Exchange] {Investor};
+      \draw[->] (Investor.north) to [out=30, in=150] node[above = 3pt, font=\footnotesize] {Cash/ETF shares} (Exchange.north);
+      \draw[->] (Exchange.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Underlying basket (creation)} (AP.north);
+      \draw[->] (AP.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Cash/underlying basket} (ETF.north);
+      \draw[->] (ETF.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares} (AP.south);
+      \draw[->] (AP.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares (creation)} (Exchange.south);
       \draw[->] (Exchange.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares/Cash} (Investor.south);
-      \end{scope}
-   \end{tikzpicture}  
+    \end{scope}
+  \end{tikzpicture}  
 \end{frame}
 
 \subsection{Evidence-based concerns expressed about ETFs}
 \begin{frame}
   \frametitle{Concerns expressed about risks conveyed through ETFs}
+  \begin{itemize}
+  \item Liquidity : apart from idiosyncratic events, ETFs in general are very liquid thnaks to the arbitrage mechanism. E.g. \textcite{Ben-David2018} show their turnover is higher than stocks.
+  \item What about underlying securities' liquidity ?
+  \end{itemize}
+  
 \end{frame}
 
 \begin{frame}
@@ -213,6 +222,11 @@
 
 \begin{frame}
   \frametitle{Key findings}
+  \begin{itemize}
+  \item On average, the volatility of U.S. stocks rises with the share of their equity held by ETFs.
+  \item If the mean reversion also increased because of ETFs, this volatility would be non-fundamental and the \emph{liquidity trading hypothesis} would hold.
+  \item \textbf{But no significant effect has been found on U.S. variance ratios.}
+  \end{itemize}
 \end{frame}
 
 \subsection{Limitations and further directions}
@@ -240,5 +254,36 @@
 \begin{frame}
   \frametitle{Bibliography}
   \printbibliography
+\end{frame}
+\appendix
+\section{Regression results}
+\subsection{Volatility}
+\subsubsection{United States}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Volatility -- U.S. sample}
+  \centering
+    \input{./Results/US/mod1_comp_long.tex}
+\end{frame}
+\subsubsection{International}
+\begin{frame}[allowframebreaks]
+  \frametitle{Volatility -- International sample}
+\end{frame}
+\subsection{Liquidity}
+\subsubsection{United States}
+\begin{frame}[allowframebreaks]
+  \frametitle{Liquidity -- U.S. sample}
+\end{frame}
+\subsubsection{International}
+\begin{frame}[allowframebreaks]
+  \frametitle{Liquidity -- International sample}
+\end{frame}
+\subsection{Efficiency}
+\subsubsection{United States}
+\begin{frame}[allowframebreaks]
+  \frametitle{Efficiency -- U.S. sample}
+\end{frame}
+\subsubsection{International}
+\begin{frame}[allowframebreaks]
+  \frametitle{Efficiency -- International sample}
 \end{frame}
 \end{document}
