@@ -1,0 +1,244 @@
+\documentclass[9pt]{beamer}
+\usetheme{CambridgeUS}
+\usecolortheme{beaver}
+\useinnertheme{rectangles}
+\useoutertheme{smoothbars}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{textpos}
+
+\usepackage{pdfpages}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsmath, amssymb}
+\usepackage[super]{nth}
+\usepackage{fancybox}
+\usepackage{lipsum}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\tikzset{%
+  >={Latex[width=2mm, length=2mm]},
+  base/.style = {rectangle, draw = black, text centered, font = \sffamily, minimum width = 1cm , minimum height = 3cm, text width = 2cm},
+  ETF/.style = {base, fill = blue!80},
+  AP/.style = {base, fill = blue!60},
+  Investor/.style = {base, fill = red!60},
+  Exchange/.style = {base, fill = lightgray},
+  arrow/.style = {->, shorten >=2pt}
+}
+
+
+\usepackage[backend=biber, dateabbrev=true, citestyle=authoryear-icomp, bibstyle=authoryear-icomp, useprefix=true, language=english]{biblatex}
+%\nocite{*}
+\bibliography{../Bibliography/BibETF}
+
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{bibliography item}[text]
+\title[ETFs' unintended effects on stocks]{Exchange-traded funds' expansion and their unintended effects over underlying stocks}
+\subtitle{Volatility, liquidity and efficiency}
+\author{Gr\'egoire Pichard}
+\date{\today}
+\institute{HEC Lausanne (Unil)}
+\subject{Master of Science in Finance (\textsc{MScF})}
+%\logo{\includegraphics[scale = 0.3]{lo_unil_hec06_bleu.eps}}
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{All evil rooted in one product ?}
+  \shadowbox{\parbox{\textwidth}{\textbf{The Silent Road to Serfdom : Why Passive Investing is Worst Than Marxism} -- Note by I.~Fraser-Jenkins, \emph{Sanford C. Bernstein \& Co.}, 2016}}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \begin{itemize}
+      \item Abstract : the shift of a growing share of capital markets towards passive, index-based investing prevents the efficient reallocation of capital from overpriced to underpriced companies. Active management and the related research generate positive externalities.
+      \item Are this concern and conclusion justified ?
+        \begin{itemize}
+        \item What are the author's interests ? This is from the quantitative research of an asset management company, also running retail mutual funds.
+        \item {In general:\\
+          \begin{quote}
+            Everything which is exaggerated is insignificant.\hfill{ \tiny Talleyrand}
+        \end{quote}}
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{figure}
+        \fbox{\includegraphics[page=1, width = 0.7\textwidth, height = 1.2\textwidth, keepaspectratio]{ETF_WorstThanMarxism.pdf}}
+        \caption{\tiny Matt Levine, Bloomberg Opinion, 24.08.2016, available at: \url{https://www.bloomberg.com/opinion/articles/2016-08-24/are-index-funds-communist\#footnote-1472053794479}}
+        \label{fig:Bloomberg_ETFMarxism}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Research field \& focus}
+  \begin{block}{General concern expressed}
+    \begin{itemize}
+    \item What effects are caused through index-tracking securities and \textbf{especially ETFs} on underlying securities ?
+    \item Is there a new risk investors and regulators should become aware of ?
+    \end{itemize}
+  \end{block}
+  \begin{alertblock}{Warning}
+    Focusing on observable indicators of the risk and loss of efficiency is needed: choice based on existing research strategies.
+  \end{alertblock}
+  \begin{exampleblock}{Research questions}
+    Three aspects are treated over a broad and long sample of stocks:
+    \begin{enumerate}
+    \item Do ETFs increase underlying stocks' volatility over the short term ?
+    \item Do ETFs divert the liquidity and thus decrease it at the individual security level ?
+    \item Are there signs ETFs make prices noisier, hence less efficient ? 
+    \end{enumerate}
+  \end{exampleblock}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Context}
+\subsection{Exponential growth of a new fund type}
+\begin{frame}
+  \frametitle{Exponential growth of a new fund type}
+  \only<1>{\framesubtitle{Capitalization worldwide}
+    \begin{figure}
+      \caption{Comparison of total stock market vs. ETF capitalization\footcite[172]{Ben-David2017}}
+      \includegraphics[width = \textwidth, height = 0.65\paperheight, keepaspectratio]{Fig1_MarketCap}
+    \end{figure}
+  }
+  
+  \only<2>{\framesubtitle{Entities listed worldwide}
+
+  }
+
+  \only<3>{\framesubtitle{Trading volume, share of total}
+    \begin{figure}
+      \caption{Comparison of total stock market vs. ETF-related daily trading volume\footcite[173]{Ben-David2017}}
+      \includegraphics[width = \textwidth, height = 0.65\paperheight, keepaspectratio]{Fig2_Volume}
+    \end{figure}
+  }
+  
+\end{frame}
+
+\subsection{Institutional aspects of ETFs}
+
+\begin{frame}
+  \frametitle{Concept and history of exchange-traded funds}
+  \begin{itemize}
+  \item Goal at the inception : track a value-weighted equity index using physical replication.
+    \begin{itemize}
+    \item First ETF ever listed : Toronto Stock Exchange Index Participation Units, introduced March 1990
+    \item First ETF listed in the U.S. : State Street SPDR S\&P 500 ETF, a.k.a ``SPY'', introduced January 1993.
+    \item As of June 21, 2019, SPY is the largest ETF by assets under management: USD 266~B.
+    \end{itemize}
+  \item A mixture of existing products:
+    \begin{itemize}
+    \item As (open-end) mutual funds:
+      \begin{itemize}
+      \item release their Net Asset Value and their holdings
+      \item registered as 1940 Act investment companies $\rightarrow$ creation/redemption of shares
+      \end{itemize}
+    \item As index-funds : track an index built with underlying
+      securities and/or derivatives and following rules defined in a
+      prospectus
+    \item As closed-end funds : traded throughout the day on an
+      exchange
+    \end{itemize}
+  \end{itemize}
+  \begin{alertblock}{Special features}
+    \begin{itemize}
+    \item the intraday NAV is spread out every 15 seconds, or more often.
+    \item \textbf{standardized in-kind or cash creation/redemption process involving authorized participants' arbitrage.}
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ETF pricing mechanism and trading}
+  \begin{tikzpicture}[->, >=stealth, auto, node distance=3cm, align = center]
+    \node[base, minimum height = 6cm, minimum width = 5.5cm, fill=red!20, draw=none] at (-8.5, 0) (SecMarket) {};
+    \node[base, minimum height = 6cm, minimum width = 5.5cm, fill=blue!20, right of=SecMarket, draw = none] at ([xshift=3cm] SecMarket) (PriMarket) {};
+    \node[below of=PriMarket, below = 3pt] (PriMarketLabel) {Primary Market};
+    \node[below of=SecMarket, below = 3pt] (SecMarketLabel) {Secondary Market};
+    \begin{scope}[transparency group]
+    \node at (-1,0) (ETF) [ETF] {ETF issuer/manager};
+    \node (AP) [AP, left of = ETF] {Authorized Participant};
+    \node (Exchange) [Exchange, left of = AP] {Stock exchange};
+    \node (Investor) [Investor, left of = Exchange] {Investor};
+    \draw[->] (Investor.north) to [out=30, in=150] node[above = 3pt, font=\footnotesize] {Cash/ETF shares} (Exchange.north);
+    \draw[->] (Exchange.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Underlying basket (creation)} (AP.north);
+    \draw[->] (AP.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Cash/underlying basket} (ETF.north);
+    \draw[->] (ETF.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares} (AP.south);
+   \draw[->] (AP.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares (creation)} (Exchange.south);
+      \draw[->] (Exchange.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares/Cash} (Investor.south);
+      \end{scope}
+   \end{tikzpicture}  
+\end{frame}
+
+\subsection{Evidence-based concerns expressed about ETFs}
+\begin{frame}
+  \frametitle{Concerns expressed about risks conveyed through ETFs}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Selection of academic contributions about ETFs' effects}
+\end{frame}
+
+\subsection{Selection of related research}
+\begin{frame}
+  \frametitle{Expliciting relevant research : \textcite{Ben-David2018}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Expliciting relevant research : \textcite{Israeli2017}}
+\end{frame}
+
+\section{Main results}
+
+
+\section{Conclusion}
+\subsection{Wrap-up}
+
+\begin{frame}
+  \frametitle{Key findings}
+\end{frame}
+
+\subsection{Limitations and further directions}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Likely trends in the ETF universe}
+  \begin{itemize}
+  \item More active bets, nicknamed \textit{passive-aggressive}
+  \item Opaque holdings structures are at an advanced stage in the regulatory approval process in the U.S. (late spring 2019)
+    
+  \end{itemize}
+  \begin{block}{The Precidian model}
+    \shadowbox{\parbox{0.9\textwidth}{\textbf{An ETF That Hides Its Secret Sauce Is Poised for Regulator's Nod} -- Bloomberg News, April 8, 2019.\footnote{Available at \url{https://www.bloomberg.com/news/articles/2019-04-08/an-etf-that-hides-its-secret-sauce-is-poised-for-regulator-s-nod}}}}
+    \begin{itemize}
+    \item Positive signs that the Securities and Exchange Commission will allow the design.
+    \item Trading permission is the next decision needed before the product is issued.
+    \item Disagreement at the SEC and skepticism from some analysts regarding appeal to investors; reality check needed and \textit{evidence so far has shown that \textcolor{red}{awareness about ETFs can take time}}.
+    \end{itemize}
+    
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Bibliography}
+  \printbibliography
+\end{frame}
+\end{document}
