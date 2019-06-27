@@ -135,7 +135,7 @@ Overall, two measures of profitability seem to correlate with expected returns :
 \label{subsec:Method:Volatility}
 The theoretical basis of all main and control variables included in the models have been discussed and the inclusion of controls is justified through a summary of the abundant literature of empirical asset pricing in the previous subsection. In this subsection, the first identification strategy attempts to answer the question : does the share of a stock owned by exchange-traded funds altogether has a contemporaneous impact over the stocks' volatility, all other characteristics being equal ? The null hypothesis being conservative (``no effect''), its potential rejection would mean that the liquidity trading hypothesis is actually reflected in the panel data with a controlled error risk level, disclosed as a t-statistic in parentheses in the results exhibits (\autoref{sec:Results}).
 
-Due to the structure of dataset, which is an unbalanced panel of U.S., respectively international stocks, some unique characteristics inherent to each stock will be controlled through entity fixed effects. Since the trend over the measurement period has been an exponential increase in the weight of ETFs, both in terms of stock ownership and volume traded, some fixed effects over the time axis seem legitimate. Otherwise, one could imagine that, provided that the average volatility of each stock does not significantly varies, the higher ETF ownership would results in a spuriously negative coefficient (!). Another reason for month fixed effects deals with short term market events, such as several market crashes that occurred during the two decades of the sample. 
+Due to the structure of dataset, which is an unbalanced panel of U.S., respectively international stocks, some unique characteristics inherent to each stock will be controlled through entity fixed effects. Since the trend over the measurement period has been an exponential increase in the weight of ETFs, both in terms of stock ownership and volume traded, some fixed effects over the time axis seem legitimate in order to avoid spurious effects. Another reason for month fixed effects deals with short term market events, such as several market crashes that occurred during the two decades of the sample. 
 \begin{equation}
   \mathsf{Volatility}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t} + B_{C}^{\intercal} \mathsf{Controls}_{i, t} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
 \end{equation}
@@ -154,8 +154,7 @@ The following regression is run regarding the effect of ETF ownership on the bid
 \textcite{Israeli2017} measure this relationship in first differences using an annual panel. The stationarity concern will be investigated further and inspiration is evidently drawn from their research scheme. They add several controls and industry-level fixed effects.
 
 The second proxy for liquidity is \textcite{Amihud2002} illiquidity ratio, which numerator and denominator may be correlated with ETF ownership : the numerator is the absolute daily return and the denominator, feared to be especially sensitive to ETF ownership's influence, is the daily dollar volume traded. A spurious improvement (lower illiquidity) could be linked with ETF ownership if the latter increases the denominator, possibly offsetting the simultaneous increase in absolute return. The proposed way to mitigate this inherent issue is to split the ratio and consider the denominator as a regressor.
- 
-\begin{equation}
+ \begin{equation}
    \mathsf{Illiq^{Num}}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t - 1} + \beta_{2} \mathsf{Illiq^{Denom}_{i,t}} + B_{C}^{\intercal} \mathsf{Controls}_{i, t- 1} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
 \end{equation}
 
@@ -163,7 +162,7 @@ Without this point being mentioned in the paper, one can notice that the illiqui
 
 \subsubsection{Concerns about efficiency}
 \label{subsec:Method:Efficiency}
-If the volatility impounded through increased ETF ownership has no fundamental origin but is liquidity-driven, the price movements should be compensated over a few days. The security prices affected through higher ETF trading volume are noisier in the short term. One of the alternative hypotheses posits that ETF-driven movements are fundamentally driven, as the inclusion in a basket would supposedly help new information materialize in prices, which become less noisy thanks to through the ``discovery channel''.
+If the volatility impounded through increased ETF ownership has no fundamental origin but is liquidity-driven, the price movements should be compensated over a few days. The security prices affected through higher ETF trading volume are noisier in the short term. One of the alternative hypotheses, the \emph{price discovery hypothesis}, posits that ETF-driven movements are fundamentally driven, as the inclusion in a basket would supposedly help new information materialize in prices, which become less noisy.
 
 As detailed in the dependent variables subsection, both the variance ratio and absolute variance ratio deviation are estimated at the quarterly frequency for each stock and one looks for an influence of ETF ownership. If variables ETF ownership and controls are available at a higher frequency, the latest one available in the quarter is preferred.
 

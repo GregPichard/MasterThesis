@@ -1,46 +1,66 @@
-\begin{center}
-  \caption{International Sample : Exchange-Traded Funds' aggregate ownership share and weekly mean reversion of underlying securities}
-  \label{tab:Efficiency:Intl:Comp}
-  \begin{tabular}{lcccc}
-    \toprule
-    &  \textbf{Abs. VR}  & \textbf{Abs. VR w/inst. o'ship} &    \textbf{VR}     & \textbf{VR w/inst. o'ship}  \\
-    \midrule
-    \textbf{Dep. Variable}                     &       absVR        &              absVR              &         VR         &             VR              \\
-    \textbf{Estimator}                         &      PanelOLS      &             PanelOLS            &      PanelOLS      &          PanelOLS           \\
-    \textbf{No. Observations}                  &       592054       &              592054             &       591848       &           591848            \\
-    \textbf{Cov. Est.}                         &   Driscoll-Kraay   &          Driscoll-Kraay         &   Driscoll-Kraay   &       Driscoll-Kraay        \\
-    \textbf{R-squared}                         &       0.0049       &              0.0049             &       0.0014       &           0.0014            \\
-    \textbf{R-Squared (Within)}                &       0.0055       &              0.0055             &       0.0017       &           0.0017            \\
-    \textbf{R-Squared (Between)}               &       0.0991       &              0.0992             &       0.0757       &           0.0758            \\
-    \textbf{R-Squared (Overall)}               &       0.0099       &              0.0099             &       0.0104       &           0.0104            \\
-    \textbf{F-statistic}                       &       354.08       &              314.75             &       98.569       &           87.752            \\
-    \textbf{P-value (F-stat)}                  &       0.0000       &              0.0000             &       0.0000       &           0.0000            \\
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\multicolumn{5}{r}{\textit{Continued from previous page}}\\
+\toprule
+& \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
 \midrule
-    \textbf{Intercept}                         &       0.9251       &              0.9250             &       0.5297       &           0.5304            \\
-    \textbf{ }                                 &      (22.527)      &             (22.576)            &      (6.1864)      &          (6.1821)           \\
-    \textbf{PctSharesHeldETF\_1lag}            &       0.2529       &              0.2539             &      -0.6122       &          -0.6199            \\
-    \textbf{ }                                 &      (2.7216)      &             (2.6854)            &     (-3.6541)      &         (-3.6808)           \\
-    \textbf{np.log(CompanyMarketCap\_1lag)}    &      -0.0248       &             -0.0248             &       0.0106       &           0.0106            \\
-    \textbf{ }                                 &     (-13.525)      &            (-13.558)            &      (2.7762)      &          (2.7598)           \\
-    \textbf{InvClose\_1lag}                    &       0.0015       &              0.0015             &      -0.0146       &          -0.0146            \\
-    \textbf{ }                                 &      (0.1169)      &             (0.1168)            &     (-0.6261)      &         (-0.6257)           \\
-    \textbf{AmihudRatio\_1lag}                 &       0.2138       &              0.2138             &      -0.2476       &          -0.2475            \\
-    \textbf{ }                                 &      (3.3927)      &             (3.3923)            &     (-4.5128)      &         (-4.5122)           \\
-    \textbf{PctBidAskSpread\_1lag}             &       0.2117       &              0.2117             &      -0.2938       &          -0.2937            \\
-    \textbf{ }                                 &      (5.8326)      &             (5.8319)            &     (-5.4872)      &         (-5.4834)           \\
-    \textbf{BookToMarketRatio\_1lag}           &       0.0001       &              0.0001             &      -0.0001       &          -0.0001            \\
-    \textbf{ }                                 &      (1.6458)      &             (1.6464)            &     (-0.5935)      &         (-0.5995)           \\
-    \textbf{RetPast12to7M\_1lag}               &     -6.928e-05     &            -6.928e-05           &     -7.459e-05     &         -7.461e-05          \\
-    \textbf{ }                                 &     (-2.6264)      &            (-2.6265)            &     (-1.7080)      &         (-1.7081)           \\
-    \textbf{GrossProfitability\_1lag}          &      -0.0041       &             -0.0041             &       0.0036       &           0.0036            \\
-    \textbf{ }                                 &     (-3.2319)      &            (-3.2325)            &      (1.5214)      &          (1.5183)           \\
-    \textbf{PctSharesHeldOtherMutual\_1lag}    &                    &             -0.0004             &                    &           0.0026            \\
-    \textbf{ }                                 &                    &            (-0.2369)            &                    &          (0.7347)           \\
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
 \midrule
-    \textbf{Effects}                           &       Entity       &              Entity             &       Entity       &           Entity            \\
-    & Time & Time & Time & Time\\
-    \bottomrule
-  \end{tabular}
-  %\caption{Model Comparison}
-\end{center}
-T-stats reported in parentheses.
+\endhead
+\caption{International Sample : Exchange-Traded Funds' aggregate ownership share and weekly mean reversion of underlying securities}
+\label{tab:Efficiency:Intl:Comp}\\
+\toprule
+ & \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
+\midrule
+ &   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship} \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Intercept}                         &       0.9251       &              0.9250             &       0.5297       &           0.5304            \\
+\textbf{ }                                 &      (22.527)      &             (22.576)            &      (6.1864)      &          (6.1821)           \\
+\textbf{PctSharesHeldETF\_1lag}            &       0.2529       &              0.2539             &      -0.6122       &          -0.6199            \\
+\textbf{ }                                 &      (2.7216)      &             (2.6854)            &     (-3.6541)      &         (-3.6808)           \\
+\textbf{np.log(CompanyMarketCap\_1lag)}    &      -0.0248       &             -0.0248             &       0.0106       &           0.0106            \\
+\textbf{ }                                 &     (-13.525)      &            (-13.558)            &      (2.7762)      &          (2.7598)           \\
+\textbf{InvClose\_1lag}                    &       0.0015       &              0.0015             &      -0.0146       &          -0.0146            \\
+\textbf{ }                                 &      (0.1169)      &             (0.1168)            &     (-0.6261)      &         (-0.6257)           \\
+\textbf{AmihudRatio\_1lag}                 &       0.2138       &              0.2138             &      -0.2476       &          -0.2475            \\
+\textbf{ }                                 &      (3.3927)      &             (3.3923)            &     (-4.5128)      &         (-4.5122)           \\
+\textbf{PctBidAskSpread\_1lag}             &       0.2117       &              0.2117             &      -0.2938       &          -0.2937            \\
+\textbf{ }                                 &      (5.8326)      &             (5.8319)            &     (-5.4872)      &         (-5.4834)           \\
+\textbf{BookToMarketRatio\_1lag}           &       0.0001       &              0.0001             &      -0.0001       &          -0.0001            \\
+\textbf{ }                                 &      (1.6458)      &             (1.6464)            &     (-0.5935)      &         (-0.5995)           \\
+\textbf{RetPast12to7M\_1lag}               &     -6.928e-05     &            -6.928e-05           &     -7.459e-05     &         -7.461e-05          \\
+\textbf{ }                                 &     (-2.6264)      &            (-2.6265)            &     (-1.7080)      &         (-1.7081)           \\
+\textbf{GrossProfitability\_1lag}          &      -0.0041       &             -0.0041             &       0.0036       &           0.0036            \\
+\textbf{ }                                 &     (-3.2319)      &            (-3.2325)            &      (1.5214)      &          (1.5183)           \\
+\textbf{PctSharesHeldOtherMutual\_1lag}    &                    &             -0.0004             &                    &           0.0026            \\
+\textbf{ }                                 &                    &            (-0.2369)            &                    &          (0.7347)           \\
+\midrule
+\textbf{Effects}                           &       Entity       &              Entity             &       Entity       &           Entity            \\
+& Time & Time & Time & Time\\
+\bottomrule
+%\pagebreak
+\bigskip\\
+\toprule
+ & \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
+\midrule
+ &   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\textbf{Dep. Variable}                     &       absVR        &              absVR              &         VR         &             VR              \\
+\textbf{Estimator}                         &      PanelOLS      &             PanelOLS            &      PanelOLS      &          PanelOLS           \\
+\textbf{No. Observations}                  &       592054       &              592054             &       591848       &           591848            \\
+\textbf{Cov. Est.}                         &   Driscoll-Kraay   &          Driscoll-Kraay         &   Driscoll-Kraay   &       Driscoll-Kraay        \\
+\textbf{R-squared}                         &       0.0049       &              0.0049             &       0.0014       &           0.0014            \\
+\textbf{R-Squared (Within)}                &       0.0055       &              0.0055             &       0.0017       &           0.0017            \\
+\textbf{R-Squared (Between)}               &       0.0991       &              0.0992             &       0.0757       &           0.0758            \\
+\textbf{R-Squared (Overall)}               &       0.0099       &              0.0099             &       0.0104       &           0.0104            \\
+\textbf{F-statistic}                       &       354.08       &              314.75             &       98.569       &           87.752            \\
+\textbf{P-value (F-stat)}                  &       0.0000       &              0.0000             &       0.0000       &           0.0000            \\
+\bottomrule
+\end{longtable}
+}

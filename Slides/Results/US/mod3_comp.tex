@@ -1,21 +1,25 @@
-\begin{center}
-  \caption{U.S. Sample : Exchange-Traded Funds' aggregate ownership share and weekly mean reversion of underlying securities}
-  \label{tab:Efficiency:US:Comp}
-  \begin{tabular}{lcccc}
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\multicolumn{5}{r}{\textit{Continued from previous page}}\\
 \toprule
-                                           &  \textbf{Abs. VR}  & \textbf{Abs. VR w/inst. o'ship} &    \textbf{VR}     & \textbf{VR w/inst. o'ship}  \\
+ & \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
 \midrule
-\textbf{Dep. Variable}                     &       absVR        &              absVR              &         VR         &             VR              \\
-\textbf{Estimator}                         &      PanelOLS      &             PanelOLS            &      PanelOLS      &          PanelOLS           \\
-\textbf{No. Observations}                  &       126851       &              126847             &       126851       &           126847            \\
-\textbf{Cov. Est.}                         &   Driscoll-Kraay   &          Driscoll-Kraay         &   Driscoll-Kraay   &       Driscoll-Kraay        \\
-\textbf{R-squared}                         &       0.0079       &              0.0081             &       0.0040       &           0.0041            \\
-\textbf{R-Squared (Within)}                &       0.0106       &              0.0106             &       0.0040       &           0.0042            \\
-\textbf{R-Squared (Between)}               &       0.2814       &              0.2820             &       0.1376       &           0.1385            \\
-\textbf{R-Squared (Overall)}               &       0.0318       &              0.0320             &       0.0163       &           0.0165            \\
-\textbf{F-statistic}                       &       123.79       &              91.734             &       61.843       &           46.323            \\
-\textbf{P-value (F-stat)}                  &       0.0000       &              0.0000             &       0.0000       &           0.0000            \\
+ &   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
 \midrule
+\endhead
+\caption{U.S. Sample : Exchange-Traded Funds' aggregate ownership share and weekly mean reversion of underlying securities}
+\label{tab:Efficiency:US:Comp}\\
+\toprule
+ & \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
+\midrule
+ &   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship} \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
 \textbf{Intercept}                         &       0.8523       &              0.8532             &       0.8735       &           0.8579            \\
 \textbf{ }                                 &      (12.280)      &             (12.208)            &      (7.6512)      &          (7.4328)           \\
 \textbf{PctSharesHeldETF\_1lag}            &       0.0096       &              0.0218             &      -0.1205       &          -0.1005            \\
@@ -44,6 +48,23 @@
 \textbf{Effects}                           &       Entity       &              Entity             &       Entity       &           Entity            \\
 & Time & Time & Time & Time\\
 \bottomrule
-\end{tabular}
-\end{center}
-T-stats reported in parentheses.
+%\pagebreak
+\bigskip\\
+\toprule
+& \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship} \\
+\midrule
+\textbf{Dep. Variable}                     &       absVR        &              absVR              &         VR         &             VR              \\
+\textbf{Estimator}                         &      PanelOLS      &             PanelOLS            &      PanelOLS      &          PanelOLS           \\
+\textbf{No. Observations}                  &       126851       &              126847             &       126851       &           126847            \\
+\textbf{Cov. Est.}                         &   Driscoll-Kraay   &          Driscoll-Kraay         &   Driscoll-Kraay   &       Driscoll-Kraay        \\
+\textbf{R-squared}                         &       0.0079       &              0.0081             &       0.0040       &           0.0041            \\
+\textbf{R-Squared (Within)}                &       0.0106       &              0.0106             &       0.0040       &           0.0042            \\
+\textbf{R-Squared (Between)}               &       0.2814       &              0.2820             &       0.1376       &           0.1385            \\
+\textbf{R-Squared (Overall)}               &       0.0318       &              0.0320             &       0.0163       &           0.0165            \\
+\textbf{F-statistic}                       &       123.79       &              91.734             &       61.843       &           46.323            \\
+\textbf{P-value (F-stat)}                  &       0.0000       &              0.0000             &       0.0000       &           0.0000            \\
+\bottomrule
+\end{longtable}
+}

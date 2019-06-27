@@ -1,4 +1,4 @@
-{\small\tabcolsep=3pt
+{\scriptsize\tabcolsep=3pt
 \begin{longtable}{>{\bfseries}lcccc}
 \multicolumn{5}{r}{\textit{Continued from previous page}}\\
 \toprule
@@ -18,7 +18,8 @@
 \endlastfoot
 Intercept                         &       0.2964       &             0.0488            &             0.0494             &        -0.0154         \\
          &      (22.268)      &            (7.1942)           &            (7.2977)            &       (-0.4273)        \\
-$\mathbf{PctETF}_{t-1}$            &       0.2470       &             0.0385            &             0.0395             &         0.0081         \\
+         \rowcolor{Aquamarine}
+$\mathbf{PctETF}_{t-1}$            &       0.2470***       &             0.0385***            &             0.0395***             &         0.0081***         \\
         &      (8.2542)      &            (5.9800)           &            (6.2940)            &        (6.8269)        \\
 $\log(\mathbf{MarketCap}_{t-1})$    &      -0.0127       &            -0.0018            &            -0.0018             &        -0.0102         \\
          &     (-20.751)      &           (-5.8479)           &           (-5.9701)            &       (-6.1991)        \\
@@ -52,7 +53,7 @@ $\mathbf{PctHedge}_{t-1}$          &                    &                       
 Effects                           &       Entity       &             Entity            &             Entity             &         Entity         \\
 & Time &  Time  &  Time &  Time\\
 \bottomrule
-\pagebreak
+\bigskip\\
 \toprule
 & \textbf{Baseline}  & \textbf{Controls +lags} & \textbf{O'ship controls} & \textbf{Standardized}  \\
 \midrule

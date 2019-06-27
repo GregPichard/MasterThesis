@@ -1,4 +1,4 @@
-\documentclass[a4paper, twoside, 10pt, titlepage, abstracton, captions = tableheading]{scrartcl}
+\documentclass[a4paper, oneside, 10pt, titlepage, abstracton, captions = tableheading]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -13,10 +13,14 @@
 \usepackage{tabularx}
 \usepackage{subcaption}
 \usepackage{lscape}
-\usepackage[colorlinks]{hyperref}
+\usepackage{afterpage}
+\usepackage{float}
+\restylefloat{table}
+\usepackage[colorlinks=false]{hyperref}
 \usepackage{url}
 \usepackage{amsmath, amssymb}
 \usepackage[super]{nth}
+\usepackage[useregional]{datetime2}
 \usepackage[backend=biber, dateabbrev=true, citestyle=authoryear-icomp, bibstyle=authoryear-icomp, useprefix=true, language=english]{biblatex}
 \usepackage[title]{appendix}
 \linespread{1.5}
@@ -29,14 +33,20 @@
 }
 \subject{Final thesis for the completion of the Master of Science in Finance (\textsc{MScF})}
 \titlehead{\centering \large Faculty of Business and Economics -- HEC Lausanne\\University of Lausanne}
-\title{Exchange-traded funds' expansion and their unintended effects over underlying stocks}
+\title{Exchange-traded funds' expansion and their unintended effects on underlying stocks}
 \subtitle{Volatility, liquidity and efficiency}
-\publishers{{\small Supervisor :\\}Prof. Artem Neklyudov}
-\date{\today}
+\publishers{{\small Supervisor :\\}Prof. Artem Neklyudov\\\medskip {\small Expert:\\}\line(1,0){150}}
+\date{\DTMdisplaydate{2019}{6}{28}{}}
 \author{Grégoire Pichard}
+
 
 \begin{document}
 \maketitle
+{\renewcommand{\abstractname}{\vspace{-\baselineskip}}
+\begin{abstract}
+  In order to write this thesis, I had to meet a supervisor who believed in the topic as much as I did : Prof.~Artem Neklyudov, PhD, accepted the proposal.  I warmly thank him for his useful advice and patience especially when I sounded less than serene.\\ Mr.~Süleyman Ceran, the Systems Administrator at the \textsc{Cedif}, the financial data service of the faculty, has provided me with invaluable access, storage and patience for my many and time-consuming questions. His commitment to my work goes well beyond his statutory tasks and for this I am extremely grateful.\\[2\baselineskip] Finally, I have to pay a special tribute to my family, who supported me throughout all the often tough Master's years -- and long beforehand. Their help obliges me to work harder.
+\end{abstract}
+}
 \input{Abstract.tex}
 \renewcommand{\sectionautorefname}{Section}
 \tableofcontents
@@ -46,10 +56,15 @@
 \input{JackBogle.tex}
 \clearpage
 \input{Motivation.tex}
+\clearpage
 \input{KnowledgeSummary.tex}
+\clearpage
 \input{Data.tex}
+\clearpage
 \input{Methodology.tex}
+\clearpage
 \input{Results.tex}
+\clearpage
 \input{Conclusion.tex}
 \clearpage
 \printbibliography

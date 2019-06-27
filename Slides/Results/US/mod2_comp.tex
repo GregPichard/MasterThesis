@@ -1,21 +1,26 @@
-\begin{center}
-  \caption{U.S. Sample : Exchange-Traded Funds' aggregate ownership share and underlying securities' liquidity}
-  \label{tab:Liquidity:US:Comp}
-  \begin{tabular}{lcccc}
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\multicolumn{5}{r}{\textit{Continued from previous page}}\\
 \toprule
-                                           &   \textbf{Amihud}   & \textbf{Amihud w/inst. o'ship} &   \textbf{Bid-Ask}  & \textbf{Bid-Ask w/inst. o'ship}  \\
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
 \midrule
-\textbf{Dep. Variable}                     &   AmihudNumerator   &        AmihudNumerator         &   PctBidAskSpread   &         PctBidAskSpread          \\
-\textbf{Estimator}                         &       PanelOLS      &            PanelOLS            &       PanelOLS      &             PanelOLS             \\
-\textbf{No. Observations}                  &        436359       &             436352             &        335170       &              335164              \\
-\textbf{Cov. Est.}                         &    Driscoll-Kraay   &         Driscoll-Kraay         &    Driscoll-Kraay   &          Driscoll-Kraay          \\
-\textbf{R-squared}                         &        0.0326       &             0.0326             &        0.0510       &              0.0510              \\
-\textbf{R-Squared (Within)}                &        0.0448       &             0.0448             &        0.0659       &              0.0660              \\
-\textbf{R-Squared (Between)}               &        0.1897       &             0.1898             &        0.5568       &              0.5572              \\
-\textbf{R-Squared (Overall)}               &        0.1291       &             0.1291             &        0.1879       &              0.1881              \\
-\textbf{F-statistic}                       &        3643.1       &             2914.2             &        4445.9       &              2543.2              \\
-\textbf{P-value (F-stat)}                  &        0.0000       &             0.0000             &        0.0000       &              0.0000              \\
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
 \midrule
+\endhead
+\caption{U.S. Sample : Exchange-Traded Funds' aggregate ownership share and underlying securities' liquidity}
+\label{tab:Liquidity:US:Comp}\\
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship} \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
 \textbf{Intercept}                         &        0.3424       &             0.3425             &        0.1055       &              0.1057              \\
 \textbf{ }                                 &       (30.114)      &            (30.084)            &       (15.863)      &             (15.819)             \\
 \textbf{PctSharesHeldETF\_1lag}            &        0.1809       &             0.1810             &        0.0074       &              0.0073              \\
@@ -35,10 +40,26 @@
 \textbf{PctSharesHeldHedge\_1lag}          &                     &                                &                     &              0.0053              \\
 \textbf{ }                                 &                     &                                &                     &             (1.1511)             \\
 \midrule
-\textbf{Effects}                           &        Entity       &             Entity             &        Entity       &              Entity              \\
-& Time & Time & Time & Time\\
+\textbf{Effects}                           &        Entity, Time       &             Entity, Time        &        Entity, Time       &              Entity, Time              \\
 \bottomrule
-\end{tabular}
-%\caption{Model Comparison}
-\end{center}
-T-stats reported in parentheses.
+\bigskip\\
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\textbf{Dep. Variable}                     &   AmihudNumerator   &        AmihudNumerator         &   PctBidAskSpread   &         PctBidAskSpread          \\
+\textbf{Estimator}                         &       PanelOLS      &            PanelOLS            &       PanelOLS      &             PanelOLS             \\
+\textbf{No. Observations}                  &        436359       &             436352             &        335170       &              335164              \\
+\textbf{Cov. Est.}                         &    Driscoll-Kraay   &         Driscoll-Kraay         &    Driscoll-Kraay   &          Driscoll-Kraay          \\
+\textbf{R-squared}                         &        0.0326       &             0.0326             &        0.0510       &              0.0510              \\
+\textbf{R-Squared (Within)}                &        0.0448       &             0.0448             &        0.0659       &              0.0660              \\
+\textbf{R-Squared (Between)}               &        0.1897       &             0.1898             &        0.5568       &              0.5572              \\
+\textbf{R-Squared (Overall)}               &        0.1291       &             0.1291             &        0.1879       &              0.1881              \\
+\textbf{F-statistic}                       &        3643.1       &             2914.2             &        4445.9       &              2543.2              \\
+\textbf{P-value (F-stat)}                  &        0.0000       &             0.0000             &        0.0000       &              0.0000              \\
+\bottomrule
+\end{longtable}
+}
+
+
