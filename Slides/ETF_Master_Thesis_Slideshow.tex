@@ -46,7 +46,7 @@
 \usepackage[backend=biber, dateabbrev=true, citestyle=authoryear-icomp, bibstyle=authoryear-icomp, useprefix=true, language=english]{biblatex}
 %\nocite{*}
 \bibliography{../Bibliography/BibETF}
-
+\renewcommand*{\bibfont}{\scriptsize}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{bibliography item}[text]
 \title[ETFs' unintended effects on stocks]{Exchange-traded funds' expansion and their unintended effects over underlying stocks}
@@ -281,14 +281,6 @@
   \end{exampleblock}
 \end{frame}
 
-\subsection{Selection of related research}
-\begin{frame}
-  \frametitle{Expliciting relevant research : \textcite{Ben-David2018}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Expliciting relevant research : \textcite{Israeli2017}}
-\end{frame}
 
 \section{Research method and main results}
 \subsection{Data}
@@ -329,7 +321,25 @@
 \begin{equation}
   \mathsf{Volatility}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t} + B_{C}^{\intercal} \mathsf{Controls}_{i, t} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
 \end{equation}
-  
+with:
+\begin{equation*}
+  \mathsf{Volatility}_{i, t} = \sqrt{\frac{1}{N\_d_{i, t} - 1} \sum_{d = 1}^{N\_d_{i, t}} (r_{i, d} - \bar{r}_{i, t})^2}
+  \end{equation*}
+
+\begin{equation*}
+  \mathsf{ETF\_Ownership}_{i, t} = \frac{\sum_{f = 1}^{N_{f}} \mathsf{\#\_AdjShares\_Held}_{f, i, t}\cdot B_{f}}{\mathsf{\#\_Shares\_Out}_{i, t}}
+\end{equation*}
+$\forall i = 1:N_{i}$ (stocks), $t = 1:T$ (periods)
+with $B_{f} = 1$ if fund $f$ is an ETF, $0$ else.
+
+Controls:
+\begin{itemize}
+\item Size, Value, Momentum
+\item Liquidity
+\item Gross profitability
+\item Volatility lags
+\item Other institutional ownership : mutual funds, hedge funds, pension funds
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -350,10 +360,32 @@
   \begin{equation}
  \mathsf{PctBidAskSpread}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t - 1} + B_{C}^{\intercal} \mathsf{Controls}_{i, t - 1} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
   \end{equation}
+  with:
+  \begin{equation*}
+  \mathsf{Pct\_BidAskSpread}_{i, t} = \frac{\mathsf{Ask}_{i, t} - \mathsf{Bid}_{i, t}}{\frac{\mathsf{Ask}_{i, t} + \mathsf{Bid}_{i, t}}{2}}
+\end{equation*}
 
   \begin{equation}
    \mathsf{Illiq^{Num}}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t - 1} + \beta_{2} \mathsf{Illiq^{Denom}_{i,t}} + B_{C}^{\intercal} \mathsf{Controls}_{i, t- 1} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
 \end{equation}
+  \textcite{Amihud2002} illiquidity ratio:
+  \begin{equation*}
+    \mathsf{Illiq}_{i, t}  = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \frac{\mid r_{i, d} \mid}{\mathsf{Volume\_\$}_{i, d}} = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \frac{\mid r_{i, d} \mid}{\mathsf{Volume}_{i, d} \cdot \mathsf{VWAP}_{i, d}}
+  \end{equation*}
+
+  Modified version following \textcite{Israeli2017}:
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{equation*}
+        \mathsf{Illiq^{Num}}_{i, t} = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}}\mid r_{i, d} \mid
+        \end{equation*}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{equation*}
+        \mathsf{Illiq^{Denom}}_{i, t} = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \mathsf{Volume\_\$}_{i, d}
+        \end{equation*}
+    \end{column}
+  \end{columns}
 
 \end{frame}
 
@@ -377,11 +409,19 @@
 \begin{equation}
   VR_{iq} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, q - 1} + B_{C}^{\intercal} \mathsf{Controls}_{i, q - 1} + \alpha_{i} + \gamma_{q} + \epsilon_{i, q}
 \end{equation}
+with:
+\begin{equation*}
+ VR_{i,t} = \frac{\mathit{Var}(r_{5,i,t})}{5 \cdot \mathit{Var}(r_{1, i,t})}
+\end{equation*}
+
 
 \begin{equation}
  absVR_{iq} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, q - 1} + B_{C}^{\intercal} \mathsf{Controls}_{i, q - 1} + \alpha_{i} + \gamma_{q} + \epsilon_{i, q}
 \end{equation}
-
+with:
+\begin{equation*}
+absVR_{i,t} = \left\lvert VR_{i, t}  - 1\right\rvert  
+\end{equation*}
 \end{frame}
 
 \begin{frame}
@@ -401,22 +441,55 @@
 
 \begin{frame}
   \frametitle{Key findings}
+  \begin{block}{U.S.}
   \begin{itemize}
-  \item On average, the volatility of U.S. stocks rises with the share of their equity held by ETFs.
+  \item On average, the volatility of U.S. stocks rises with ETF ownership : + 0.8\% of a std. dev. following a 1 std. dev. ETF ownership increase (3.5\%)
   \item If the mean reversion also increased because of ETFs, this volatility would be non-fundamental and the \emph{liquidity trading hypothesis} would hold.
-  \item \textbf{But no significant effect has been found on U.S. variance ratios.}
-  \item Price discovery hypothesis ?
+  \item But no significant effect on variance ratios : \emph{price discovery hypothesis ?}
+  \item Still an effect on liquidity: only price impact rises
   \end{itemize}
+  \end{block}
+  \begin{block}{International}
+    \begin{itemize}
+    \item No volatility increase correlated with ETF ownership (with controls)
+      \item But likely increase in mean reversion over 1 to 5 days
+      \item Positive effect on bid-ask spread
+      \item Significance of the sample ? 0.4\% of a company's equity held through ETFs on average
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \subsection{Limitations and further directions}
+\begin{frame}
+  \frametitle{Limitations and further directions}
+  \begin{block}{Quality concerns}
+    \begin{itemize}
+    \item Dropping up to $\frac{2}{3}$ of the observations because of missing data
+      \item Reporting delays in institutional holdings addressed through extrapolation
+      \end{itemize}
+  \end{block}
+  \begin{block}{Robustness checks to try}
+  \begin{itemize}
+    \item Subsamples over time, matching regime changes
+    \item International : developed and emerging countries apart
+      \item Keep securities with a minimum available number of observations
+  \end{itemize}
+\end{block}
+\begin{block}{Research avenues}
+  \begin{itemize}
+    \item Discriminate by funds' strategies : passive, smart beta, active
+  \item Focus on liquidity effects around ETF trading halts
+    \item Intraday effects
+  \end{itemize}
+  \end{block}
+\end{frame}
 
-\begin{frame}[allowframebreaks]
+\begin{frame}
   \frametitle{Likely trends in the ETF universe}
   \begin{itemize}
+  \item Rise of alternative weighting schemes (smart beta)  
   \item More active bets, nicknamed \textit{passive-aggressive}
   \item Opaque holdings structures are at an advanced stage in the regulatory approval process in the U.S. (late spring 2019)
-    
   \end{itemize}
   \begin{block}{The Precidian model}
     \shadowbox{\parbox{0.9\textwidth}{\textbf{An ETF That Hides Its Secret Sauce Is Poised for Regulator's Nod} -- Bloomberg News, April 8, 2019.\footnote{Available at \url{https://www.bloomberg.com/news/articles/2019-04-08/an-etf-that-hides-its-secret-sauce-is-poised-for-regulator-s-nod}}}}
@@ -433,7 +506,7 @@
 
 \begin{frame}
   \frametitle{Bibliography}
-  \printbibliography
+    \printbibliography
 \end{frame}
 \appendix
 \section{Regression results}
