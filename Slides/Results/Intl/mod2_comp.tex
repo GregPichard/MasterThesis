@@ -1,0 +1,63 @@
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\multicolumn{5}{r}{\textit{Continued from previous page}}\\
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\endhead
+\caption{International Sample : Exchange-Traded Funds' aggregate ownership share and underlying securities' liquidity}
+\label{tab:Liquidity:Intl:Comp}\\
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+\textbf{Intercept}                         &        0.0776       &             0.0776             &        0.1446       &              0.1446              \\
+\textbf{ }                                 &       (12.831)      &            (12.829)            &       (25.012)      &             (25.021)             \\
+\textbf{PctSharesHeldETF\_1lag}            &        0.0038       &             0.0038             &        0.0613       &              0.0610              \\
+\textbf{ }                                 &       (0.5715)      &            (0.5817)            &       (4.9367)      &             (4.9518)             \\
+\textbf{np.log(CompanyMarketCap\_1lag)}    &       -0.0058       &            -0.0058             &       -0.0061       &             -0.0061              \\
+\textbf{ }                                 &      (-21.501)      &           (-21.502)            &      (-23.176)      &            (-23.183)             \\
+\textbf{BookToMarketRatio\_1lag}           &        0.0012       &             0.0012             &      1.107e-05      &            1.108e-05             \\
+\textbf{ }                                 &       (1.0328)      &            (1.0328)            &       (0.6876)      &             (0.6887)             \\
+\textbf{np.log(AmihudDenominator)}         &        0.0042       &             0.0042             &                     &                                  \\
+\textbf{ }                                 &       (16.998)      &            (16.998)            &                     &                                  \\
+\textbf{PctSharesHeldOtherMutual\_1lag}    &                     &           -1.341e-05           &                     &            -1.92e-06             \\
+\textbf{ }                                 &                     &           (-0.9416)            &                     &            (-0.2806)             \\
+\textbf{Volatility\_1lag}                  &                     &                                &        0.1772       &              0.1772              \\
+\textbf{ }                                 &                     &                                &       (13.426)      &             (13.426)             \\
+\textbf{PctSharesHeldPension\_1lag}        &                     &                                &                     &              0.0314              \\
+\textbf{ }                                 &                     &                                &                     &             (1.1500)             \\
+\midrule
+\textbf{Effects}                           &        Entity       &             Entity             &        Entity       &              Entity              \\
+& Time & Time & Time & Time\\
+\bottomrule
+\bigskip\\
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+
+\textbf{Dep. Variable}                     &   AmihudNumerator   &        AmihudNumerator         &   PctBidAskSpread   &         PctBidAskSpread          \\
+\textbf{Estimator}                         &       PanelOLS      &            PanelOLS            &       PanelOLS      &             PanelOLS             \\
+\textbf{No. Observations}                  &       1465561       &            1465555             &       1124265       &             1124260              \\
+\textbf{Cov. Est.}                         &    Driscoll-Kraay   &         Driscoll-Kraay         &    Driscoll-Kraay   &          Driscoll-Kraay          \\
+\textbf{R-squared}                         &        0.0285       &             0.0285             &        0.0227       &              0.0227              \\
+\textbf{R-Squared (Within)}                &        0.0287       &             0.0287             &        0.0375       &              0.0375              \\
+\textbf{R-Squared (Between)}               &       -0.3627       &            -0.3626             &        0.1785       &              0.1785              \\
+\textbf{R-Squared (Overall)}               &       -0.0089       &            -0.0089             &        0.0956       &              0.0956              \\
+\textbf{F-statistic}                       &      1.064e+04      &             8514.8             &        6433.1       &              4289.0              \\
+\textbf{P-value (F-stat)}                  &        0.0000       &             0.0000             &        0.0000       &              0.0000              \\
+\bottomrule
+\end{longtable}
+}

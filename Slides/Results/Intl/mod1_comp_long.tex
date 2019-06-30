@@ -1,0 +1,68 @@
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{lcccc}
+\multicolumn{5}{r}{\textit{Continued from previous page}}\\
+\toprule
+& \textbf{Baseline}  & \textbf{Controls + Vol. lags} & \textbf{Inst. o'ship control} & \textbf{Standardized}  \\
+\midrule
+\endhead
+\caption{International Sample : Exchange-Traded Fund aggregate ownership share and the volatility of underlying securities' daily returns}\\
+\label{tab:Volatility:Intl:Comp}\\
+\toprule
+& \textbf{Baseline}  & \textbf{Controls + Vol. lags} & \textbf{Inst. o'ship control} & \textbf{Standardized}  \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+\textbf{Intercept}                         &       0.0582       &             0.0283            &             0.0283            &         0.6235         \\
+\textbf{ }                                 &      (10.611)      &            (7.7563)           &            (7.7708)           &        (4.4628)        \\
+\textbf{PctSharesHeldETF\_1lag}            &       0.0169       &             0.0072            &             0.0070            &         0.0028         \\
+\textbf{ }                                 &      (1.8226)      &            (1.0225)           &            (0.9781)           &        (0.9781)        \\
+\textbf{np.log(CompanyMarketCap\_1lag)}    &      -0.0015       &            -0.0008            &            -0.0008            &        -0.0310         \\
+\textbf{ }                                 &     (-6.1428)      &           (-4.9380)           &           (-4.9511)           &       (-4.9511)        \\
+\textbf{InvClose\_1lag}                    &       0.0045       &             0.0015            &             0.0015            &         0.0585         \\
+\textbf{ }                                 &      (2.5792)      &            (1.1485)           &            (1.1484)           &        (1.1484)        \\
+\textbf{BookToMarketRatio\_1lag}           &     3.446e-05      &            2.54e-05           &           2.538e-05           &         0.0010         \\
+\textbf{ }                                 &      (3.6160)      &            (3.3179)           &            (3.3206)           &        (3.3206)        \\
+\textbf{RetPast12to1M\_1lag}               &       0.0005       &             0.0001            &             0.0001            &         0.0052         \\
+\textbf{ }                                 &      (1.8965)      &            (1.5202)           &            (1.5203)           &        (1.5203)        \\
+\textbf{AmihudRatio\_1lag}                 &                    &             0.0250            &             0.0250            &         0.9984         \\
+\textbf{ }                                 &                    &            (0.8272)           &            (0.8272)           &        (0.8272)        \\
+\textbf{PctBidAskSpread\_1lag}             &                    &             0.0262            &             0.0262            &         1.0496         \\
+\textbf{ }                                 &                    &            (6.9533)           &            (6.9532)           &        (6.9532)        \\
+\textbf{GrossProfitability\_1lag}          &                    &            -0.0001            &            -0.0001            &        -0.0056         \\
+\textbf{ }                                 &                    &           (-0.6729)           &           (-0.6731)           &       (-0.6731)        \\
+\textbf{Volatility\_1lag}                  &                    &             0.2541            &             0.2541            &         0.2541         \\
+\textbf{ }                                 &                    &            (21.616)           &            (21.615)           &        (21.615)        \\
+\textbf{Volatility\_2lag}                  &                    &             0.1226            &             0.1226            &         0.1226         \\
+\textbf{ }                                 &                    &            (18.960)           &            (18.960)           &        (18.960)        \\
+\textbf{Volatility\_3lag}                  &                    &             0.0968            &             0.0968            &         0.0968         \\
+\textbf{ }                                 &                    &            (11.790)           &            (11.790)           &        (11.790)        \\
+\textbf{Volatility\_4lag}                  &                    &             0.0607            &             0.0607            &         0.0607         \\
+\textbf{ }                                 &                    &            (13.274)           &            (13.271)           &        (13.271)        \\
+\textbf{PctSharesHeldOtherMutual\_1lag}    &                    &                               &           9.061e-05           &         0.0008         \\
+\textbf{ }                                 &                    &                               &            (0.6096)           &        (0.6096)        \\
+\midrule
+\textbf{Effects}                           &       Entity       &             Entity            &             Entity            &         Entity         \\
+& Time & Time & Time & Time\\
+\bottomrule
+\bigskip\\
+\toprule
+& \textbf{Baseline}  & \textbf{Controls + Vol. lags} & \textbf{Inst. o'ship control} & \textbf{Standardized}  \\
+\midrule
+\textbf{Dep. Variable}                     &     Volatility     &           Volatility          &           Volatility          &       Volatility       \\
+\textbf{Estimator}                         &      PanelOLS      &            PanelOLS           &            PanelOLS           &        PanelOLS        \\
+\textbf{No. Observations}                  &      1516791       &            1319966            &            1319966            &        1319966         \\
+\textbf{Cov. Est.}                         &   Driscoll-Kraay   &         Driscoll-Kraay        &         Driscoll-Kraay        &     Driscoll-Kraay     \\
+\textbf{R-squared}                         &       0.0070       &             0.1729            &             0.1729            &         0.1729         \\
+\textbf{R-Squared (Within)}                &       0.0148       &             0.2100            &             0.2100            &         0.2100         \\
+\textbf{R-Squared (Between)}               &      -0.0101       &             0.7081            &             0.7079            &         0.7079         \\
+\textbf{R-Squared (Overall)}               &      -0.0208       &             0.3261            &             0.3260            &         0.3260         \\
+\textbf{F-statistic}                       &       2118.7       &           2.274e+04           &           2.099e+04           &       2.099e+04        \\
+\textbf{P-value (F-stat)}                  &       0.0000       &             0.0000            &             0.0000            &         0.0000         \\
+\bottomrule
+\end{longtable}
+}

@@ -1,0 +1,45 @@
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\toprule
+& \textbf{Baseline}  & \textbf{Controls + Vol. lags} & \textbf{Inst. o'ship control} & \textbf{Standardized}  \\
+\midrule
+\endhead
+\caption{International Sample : Exchange-Traded Fund aggregate ownership share and the volatility of underlying securities' daily returns}\\
+\label{tab:short:Volatility:Intl:Comp}\\
+\toprule
+& \textbf{Baseline}  & \textbf{Controls + Vol. lags} & \textbf{Inst. o'ship control} & \textbf{Standardized}  \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+Intercept                &       0.0582***       &             0.0283***            &             0.0283***            &         0.6235***         \\
+\rowcolor{blue!20}
+$\mathbf{PctETF}_{t-1}$            &       0.0169*      &             0.0072            &             0.0070            &         0.0028         \\
+(t-stat)                                &      (1.8226)      &            (1.0225)           &            (0.9781)           &        (0.9781)        \\
+$\log(\mathbf{MarketCap}_{t-1})$    &      -0.0015***       &            -0.0008***            &            -0.0008***          &        -0.0310***         \\
+$1/\mathbf{Close}_{t-1}$                    &       0.0045***       &             0.0015            &             0.0015            &         0.0585         \\
+$\left(BE/ME\right)_{t-1}$      &     3.446e-05***      &            2.54e-05***           &           2.538e-05***           &         0.0010***         \\
+$\mathbf{Past 12 to 1M ret.}_{t-1}$       &       0.0005*       &             0.0001            &             0.0001            &         0.0052         \\
+$\mathbf{AmihudRatio}_{t-1}$       &                    &             0.0250            &             0.0250            &         0.9984         \\
+$\mathbf{BidAskSpread}_{t-1}$            &                    &             0.0262***            &             0.0262***            &         1.0496***         \\
+$\mathbf{G.~Profitab.}_{t-1}$      &                    &            -0.0001            &            -0.0001            &        -0.0056         \\
+Volatility lags ($t - 4$ to $t - 1$) & & Yes & Yes & Yes\\
+Mutual funds ownership &  &  & Yes  & Yes\\
+\midrule
+Fixed Effects   &     Entity, Time       &        Entity, Time             &            Entity, Time          &       Entity, Time  \\
+\bottomrule
+\toprule
+\textbf{No. Observations}                  &      1516791       &            1319966            &            1319966            &        1319966         \\
+\textbf{R-squared}                         &       0.0070       &             0.1729            &             0.1729            &         0.1729         \\
+\textbf{R-Squared (Within)}                &       0.0148       &             0.2100            &             0.2100            &         0.2100         \\
+\textbf{R-Squared (Between)}               &      -0.0101       &             0.7081            &             0.7079            &         0.7079         \\
+\textbf{R-Squared (Overall)}               &      -0.0208       &             0.3261            &             0.3260            &         0.3260         \\
+\textbf{F-statistic}                       &       2118.7       &           2.274e+04           &           2.099e+04           &       2.099e+04        \\
+\textbf{P-value (F-stat)}                  &       0.0000       &             0.0000            &             0.0000            &         0.0000         \\
+\bottomrule
+\end{longtable}
+}

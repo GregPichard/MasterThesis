@@ -1,0 +1,47 @@
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\toprule
+& \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\endhead
+\caption{International Sample : Exchange-Traded Funds' aggregate ownership share and weekly mean reversion of underlying securities}
+\label{tab:short:Efficiency:Intl:Comp}\\
+\toprule
+ & \multicolumn{2}{c}{\textbf{absVR}} &  \multicolumn{2}{c}{\textbf{VR}}\\
+\midrule
+ &   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship} \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Intercept                         &       0.9251***       &              0.9250***             &       0.5297***       &           0.5304***            \\
+\rowcolor{blue!20}
+$\mathbf{PctETF}_{t-1}$           &       0.2529***       &              0.2539***             &      -0.6122***       &          -0.6199***            \\
+(t-stat)                                 &      (2.7216)      &             (2.6854)            &     (-3.6541)      &         (-3.6808)           \\
+$\log(\mathbf{MarketCap}_{t-1})$   &      -0.0248***       &             -0.0248***             &       0.0106***       &           0.0106***            \\
+$1/\mathbf{Close}_{t-1}$            &       0.0015       &              0.0015             &      -0.0146       &          -0.0146            \\
+$\mathbf{AmihudRatio}_{t-1}$               &       0.2138***       &              0.2138***             &      -0.2476***       &          -0.2475***            \\
+$\mathbf{BidAskSpread}_{t-1}$        &       0.2117***       &              0.2117***             &      -0.2938***       &          -0.2937***            \\
+$\left(BE/ME\right)_{t-1}$          &       0.0001*       &              0.0001*             &      -0.0001       &          -0.0001            \\
+$\mathbf{Past 12 to 7M ret.}_{t-1}$        &     -6.928e-05***     &            -6.928e-05***           &     -7.459e-05*     &         -7.461e-05*          \\
+$\mathbf{G.~Profitab.}_{t-1}$      &      -0.0041***       &             -0.0041***            &       0.0036       &           0.0036            \\
+Mutual funds ownership     &                    &             -0.0004             &                    &           0.0026            \\
+\midrule
+Fixed Effects                           &       Entity, Time       &              Entity, Time             &       Entity, Time       &           Entity, Time            \\
+\bottomrule
+\toprule
+\textbf{No. Observations}                  &       592054       &              592054             &       591848       &           591848            \\
+\textbf{R-squared}                         &       0.0049       &              0.0049             &       0.0014       &           0.0014            \\
+\textbf{R-Squared (Within)}                &       0.0055       &              0.0055             &       0.0017       &           0.0017            \\
+\textbf{R-Squared (Between)}               &       0.0991       &              0.0992             &       0.0757       &           0.0758            \\
+\textbf{R-Squared (Overall)}               &       0.0099       &              0.0099             &       0.0104       &           0.0104            \\
+\textbf{F-statistic}                       &       354.08       &              314.75             &       98.569       &           87.752            \\
+\textbf{P-value (F-stat)}                  &       0.0000       &              0.0000             &       0.0000       &           0.0000            \\
+\bottomrule
+\end{longtable}
+}

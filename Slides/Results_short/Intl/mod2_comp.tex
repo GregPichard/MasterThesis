@@ -1,0 +1,46 @@
+{\scriptsize\tabcolsep=3pt
+\begin{longtable}{>{\bfseries}lcccc}
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\endhead
+\caption{International Sample : Exchange-Traded Funds' aggregate ownership share and underlying securities' liquidity}
+\label{tab:short:Liquidity:Intl:Comp}\\
+\toprule
+& \multicolumn{2}{c}{\textbf{Amihud ratio}} &  \multicolumn{2}{c}{\textbf{Bid-Ask spread}}\\
+\midrule
+&   \textbf{Baseline}   & \textbf{w/inst. o'ship} &   \textbf{Baseline}  & \textbf{w/inst. o'ship}  \\
+\midrule
+\endfirsthead
+\bottomrule
+\multicolumn{5}{r}{\textit{Continues on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+Intercept                                &        0.0776***       &             0.0776***             &        0.1446***       &              0.1446***      \\
+\rowcolor{blue!20}
+$\mathbf{PctETF}_{t-1}$       &        0.0038       &             0.0038             &        0.0613***      &              0.0610***              \\
+(t-stat)                                 &       (0.5715)      &            (0.5817)            &       (4.9367)      &             (4.9518)             \\
+$\log(\mathbf{MarketCap}_{t-1})$   &       -0.0058***       &            -0.0058***             &       -0.0061***       &             -0.0061***              \\
+$\left(BE/ME\right)_{t-1}$            &        0.0012       &             0.0012             &      1.107e-05      &            1.108e-05             \\
+$\log(\mathbf{AmihudDenominator}_t)$         &        0.0042***       &             0.0042***             &                     &                                  \\
+$\mathbf{Volatility}_{t-1}$                  &                     &                                &        0.1772***       &              0.1772***              \\
+Other funds ownership        &                     &                  Yes              &                    &              Yes\\
+\midrule
+Fixed Effects                           &        Entity, Time       &             Entity, Time             &        Entity, Time       &              Entity, Time \\
+\bottomrule
+\toprule
+\textbf{Dep. Variable}                     &   AmihudNumerator   &        AmihudNumerator         &   PctBidAskSpread   &         PctBidAskSpread          \\
+\textbf{No. Observations}                  &       1465561       &            1465555             &       1124265       &             1124260              \\
+\textbf{R-squared}                         &        0.0285       &             0.0285             &        0.0227       &              0.0227              \\
+\textbf{R-Squared (Within)}                &        0.0287       &             0.0287             &        0.0375       &              0.0375              \\
+\textbf{R-Squared (Between)}               &       -0.3627       &            -0.3626             &        0.1785       &              0.1785              \\
+\textbf{R-Squared (Overall)}               &       -0.0089       &            -0.0089             &        0.0956       &              0.0956              \\
+\textbf{F-statistic}                       &      1.064e+04      &             8514.8             &        6433.1       &              4289.0              \\
+\textbf{P-value (F-stat)}                  &        0.0000       &             0.0000             &        0.0000       &              0.0000              \\
+\bottomrule
+\end{longtable}
+}

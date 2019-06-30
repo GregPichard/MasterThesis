@@ -1,0 +1,129 @@
+\section{Detailed estimation results}
+\label{app:sec:DetailedResults}
+One of the many advantages provided through the statistical functions library, called \texttt{linearmodels}\footnote{The \texttt{linearmodels}, whose current stable version at the time of writing is v.4.5, is developped and maintained by Prof. Kevin Sheppard, who provides the source code free for use at \url{https://github.com/bashtage/linearmodels}. I rely on the documentation included in the docstring as well as on \url{https://bashtage.github.io/linearmodels/doc/}}, accessed through the Python 3.7.3 programming language is the ability to extract summarized as well as extended regression estimates and related statistics. Since it would have been untractable to provide extended sample descriptions (the upper panel in following tables) and more insight into regression coefficients estimates (the lower panels), those extended results have been gathered in the current supporting section.
+
+%\afterpage{
+{\linespread{1.0}
+  \begin{landscape}
+    
+    \subsection{ETF ownership and underlying stocks' volatility}
+    \label{app:sec:DetailedResults:Volatility}
+    This subsection constitutes additional material about variants of the model attempting to explain stocks volatility, summarized and discussed in \autoref{sec:Results:sub:Volatility} (p.\pageref{sec:Results:sub:Volatility}).
+    
+    \subsubsection{U.S. stocks sample}
+    %{\linespread{1.0}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod1_All_Volatility_withLags.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod1_contemporaneousControls_fit.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod1_fit_All_Volatility_withLags_withFundcontrols.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod1_fit_All_Volatility_std_withLags_withFundcontrols.tex}
+    \end{table}
+    %\input{Regression_Results/US/mod1_fit_All_diffVolatility_std_withLags_withFundcontrols.tex}
+    %}
+    %\end{landscape}
+
+    \subsubsection{International sample}
+    %\begin{landscape}
+    % {\linespread{1.0}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod1_fit_All_Volatility.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod1_contemporaneousControls_fit.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod1_fit_All_Volatility_withLags_withFundcontrols.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod1_fit_All_Volatility_std_withLags_withFundcontrols.tex}
+    \end{table}
+    %}
+    %\end{landscape}
+
+    \subsection{ETF ownership and underlying stocks' liquidity}
+    \label{app:sec:DetailedResults:Liquidity}
+    This subsection constitutes additional material about variants of the models using several liquidity proxies as dependent variables, summarized and discussed in \autoref{sec:Results:sub:Liquidity} (p.\pageref{sec:Results:sub:Liquidity}).
+    \subsubsection{U.S. stocks sample}
+    %\begin{landscape}
+    %{\linespread{1.0}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_BidAsk.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_BidAsk_withFundcontrols.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_Amihud.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod2_fit_All_Liquidity_Amihud_withFundcontrols.tex}
+    \end{table}
+    %}
+    %\end{landscape}
+
+    \subsubsection{International sample}
+    %\begin{landscape}
+    %{\linespread{1.0}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod2_fit_All_Liquidity_BidAsk.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod2_fit_All_Liquidity_BidAsk_withFundcontrols.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod2_fit_All_Liquidity_Amihud.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod2_fit_All_Liquidity_Amihud_withFundcontrols.tex}
+    \end{table}
+    %}
+    %\end{landscape}
+
+    \subsection{ETF ownership and concerns about pricing efficiency}
+    \label{app:sec:DetailedResults:Efficiency}
+    This subsection constitutes additional material about variants of the model studying two forms of variance ratios, summarized and discussed in \autoref{sec:Results:sub:Efficiency} (p.\pageref{sec:Results:sub:Efficiency}).
+
+    \subsubsection{U.S. stocks sample}
+    %\begin{landscape}
+    %{\linespread{1.0}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod3_fit_All_VR.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod3_fit_All_VR_withFundcontrols.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod3_fit_All_absVR.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/US/mod3_fit_All_absVR_withFundcontrols.tex}
+    \end{table}
+    %}
+    %\end{landscape}
+
+    \subsubsection{International sample}
+
+    %\begin{landscape}
+    %{\linespread{1.0}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod3_fit_All_VR.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod3_fit_All_VR_withFundcontrols.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod3_fit_All_absVR.tex}
+    \end{table}
+    \begin{table}[H]
+      \input{Regression_Results/Intl/mod3_fit_All_absVR_withFundcontrols.tex}
+    \end{table}
+    %}
+    %\end{landscape}
+  \end{landscape}
+}

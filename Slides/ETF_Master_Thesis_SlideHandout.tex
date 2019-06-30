@@ -1,0 +1,550 @@
+\documentclass[handout, 9pt, usenames, dvipsnames]{beamer}
+\usetheme{CambridgeUS}
+\usecolortheme{beaver}
+\useinnertheme{rectangles}
+\useoutertheme{smoothbars}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{textpos}
+
+\usepackage{pdfpages}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{xcolor, colortbl}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage[super]{nth}
+\usepackage{fancybox}
+\usepackage{lipsum}
+
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{appendixnumberbeamer}
+\restylefloat{table}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\tikzset{%
+  >={Latex[width=10mm, length=3mm]},
+  base/.style = {rectangle, draw = black, text centered, font = \sffamily, minimum width = 1cm , minimum height = 3cm, text width = 2cm},
+  ETF/.style = {base, fill = blue!80},
+  AP/.style = {base, fill = blue!60},
+  Investor/.style = {base, fill = red!60},
+  Exchange/.style = {base, fill = lightgray},
+  arrow/.style = {->, shorten >=2pt, width=10mm}
+}
+
+
+\usepackage[backend=biber, dateabbrev=true, citestyle=authoryear-icomp, bibstyle=authoryear-icomp, useprefix=true, language=english]{biblatex}
+%\nocite{*}
+\bibliography{../Bibliography/BibETF}
+\renewcommand*{\bibfont}{\scriptsize}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{bibliography item}[text]
+\title[ETFs' unintended effects on stocks]{Exchange-traded funds' expansion and their unintended effects over underlying stocks}
+\subtitle{Volatility, liquidity and efficiency}
+\author{Gr\'egoire Pichard}
+\date{\today}
+\institute{HEC Lausanne (Unil)}
+\subject{Master of Science in Finance (\textsc{MScF})}
+%\logo{\includegraphics[scale = 0.3]{lo_unil_hec06_bleu.eps}}
+
+\setbeamercovered{transparent}
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{All evil rooted in one product ?}
+  \shadowbox{\parbox{\textwidth}{\textbf{The Silent Road to Serfdom : Why Passive Investing is Worst Than Marxism} -- Note by I.~Fraser-Jenkins, \emph{Sanford C. Bernstein \& Co.}, 2016}}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \begin{itemize}
+      \item<1-> Abstract : the shift of a growing share of capital markets towards passive, index-based investing prevents the efficient reallocation of capital from overpriced to underpriced companies. Active management and the related research generate positive externalities.
+      \item<2-> Are this concern and conclusion justified ?
+        \begin{itemize}
+        \item What are the author's interests ? This is from the quantitative research of an asset management company, also running retail mutual funds.
+        \item {In general:\\
+          \begin{quote}
+            Everything which is exaggerated is insignificant.\hfill{ \tiny Talleyrand}
+        \end{quote}}
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{figure}
+        \fbox{\includegraphics[page=1, width = 0.7\textwidth, height = 1.2\textwidth, keepaspectratio]{ETF_WorstThanMarxism.pdf}}
+        \caption{\tiny Matt Levine, Bloomberg Opinion, 24.08.2016, available at: \url{https://www.bloomberg.com/opinion/articles/2016-08-24/are-index-funds-communist\#footnote-1472053794479}}
+        \label{fig:Bloomberg_ETFMarxism}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Research field \& focus}
+  \begin{block}{General concerns expressed}
+    \begin{itemize}
+    \item What effects are caused through index-tracking securities and \textbf{especially ETFs} on underlying securities ?
+    \item Is there a new risk investors and regulators should become aware of ?
+    \end{itemize}
+  \end{block}
+  \begin{alertblock}{Warning}
+    Focusing on observable indicators of the risk and loss of efficiency is needed: choice based on existing research strategies.
+  \end{alertblock}
+  \begin{exampleblock}{Research questions}
+    Three aspects are treated over a broad and long sample of stocks:
+    \begin{enumerate}
+    \item<1-> Do ETFs increase underlying stocks' volatility over the short term ?
+    \item<2-> Do ETFs divert the liquidity and thus decrease it at the individual security level ?
+    \item<3-> Are there signs ETFs make prices noisier, hence less efficient ? 
+    \end{enumerate}
+  \end{exampleblock}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Context}
+\subsection{Exponential growth of a new fund type}
+\begin{frame}
+  \frametitle{Capitalization worldwide}
+  \begin{figure}
+    \centering
+    \caption{Comparison of total stock market vs. ETF capitalization\footcite[172]{Ben-David2017}}
+    \label{fig:Fig1_MarketCap}
+    \includegraphics[width = \textwidth, height = 0.65\paperheight, keepaspectratio]{Fig1_MarketCap}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Trading volume, share of total}
+  \begin{figure}
+    \centering
+    \caption{Comparison of total stock market vs. ETF-related daily trading volume\footcite[173]{Ben-David2017}}
+    \label{fig:Fig2_Volume}
+    \includegraphics[width = \textwidth, height = 0.65\paperheight, keepaspectratio]{Fig2_Volume}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Entities listed in the U.S.}
+  \begin{figure}
+    \centering
+    \caption{Number of ETFs included over the sample period\footnote{Data from \emph{Eikon} fund screener, only physical- and optimized-replication ETFs listed in the U.S.}}
+    \includegraphics[width = \textwidth, height = 0.65\paperheight, keepaspectratio]{LiveETF_Eikon}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comparing flows in U.S. equity}
+  \begin{figure}
+    \centering
+    \caption{Shift towards ETF investments and steady outflows from mutual funds}
+    \includegraphics[width = \textwidth, height = 0.65\paperheight, keepaspectratio]{USFlows_ETFvsMutual.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Institutional aspects of ETFs}
+
+\begin{frame}
+  \frametitle{Concept and history of exchange-traded funds}
+  \begin{itemize}
+  \item<1-> Goal at the inception : track a value-weighted equity index using physical replication.
+    \begin{itemize}
+    \item First ETF ever listed : Toronto Stock Exchange Index Participation Units, introduced March 1990
+    \item First ETF listed in the U.S. : State Street SPDR S\&P 500 ETF, a.k.a. ``SPY'', introduced January 1993.
+    \item As of June 21, 2019, SPY is the largest ETF by assets under management: USD 266~B.
+    \end{itemize}
+  \item<2-> A mixture of existing products:
+    \begin{itemize}
+    \item As (open-end) mutual funds:
+      \begin{itemize}
+      \item release their Net Asset Value and their holdings
+      \item registered as 1940 Act investment companies $\rightarrow$ creation/redemption of shares
+      \end{itemize}
+    \item As index-funds : track an index built with underlying
+      securities and/or derivatives and following rules defined in a
+      prospectus
+    \item As closed-end funds : traded throughout the day on an
+      exchange
+    \end{itemize}
+  \end{itemize}
+  \onslide<3->\begin{alertblock}{Special features}
+    \begin{itemize}
+    \item the intraday NAV is spread out every 15 seconds, or more often.
+    \item \textbf{standardized in-kind or cash creation/redemption process involving authorized participants' arbitrage.}
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ETF pricing mechanism and trading}
+  \begin{tikzpicture}[->, >={Stealth[width=3mm, length=4mm]}, auto, node distance=3cm, align = center]
+    \node[base, minimum height = 6cm, minimum width = 5.5cm, fill=red!20, draw=none] at (-8.5, 0) (SecMarket) {};
+    \node[base, minimum height = 6cm, minimum width = 5.5cm, fill=blue!20, right of=SecMarket, draw = none] at ([xshift=3cm] SecMarket) (PriMarket) {};
+    \node[below of=PriMarket, below = 3pt] (PriMarketLabel) {Primary Market};
+    \node[below of=SecMarket, below = 3pt] (SecMarketLabel) {Secondary Market};
+    \begin{scope}[transparency group]
+      \node at (-1,0) (ETF) [ETF] {ETF issuer/manager};
+      \node (AP) [AP, left of = ETF] {Authorized Participant};
+      \node (Exchange) [Exchange, left of = AP] {Stock exchange};
+      \node (Investor) [Investor, left of = Exchange] {Investor};
+      \draw[->] (Investor.north) to [out=30, in=150] node[above = 3pt, font=\footnotesize] {Cash/ETF shares} (Exchange.north);
+      \draw[->] (Exchange.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Underlying basket (creation)} (AP.north);
+      \draw[->] (AP.north) to [out=30, in = 150] node[above = 3pt, font=\footnotesize] {Cash/underlying basket} (ETF.north);
+      \draw[->] (ETF.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares} (AP.south);
+      \draw[->] (AP.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares (creation)} (Exchange.south);
+      \draw[->] (Exchange.south) to [in=330, out = 210] node[below = 3pt, font=\footnotesize] {ETF shares/Cash} (Investor.south);
+    \end{scope}
+  \end{tikzpicture}  
+\end{frame}
+
+\subsection{Evidence-based concerns expressed about ETFs}
+\begin{frame}
+  \frametitle{Concerns expressed about risks conveyed through ETFs}
+  \begin{itemize}
+  \item Liquidity : apart from idiosyncratic events (e.g. 2010 Flash Crash), ETFs in general are very liquid thanks to the arbitrage mechanism. E.g. \textcite{Ben-David2018} show their turnover is higher than stocks.
+  \item What about underlying securities' liquidity ?
+  \end{itemize}
+  \begin{alertblock}{Under regulatory scrutiny}
+    This asset category started to worry regulators less than a decade ago, without leading them to clear conclusions nor actions.
+    \begin{quotation}
+      [ETFs] may transmit or amplify financial shocks originating elsewhere.
+
+      [\dots]
+
+      ETFs [\dots] could also potentially accelerate or amplify movements in markets during market turbulence, thus reducing market liquidity.\flushright{\footnotesize U.S. Dept. of Treasury, Office of Financial Research, September 2013}
+    \end{quotation}
+  \end{alertblock}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Selection of academic contributions about ETFs' effects}
+  \begin{itemize}
+  \item Empirical contributions
+    \begin{itemize}
+    \item \textcite{Agarwal2017} : quasi-natural experiments with (1) trading halts and (2) Russell indices to show an increase of the \emph{commonality} of stock liquidity with respect to a highly ETF-owned basket of other stocks.
+    \item \textcite{Da2018} :
+      \begin{itemize}
+      \item ETFs' turnover, but not ownership, is positively linked with the comovement of their component stocks.
+      \item Stock-level analysis : average turnover of ETF shareholders predictscomovement with the market; mean reversion due to ETF flows and comovement is thus \emph{excessive}
+      \end{itemize}
+    \item \textcite{Leippold2015} (including a model) : introduction of equity ETF increases the average correlation among index components as well as non-index components, more than index futures did.
+    \item \textcite{Krause2014} (idem) : variance spillovers between ETFs and their largest component stocks are positively correlated with liquidity, ETF ownership share, ETF flows and their market capitalization; the relationship strengthens for small stocks.
+      %\item \textcite{Petajisto2017} : despite the arbitrage mechanism involving authorized participants, prices of ETFs tracking illiquid securities deviate more from NAV, allowing for active strategies arbitraging mispricing across similar ETFs.
+    \end{itemize}
+  \item Theoretical models
+    \begin{itemize}
+    \item \textcite{Bhattacharya2016} : as ETFs provide access to otherwise illiquid securities, ETF-related information distorts those securities' prices. (``tail wagging the dog'' in authors' words)
+    \item \textcite{Chinco2016} : ETF rebalancing cause subsequent rebalancing cascades reaching stocks held together in ETF portfolios; the direction of a stock's move is impossible to predict.
+    \end{itemize}
+  \end{itemize}
+
+  \begin{exampleblock}{Most relevant}
+    {\bfseries Part of the methodology} in the following articles has served for this thesis, which replicates and extends their results:
+    \begin{itemize}
+    \item \textcite{Ben-David2018}
+      \begin{itemize}
+      \item {\bfseries Monthly volatility impact of ETF ownership} : \emph{liquidity trading hypothesis} vs. \emph{liquidity buffer hypothesis}
+      \item Robust IV setting using exogenous index membership changes (Russell 3000)
+      \item {\bfseries Reversion of prices after a shock} : \emph{liquidity trading hypothesis} vs. \emph{price discovery hypothesis}
+      \item Price impact of ETF flows using trade-level data
+      \item Correction of mispricing (arbitrage) and intraday volatility
+      \item Asset pricing consequence : a risk premium for the volatility caused by ETF interest.      
+      \end{itemize}
+    \item \textcite{Israeli2017}
+      \begin{itemize}
+      \item Testing two hypotheses showing that ETF appeal to noise traders, who migrate from individual securities, while informed traders find less liquidity on underlying stocks.
+        \begin{enumerate}
+        \item Trading costs increasing with ETF ownership
+        \item Deterioration of the informational efficiency of stock prices
+        \end{enumerate}
+      \item {\bfseries Proxies for liquidity : bid-ask spread estimator and \textcite{Amihud2002} illiquidity ratio}
+      \item Proxies for firm-level informational efficiency : return synchronicity, future earnings response and analyst coverage
+      \end{itemize}
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+
+\section{Research method and main results}
+\subsection{Data}
+\begin{frame}
+  \frametitle{Data coverage}
+  \begin{itemize}
+  \item<1-> Period : August 1999 -- December 2018
+  \item<2-> Frequency:
+    \begin{itemize}
+    \item Daily price, volume and VWAP series
+    \item Monthly ETF and other fund holdings, and controls
+    \item Quarterly resampling for variance ratios (estimation of efficiency effects)
+    \end{itemize}
+  \item<3-> Analysis performed at stock-level over separate samples:
+    \begin{itemize}
+    \item on a U.S. stocks sample : 4784 companies
+    \item on an international sample of stocks: 16417 companies from Europe (EU25 + EFTA), Canada, Japan, BRICS and emerging countries (Israel, Turkey, South Korea, Hong Kong, Taiwan) 
+    \end{itemize}
+  \item<4-> Exchange-traded funds :
+    \begin{itemize}
+    \item 3601 live funds as of 2019 Q1, from the \textit{Lipper} database
+    \item Physical or optimized replication only
+    \item Countries of incorporation not limited to U.S. :
+      \begin{itemize}
+      \item Americas (Canada, Mexico, Brazil, Colombia)
+      \item Europe (France, Germany, Switzerland, Ireland, Spain, Greece, Sweden, Poland, Russia)
+      \item Asia-Pacific (Japan, South Korea, India, Hong Kong, Mainland China, Taiwan, Vietnam, Indonesia, Malaysia, Australia, New Zealand)
+      \end{itemize}
+    \end{itemize}
+    \item<5-> Source : Thomson Reuters \emph{Eikon} platform and API. 
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{ETF ownership and the volatility of underlying stocks}
+\begin{frame}
+  \frametitle{Methodology}
+\begin{equation}
+  \mathsf{Volatility}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t} + B_{C}^{\intercal} \mathsf{Controls}_{i, t} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
+\end{equation}
+with:
+\begin{equation*}
+  \mathsf{Volatility}_{i, t} = \sqrt{\frac{1}{N\_d_{i, t} - 1} \sum_{d = 1}^{N\_d_{i, t}} (r_{i, d} - \bar{r}_{i, t})^2}
+  \end{equation*}
+
+\begin{equation*}
+  \mathsf{ETF\_Ownership}_{i, t} = \frac{\sum_{f = 1}^{N_{f}} \mathsf{\#\_AdjShares\_Held}_{f, i, t}\cdot B_{f}}{\mathsf{\#\_Shares\_Out}_{i, t}}
+\end{equation*}
+$\forall i = 1:N_{i}$ (stocks), $t = 1:T$ (periods)
+with $B_{f} = 1$ if fund $f$ is an ETF, $0$ else.
+
+Controls:
+\begin{itemize}
+\item Size, Value, Momentum
+\item Liquidity
+\item Gross profitability
+\item Volatility lags
+\item Other institutional ownership : mutual funds, hedge funds, pension funds
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimation results : U.S.}
+  \centering
+  \input{./Results_short/US/mod1_comp_long.tex}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimation results : International}
+  \centering
+  \input{./Results_short/Intl/mod1_comp_long.tex}
+\end{frame}
+
+\subsection{ETF ownership and the liquidity of underlying stocks}
+\begin{frame}
+  \frametitle{Methodology}
+  \begin{equation}
+ \mathsf{PctBidAskSpread}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t - 1} + B_{C}^{\intercal} \mathsf{Controls}_{i, t - 1} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
+  \end{equation}
+  with:
+  \begin{equation*}
+  \mathsf{Pct\_BidAskSpread}_{i, t} = \frac{\mathsf{Ask}_{i, t} - \mathsf{Bid}_{i, t}}{\frac{\mathsf{Ask}_{i, t} + \mathsf{Bid}_{i, t}}{2}}
+\end{equation*}
+
+  \begin{equation}
+   \mathsf{Illiq^{Num}}_{i,t} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, t - 1} + \beta_{2} \mathsf{Illiq^{Denom}_{i,t}} + B_{C}^{\intercal} \mathsf{Controls}_{i, t- 1} + \alpha_{i} + \gamma_{t} + \epsilon_{i, t}
+\end{equation}
+  \textcite{Amihud2002} illiquidity ratio:
+  \begin{equation*}
+    \mathsf{Illiq}_{i, t}  = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \frac{\mid r_{i, d} \mid}{\mathsf{Volume\_\$}_{i, d}} = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \frac{\mid r_{i, d} \mid}{\mathsf{Volume}_{i, d} \cdot \mathsf{VWAP}_{i, d}}
+  \end{equation*}
+
+  Modified version following \textcite{Israeli2017}:
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{equation*}
+        \mathsf{Illiq^{Num}}_{i, t} = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}}\mid r_{i, d} \mid
+        \end{equation*}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{equation*}
+        \mathsf{Illiq^{Denom}}_{i, t} = \frac{1}{N\_d_{i, t}} \sum_{d = 1}^{N\_d_{i, t}} \mathsf{Volume\_\$}_{i, d}
+        \end{equation*}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimation results : U.S.}
+  \centering
+  \input{./Results_short/US/mod2_comp.tex}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimation results : International}
+  \centering
+  \input{./Results_short/Intl/mod2_comp.tex}
+\end{frame}
+
+
+\subsection{ETF ownership and the price efficiency of underlying stocks}
+\begin{frame}
+  \frametitle{Methodology}
+  
+\begin{equation}
+  VR_{iq} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, q - 1} + B_{C}^{\intercal} \mathsf{Controls}_{i, q - 1} + \alpha_{i} + \gamma_{q} + \epsilon_{i, q}
+\end{equation}
+with:
+\begin{equation*}
+ VR_{i,t} = \frac{\mathit{Var}(r_{5,i,t})}{5 \cdot \mathit{Var}(r_{1, i,t})}
+\end{equation*}
+
+
+\begin{equation}
+ absVR_{iq} = \beta_{0} + \beta_{1} \mathsf{ETF\_ownership}_{i, q - 1} + B_{C}^{\intercal} \mathsf{Controls}_{i, q - 1} + \alpha_{i} + \gamma_{q} + \epsilon_{i, q}
+\end{equation}
+with:
+\begin{equation*}
+absVR_{i,t} = \left\lvert VR_{i, t}  - 1\right\rvert  
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimation results : U.S.}
+  \centering
+  \input{./Results_short/US/mod3_comp.tex}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estimation results : International}
+  \centering
+  \input{./Results_short/Intl/mod3_comp.tex}
+\end{frame}
+
+\section{Conclusion}
+\subsection{Wrap-up}
+
+\begin{frame}
+  \frametitle{Key findings}
+  \begin{block}{U.S.}
+  \begin{itemize}
+  \item On average, the volatility of U.S. stocks rises with ETF ownership : + 0.8\% of a std. dev. following a 1 std. dev. ETF ownership increase (3.5\%)
+  \item If the mean reversion also increased because of ETFs, this volatility would be non-fundamental and the \emph{liquidity trading hypothesis} would hold.
+  \item But no significant effect on variance ratios : \emph{price discovery hypothesis ?}
+  \item Still an effect on liquidity: only price impact rises
+  \end{itemize}
+  \end{block}
+  \begin{block}{International}
+    \begin{itemize}
+    \item No volatility increase correlated with ETF ownership (with controls)
+      \item But likely increase in mean reversion over 1 to 5 days
+      \item Positive effect on bid-ask spread
+      \item Significance of the sample ? 0.4\% of a company's equity held through ETFs on average
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Limitations and further directions}
+\begin{frame}
+  \frametitle{Limitations and further directions}
+  \begin{block}{Quality concerns}
+    \begin{itemize}
+    \item Dropping up to $\frac{2}{3}$ of the observations because of missing data
+      \item Reporting delays in institutional holdings addressed through extrapolation
+      \end{itemize}
+  \end{block}
+  \begin{block}{Robustness checks to try}
+  \begin{itemize}
+    \item Subsamples over time, matching regime changes
+    \item International : developed and emerging countries apart
+      \item Keep securities with a minimum available number of observations
+  \end{itemize}
+\end{block}
+\begin{block}{Research avenues}
+  \begin{itemize}
+    \item Discriminate by funds' strategies : passive, smart beta, active
+  \item Focus on liquidity effects around ETF trading halts
+    \item Intraday effects
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Likely trends in the ETF universe}
+  \begin{itemize}
+  \item Rise of alternative weighting schemes (smart beta)  
+  \item More active bets, nicknamed \textit{passive-aggressive}
+  \item Opaque holdings structures are at an advanced stage in the regulatory approval process in the U.S. (late spring 2019)
+  \end{itemize}
+  \begin{block}{The Precidian model}
+    \shadowbox{\parbox{0.9\textwidth}{\textbf{An ETF That Hides Its Secret Sauce Is Poised for Regulator's Nod} -- Bloomberg News, April 8, 2019.\footnote{Available at \url{https://www.bloomberg.com/news/articles/2019-04-08/an-etf-that-hides-its-secret-sauce-is-poised-for-regulator-s-nod}}}}
+    \begin{itemize}
+    \item Positive signs that the Securities and Exchange Commission will allow the design.
+    \item Trading permission is the next decision needed before the product is issued.
+    \item Disagreement at the SEC and skepticism from some analysts regarding appeal to investors; reality check needed and \textit{evidence so far has shown that \textcolor{red}{awareness about ETFs can take time}}.
+    \end{itemize}
+    
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Bibliography}
+    \printbibliography
+\end{frame}
+\appendix
+\section{Regression results}
+\subsection{Volatility}
+\subsubsection{United States}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Volatility -- U.S. sample}
+  \centering
+  \input{./Results/US/mod1_comp_long.tex}
+\end{frame}
+\subsubsection{International}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Volatility -- International sample}
+  \centering
+  \input{./Results/Intl/mod1_comp_long.tex}
+\end{frame}
+\subsection{Liquidity}
+\subsubsection{United States}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Liquidity -- U.S. sample}
+  \centering
+  \input{./Results/US/mod2_comp.tex}
+\end{frame}
+\subsubsection{International}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Liquidity -- International sample}
+  \centering
+  \input{./Results/Intl/mod2_comp.tex}
+\end{frame}
+\subsection{Efficiency}
+\subsubsection{United States}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Efficiency -- U.S. sample}
+  \input{./Results/US/mod3_comp.tex}
+\end{frame}
+\subsubsection{International}
+\begin{frame}[allowframebreaks, t]
+  \frametitle{Efficiency -- International sample}
+  \input{./Results/Intl/mod3_comp.tex}
+\end{frame}
+\end{document}

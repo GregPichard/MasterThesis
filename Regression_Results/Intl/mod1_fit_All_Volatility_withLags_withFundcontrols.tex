@@ -1,0 +1,48 @@
+\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}                 &     Volatility     & \textbf{  R-squared:         }   &      0.1729      \\
+\textbf{Estimator:}                     &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.7079      \\
+\textbf{No. Observations:}              &      1319966       & \textbf{  R-squared (Within):}   &      0.2100      \\
+\textbf{Date:}                          &  Tue, Jun 18 2019  & \textbf{  R-squared (Overall):}  &      0.3260      \\
+\textbf{Time:}                          &      00:41:41      & \textbf{  Log-likelihood     }   &    3.944e+06     \\
+\textbf{Cov. Estimator:}                &   Driscoll-Kraay   & \textbf{                     }   &                  \\
+\textbf{}                               &                    & \textbf{  F-statistic:       }   &    2.099e+04     \\
+\textbf{Entities:}                      &       14383        & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Avg Obs:}                       &       91.773       & \textbf{  Distribution:      }   &  F(13,1305367)   \\
+\textbf{Min Obs:}                       &       1.0000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                       &       176.00       & \textbf{  F-statistic (robust):} &      354.85      \\
+\textbf{}                               &                    & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Time periods:}                  &        204         & \textbf{  Distribution:      }   &  F(13,1305367)   \\
+\textbf{Avg Obs:}                       &       6470.4       & \textbf{                     }   &                  \\
+\textbf{Min Obs:}                       &       149.00       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                       &     1.311e+04      & \textbf{                     }   &                  \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                                        & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
+\midrule
+\textbf{Intercept}                      &       0.0283       &       0.0036       &      7.7708     &      0.0000      &       0.0212      &       0.0355       \\
+\textbf{PctSharesHeldETF\_1lag}         &       0.0070       &       0.0071       &      0.9781     &      0.3280      &      -0.0070      &       0.0210       \\
+\textbf{np.log(CompanyMarketCap\_1lag)} &      -0.0008       &       0.0002       &     -4.9511     &      0.0000      &      -0.0011      &      -0.0005       \\
+\textbf{InvClose\_1lag}                 &       0.0015       &       0.0013       &      1.1484     &      0.2508      &      -0.0010      &       0.0040       \\
+\textbf{AmihudRatio\_1lag}              &       0.0250       &       0.0302       &      0.8272     &      0.4081      &      -0.0342      &       0.0841       \\
+\textbf{PctBidAskSpread\_1lag}          &       0.0262       &       0.0038       &      6.9532     &      0.0000      &       0.0188      &       0.0336       \\
+\textbf{BookToMarketRatio\_1lag}        &     2.538e-05      &     7.642e-06      &      3.3206     &      0.0009      &      1.04e-05     &     4.035e-05      \\
+\textbf{RetPast12to1M\_1lag}            &       0.0001       &     8.547e-05      &      1.5203     &      0.1284      &     -3.758e-05    &       0.0003       \\
+\textbf{GrossProfitability\_1lag}       &      -0.0001       &       0.0002       &     -0.6731     &      0.5009      &      -0.0005      &       0.0003       \\
+\textbf{PctSharesHeldOtherMutual\_1lag} &     9.061e-05      &       0.0001       &      0.6096     &      0.5421      &      -0.0002      &       0.0004       \\
+\textbf{Volatility\_1lag}               &       0.2541       &       0.0118       &      21.615     &      0.0000      &       0.2310      &       0.2771       \\
+\textbf{Volatility\_2lag}               &       0.1226       &       0.0065       &      18.960     &      0.0000      &       0.1099      &       0.1353       \\
+\textbf{Volatility\_3lag}               &       0.0968       &       0.0082       &      11.790     &      0.0000      &       0.0807      &       0.1129       \\
+\textbf{Volatility\_4lag}               &       0.0607       &       0.0046       &      13.271     &      0.0000      &       0.0517      &       0.0697       \\
+\bottomrule
+\end{tabular}
+%\caption{PanelOLS Estimation Summary}
+\end{center}
+
+F-test for Poolability: 13.766 \newline
+ P-value: 0.0000 \newline
+ Distribution: F(14585,1305367) \newline
+  \newline
+ Included effects: Entity, Time

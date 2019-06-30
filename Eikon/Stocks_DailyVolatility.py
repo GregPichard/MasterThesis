@@ -67,14 +67,29 @@ Stocks_ReturnClose_DailyPanel.drop(pd.to_datetime('2004-12-24'), axis=0, inplace
 Stocks_ReturnClose_DailyPanel = Stocks_ReturnClose_DailyPanel.filter(Stocks_Volume_DailyPanel_db.columns, axis = 1)
 
 # Computing the Amihud illiquidity ratio over calendar months
-# For model 2 (liquidity), both the numerator and denominator will be needed
-Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db)
-Stocks_AmihudNumerator_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()
+# For model 2 (liquidity), both the numerator and denominator will be needed, following the indication in Israeli (2017)
+Stocks_AmihudNumerator_MonthlyPanel = abs(Stocks_ReturnClose_DailyPanel).resample('M', axis=0).mean()
 Stocks_AmihudNumerator_MonthlyPanel.to_csv('Monthly/Stocks_AmihudNumerator_WidePanel.csv', index = True, header = True)
-Stocks_AmihudDenominator_MonthlyPanel = Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudDenominator_MonthlyPanel = (Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db).resample('M', axis=0).mean()
 Stocks_AmihudDenominator_MonthlyPanel.to_csv('Monthly/Stocks_AmihudDenominator_WidePanel.csv', index = True, header = True)
-Stocks_AmihudRatio_MonthlyPanel = Stocks_AmihudNumerator_MonthlyPanel/Stocks_AmihudDenominator_MonthlyPanel
+# Original definition of the ILLIQ ratio in Amihud (2002)
+Stocks_AbsReturnOverVolume_DailyPanel = abs(Stocks_ReturnClose_DailyPanel)/(Stocks_Volume_DailyPanel_db * Stocks_VWAP_DailyPanel_db)
+Stocks_AmihudRatio_MonthlyPanel = Stocks_AbsReturnOverVolume_DailyPanel.resample('M', axis=0).sum()/Stocks_ReturnClose_DailyPanel.resample('M', axis=0).count()
+Stocks_AmihudRatio_MonthlyPanel.replace([np.inf, -np.inf], np.nan, inplace = True)
 Stocks_AmihudRatio_MonthlyPanel.to_csv('Monthly/Stocks_AmihudRatio_WidePanel.csv', index = True, header = True)
 #Stocks_PriceVol_db['Year'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).year
 #Stocks_PriceVol_db['Month'] = pd.DatetimeIndex(Stocks_PriceVol_db.Date).month
 #Stocks_PriceVol_db['YearMonth'] = [str(y) + '-' + str(m).zfill(2) for y, m in zip(Stocks_PriceVol_db['Year'], Stocks_PriceVol_db['Month'])]
+
+# Variance ratio: the variable in order to analyze mean reversion
+# Quarterly 1-day versus 5-day returns variance comparison
+Stocks_1dVariance = Stocks_ReturnClose_DailyPanel.resample('Q', axis=0).var()
+Stocks_5dReturns = Stocks_Close_DailyPanel_db.diff(periods = 5)/Stocks_Close_DailyPanel_db.shift(5)
+Stocks_5dReturns.dropna(how = 'all', inplace = True)
+Stocks_5dReturns.replace([np.inf, -np.inf], np.nan, inplace = True)
+# Non-overlapping 5-day periods : keeping the first (valid, i.e numeric, even 0 and -1) 5-day return value, at the weekly frequency. The label accounts for the 5-day period end date
+Stocks_5dReturns = Stocks_5dReturns.resample('W', axis = 0, convention='start', label = 'left').first()
+Stocks_5dVariance = Stocks_5dReturns.resample('Q', axis = 0).var()
+
+Stocks_5to1dVarianceRatio = Stocks_5dVariance/(5 * Stocks_1dVariance)
+Stocks_5to1dVarianceRatio.to_csv('Quarterly/Stocks_5to1dVarianceRatio.csv', header = True, index = True)

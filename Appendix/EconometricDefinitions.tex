@@ -1,0 +1,126 @@
+\section{Econometric definitions}
+\label{app:sec:EconometricDefinitions}
+Due to the use of a (dynamic) panel regression method throughout the empirical analysis, it is useful to discuss specifically certain statistics given in summary outputs, to be found in \autoref{sec:Results} (p.\pageref{sec:Results}), as well as in the extended outputs gathered (as a matter of brevity) in an appendix section (\autoref{app:sec:DetailedResults}, p.\pageref{app:sec:DetailedResults}.).
+
+\subsection{Covariance matrix estimator}
+\textcite{Driscoll1998} has provided a contribution for panel models that is nowadays widely followed in this field. Their covariance matrix estimation is robust to heteroskedasticity, entity-specific serial correlation but also cross-sectional dependence. The method is the label for a category estimators in some statistical packages, including the one used here. As explained in the package documentation, the Driscoll-Kraay method applies when the number of periods is large. \textcite{Newey1987} provide an estimator for a covariance matrix robust to heteroskedasticity, and, very importantly in volatility regressions here, serial entity-specific correlation.
+
+As a matter of convenience, we define the covariance of regressors (there are $k$ of them):
+\begin{equation}
+  \Sigma_{XX}^{-1} = \sum_{i = 1}^{N} \sum_{t = 1}^{T_{i}} x_{it}^\intercal x_{it}
+\end{equation}
+
+We can notice that $T_{i}$ accounts e.g. for an unbalanced panel, with varying number of observations per entity. The total number of observations is therefore: $n_{obs} = \sum_{i = 1}^N T_{i}$
+The bandwidth parameter is from \textcite{Newey1987}:
+\begin{equation}
+bw = \lfloor 4\cdot\left(\frac{n_{obs}}{100}\right)^{\frac{2}{9}} \rfloor
+\end{equation}
+The so-called Bartlett kernel ensuring we are using the \textcite{Newey1987} estimator is:
+\begin{equation}
+  K(i, bw) = 1 - \frac{i}{bw + 1}
+\end{equation}
+The central factor is the actual specificity of the \textcite{Newey1987} estimator and accounts for auto-covariance across time:
+\begin{equation}
+  \hat{S_{HAC}} = \hat{\Gamma_0} + \sum_{i = 1}^{bw} (K(i, bw) (\hat{\Gamma_1} + \hat{\Gamma_1}^\intercal))
+\end{equation}
+The first term is measured over the entire time horizon, i.e. $i = 0$:
+\begin{equation}
+  \hat{\Gamma_0} = \sum_{t = 1}^T \xi_t^\intercal \xi_t
+\end{equation}
+with
+\begin{equation}
+  \xi_t = \sum_{i = 1}^{n_t} \hat{\epsilon_{it}} x_{it}
+  \end{equation}
+$n_t$ stands for the number of individual observations at time $t$, $\epsilon_{it}$ is the sample residual of entity $i$ at time $t$.
+The \textcite{Newey1987} estimator with small sample correction is :
+\begin{equation}
+  \hat{Var_{HAC}} = \frac{n_{obs}}{n_{obs} - k} \sum_{XX}^{-1} \hat{S_{HAC}} \sum_{XX}^{-1}
+\end{equation}
+
+\subsection{Various goodness of fit indicators}
+Since regressions are applied on panel models with fixed effects, it is possible to compute goodness of fit statistics either within or across clusters. The displayed $R^2$ is always, by design, the determination coefficient of the actual model, while alternative statistics allow to gain more insight about the model's explanatory power.
+
+In what follows, the notation conventions match those in the source code of the \texttt{linearmodels} module used for estimations. The panels with time and entitity fixed effects are in general of the form :
+\begin{equation}
+  y_{it} = \alpha + x_{it}\beta + \nu_{i} + \gamma_{t} + \epsilon_{it}
+  \label{app:eq:panel:model}
+\end{equation}
+The fitted values follow :
+\begin{equation}
+  \hat{y}_{it} = \hat{\alpha} + x_{it}\hat{\beta} + \hat{\nu}_{i} + \hat{\gamma}_{t}
+  \label{app:eq:panel:fitted}
+\end{equation}
+
+\subsubsection{$R^2$}
+This corresponds to the pooled OLS model with time and entity dummies. The sum of squared residuals is computed over fitted values that include fixed effects as in \eqref{app:eq:panel:fitted} :
+\begin{equation}
+  SSR = \sum_{i = 1}^N \sum_{t = 1}^{T_{i}} (y_{it} - \hat{y}_{it})^2
+\end{equation}
+
+And the total sum of squared dependent variables:
+\begin{equation}
+  TSS = \sum_{i = 1}^N \sum_{t = 1}^{T_{i}} (y_{it} - \bar{y})^2
+\end{equation}
+(Here, $\bar{y}$ is the grand average of $y_{it}$ over time and entities.)
+
+By definition, the R-squared is the share of the dependent's variance explained by the regression:
+\begin{equation}
+R^{2} = 1 - \frac{SSR}{TSS}
+\end{equation}
+
+\subsubsection{$R^2$ between}
+The \textit{between} model is based on entity averages:
+\begin{equation}
+\bar{y}_{i} = \alpha + \bar{x}_{i} \beta + \nu{i} + \bar{\gamma} + \bar{\epsilon}_{i}  
+\end{equation}
+with entity-specific averages over time : $\bar{y}_{i} = \frac{\sum_{t=1}^{T_{i}} y_{it}}{T_{i}}$, $\bar{x}_{i} = \frac{\sum_{t=1}^{T_{i}} x_{it}}{T_{i}}$ and  $\bar{\epsilon}_{i} = \frac{\sum_{t=1}^{T_{i}} \epsilon_{it}}{T_{i}}$.
+
+The fitted values follow :
+\begin{equation}
+  \hat{\bar{y_{i}}} = \hat{\alpha} + \bar{x}_{i}\hat{\beta}
+\end{equation}
+The estimation thus cannot differentiate the time fixed-effects from the constant and the individual fixed effects is absobed in the error term.
+
+The sum of squared residuals:
+\begin{equation}
+  SSR_{between} = \sum_{i = 1}^{N} (\bar{y}_{i} - \bar{\hat{y}}_{i})^2
+\end{equation}
+And the total sum of squares is :
+\begin{equation}
+  TSS_{between} = \sum_{i = 1}^{N} (\bar{y}_{i} - \bar{\bar{y}})^2 
+\end{equation}
+(Here, $\bar{\bar{y}}$ is the average of entity-specific average dependents, which themselves are averages over time.)
+
+The statistic is therefore:
+\begin{equation}
+  R^{2}_{between} = 1 - \frac{SSR_{between}}{TSS_{between}}
+\end{equation}
+The \textit{between} estimator reduces individuals to their sample means, which inherently is a loss of information but also is a way to give more weight on cross-sectional variations; hence the coefficient of determination shows how much of the variance across entities the model on average over the time of measurements.
+\subsubsection{$R^2$ within}
+The \textit{within}
+\begin{equation}
+  \tilde{y}_{it} = y_{it} - \bar{y}_{i} =  (x_{it} - \bar{x}_{i})\beta + (\gamma_{t} - \bar{\gamma}) + (\epsilon_{it} - \bar{\epsilon}_{i})
+\end{equation}
+
+The individual fixed effect disappears in the \textit{within} transformation. FiFitted values are as follows:
+\begin{equation}
+  \hat{\tilde{y}}_{it} = (x_{it} - \bar{x}_{i})\hat{\beta} + (\gamma_{t} - \bar{\gamma}) 
+\end{equation}
+Depending on the implementation, the time effects may not be included in the \textit{within} transformation.
+
+The sum of squared residuals:
+\begin{equation}
+  SSR_{within} = \sum_{i = 1}^{N}\sum_{t = 1}^{T_{i}} (\tilde{y}_{it} - \hat{\tilde{y}}_{it})^2
+\end{equation}
+And the total sum of squares is :
+\begin{equation}
+  TSS_{within} = \sum_{i = 1}^{N}\sum_{t = 1}^{T_{i}} \tilde{y}_{it}^2 
+\end{equation}
+
+The statistic is therefore:
+\begin{equation}
+  R^{2}_{within} = 1 - \frac{SSR_{within}}{TSS_{within}}
+\end{equation}
+The \textit{within} transformation is used to measure how well regressors can explain the dependent's variance after individual specifities have been taken into account through fixed effects.
+\subsubsection{$R^2$ overall}
+The \textit{overall} $R^2$ is estimated over a model without fixed effects, whether entity- or time-specific. Therefore, it is equivalent to the usual, unadjusted coefficient of a pooled OLS estimation.

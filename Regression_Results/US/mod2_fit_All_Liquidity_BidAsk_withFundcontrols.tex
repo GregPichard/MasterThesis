@@ -1,0 +1,42 @@
+\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}                 &  PctBidAskSpread   & \textbf{  R-squared:         }   &      0.0510      \\
+\textbf{Estimator:}                     &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.5572      \\
+\textbf{No. Observations:}              &       335164       & \textbf{  R-squared (Within):}   &      0.0660      \\
+\textbf{Date:}                          &  Fri, Jun 14 2019  & \textbf{  R-squared (Overall):}  &      0.1881      \\
+\textbf{Time:}                          &      12:35:22      & \textbf{  Log-likelihood     }   &     8.49e+05     \\
+\textbf{Cov. Estimator:}                &   Driscoll-Kraay   & \textbf{                     }   &                  \\
+\textbf{}                               &                    & \textbf{  F-statistic:       }   &      2543.2      \\
+\textbf{Entities:}                      &        3995        & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Avg Obs:}                       &       83.896       & \textbf{  Distribution:      }   &   F(7,331025)    \\
+\textbf{Min Obs:}                       &       1.0000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                       &       138.00       & \textbf{  F-statistic (robust):} &      68.466      \\
+\textbf{}                               &                    & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Time periods:}                  &        138         & \textbf{  Distribution:      }   &   F(7,331025)    \\
+\textbf{Avg Obs:}                       &       2428.7       & \textbf{                     }   &                  \\
+\textbf{Min Obs:}                       &       1448.0       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                       &       3939.0       & \textbf{                     }   &                  \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                                        & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
+\midrule
+\textbf{Intercept}                      &       0.1057       &       0.0067       &      15.819     &      0.0000      &       0.0926      &       0.1188       \\
+\textbf{PctSharesHeldETF\_1lag}         &       0.0073       &       0.0085       &      0.8642     &      0.3875      &      -0.0093      &       0.0239       \\
+\textbf{np.log(CompanyMarketCap\_1lag)} &      -0.0049       &       0.0003       &     -14.622     &      0.0000      &      -0.0056      &      -0.0043       \\
+\textbf{BookToMarketRatio\_1lag}        &     -4.149e-08     &     4.662e-08      &     -0.8901     &      0.3734      &     -1.329e-07    &     4.987e-08      \\
+\textbf{Volatility\_1lag}               &       0.0498       &       0.0049       &      10.161     &      0.0000      &       0.0402      &       0.0594       \\
+\textbf{PctSharesHeldOtherMutual\_1lag} &     -2.123e-06     &     3.488e-07      &     -6.0853     &      0.0000      &     -2.806e-06    &     -1.439e-06     \\
+\textbf{PctSharesHeldPension\_1lag}     &       0.2846       &       0.2373       &      1.1997     &      0.2302      &      -0.1804      &       0.7497       \\
+\textbf{PctSharesHeldHedge\_1lag}       &       0.0053       &       0.0046       &      1.1511     &      0.2497      &      -0.0037      &       0.0143       \\
+\bottomrule
+\end{tabular}
+%\caption{PanelOLS Estimation Summary}
+\end{center}
+
+F-test for Poolability: 9.5287 \newline
+ P-value: 0.0000 \newline
+ Distribution: F(4131,331025) \newline
+  \newline
+ Included effects: Entity, Time

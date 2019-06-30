@@ -95,7 +95,7 @@ StocksETF_Holdings_db.to_csv('Monthly/ETF_Holdings_LongMerged_db.csv', index = T
 
 ## Extension : Aggregating other categories of institutional ownership
 # Other, non-ETF mutual funds
-OtherMutual_db = pd.concat([x.query('Owner_type == "Mutual Fund" and Fund_RIC not in ' + str(list(ETF_ID_db.Lipper_RIC)))  for x in pd.read_csv('Monthly/FundOwners_Monthly_Full_db.csv', chunksize = 10e4)], ignore_index = True)
+OtherMutual_db = pd.concat([x.query('Owner_type == "Mutual Fund" and Fund_RIC not in ' + str(list(ETF_ID_db.Lipper_RIC)))  for x in pd.read_csv('Monthly/FundOwners_Monthly_Full_db.csv', chunksize = 10e5)], ignore_index = True)
 for col in list(OtherMutual_db.drop(['Date', 'AdjNbSharesHeld'], axis = 1).columns):
     OtherMutual_db[col] = OtherMutual_db[col].astype('category')
 OtherMutual_db.drop_duplicates(inplace = True)
@@ -144,6 +144,7 @@ NonETF_Holdings_db = NonETF_Holdings_db.assign(PctSharesHeldOtherMutual = pd.Ser
 NonETF_Holdings_db = NonETF_Holdings_db.assign(PctSharesHeldPension = pd.Series(NonETF_Holdings_db.Pension_AdjNbSharesHeld/NonETF_Holdings_db.NbSharesOutstanding))
 NonETF_Holdings_db = NonETF_Holdings_db.assign(PctSharesHeldHedge = pd.Series(NonETF_Holdings_db.Hedge_AdjNbSharesHeld/NonETF_Holdings_db.NbSharesOutstanding))
 
+# If the number of shares held by a category of funds is unknown, we assume the percentage (relative to total shares outstanding) is 0.
 NonETF_Holdings_db.loc[NonETF_Holdings_db.OtherMutual_AdjNbSharesHeld.isna(), 'PctSharesHeldOtherMutual'] = 0
 NonETF_Holdings_db.loc[NonETF_Holdings_db.Pension_AdjNbSharesHeld.isna(), 'PctSharesHeldPension'] = 0
 NonETF_Holdings_db.loc[NonETF_Holdings_db.Hedge_AdjNbSharesHeld.isna(), 'PctSharesHeldHedge'] = 0
